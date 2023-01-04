@@ -102,6 +102,7 @@ class ProductManager {
                 try {
                     await fs.promises.writeFile(this.filename, jsonString);
                     console.log("Object deleted");
+
                     return;
                 } catch (err) {
                     console.log(err.message);

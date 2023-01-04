@@ -26,7 +26,7 @@ app.get("/products", async (req, res) => {
     }
 });
 
-app.get("/products/:pid?", (req, res) => {
+app.get("/products/:pid?", async (req, res) => {
     const { pid } = req.params;
     ProductManager.getProducts().then((data) => {
         let productSearched;
@@ -43,3 +43,14 @@ app.get("/products/:pid?", (req, res) => {
         }
     })
 })
+
+app.get("/productoRandom", async (req, res) => {
+    let cantProds = await ProductManager.countAllProds();
+    let random = Math.floor(Math.random() * cantProds + 1);
+    let randObj = await ProductManager.getProductById(random);
+    res.send(randObj);
+});
+
+app.get("/", async (req, res) => {
+    res.send("You have to enter /products, /products/<idsearched> or /productoRandom");
+});
