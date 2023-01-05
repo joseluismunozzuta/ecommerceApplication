@@ -1,19 +1,23 @@
 import fs from 'fs';
 
-const crearProducto = (title, descripcion, price, thumbnail, code, stock) => {
-    const p = new Object();
-    p.title = title;
-    p.descripcion = descripcion;
-    p.price = price;
-    p.thumbnail = thumbnail;
-    p.code = code;
-    p.stock = stock;
-    return p;
-};
+
 class ProductManager {
     constructor(filename) {
         this.filename = filename;
     }
+
+    crearProducto = (title, descripcion, price, category, thumbnail, code, stock, status) => {
+        const p = new Object();
+        p.title = title;
+        p.descripcion = descripcion;
+        p.price = price;
+        p.category = category;
+        p.thumbnail = thumbnail;
+        p.code = code;
+        p.stock = stock;
+        p.status = status;
+        return p;
+    };
 
     async getProducts() {
         try {
@@ -56,7 +60,7 @@ class ProductManager {
         for (let ob of objetos) {
             jsonObjects.push(ob);
             if (ob.id > maxId) {
-                maxId = ob.id;
+                maxId = parseInt(ob.id);
             }
         }
         if (maxId == 0) {
@@ -92,6 +96,26 @@ class ProductManager {
         return null;
     }
 
+    async updateProduct(searchedId, newProduct) {
+        console.log(newProduct);
+        const obj = await this.getProducts();
+        const index = obj.findIndex((o) => o.id == searchedId);
+        if(index === -1){
+            console.log("Product not found");
+            return false;
+        }
+        newProduct.id = searchedId;
+        obj[index] = newProduct;
+        let jsonString = JSON.stringify(obj);
+        try {
+            await fs.promises.writeFile(this.filename, jsonString);
+            return true;
+        }
+        catch (err) {
+            console.log(err.message);
+        }
+    }
+
     async deleteProduct(searchedId) {
         const obj = await this.getProducts();
         let index = 0;
@@ -102,8 +126,7 @@ class ProductManager {
                 try {
                     await fs.promises.writeFile(this.filename, jsonString);
                     console.log("Object deleted");
-
-                    return;
+                    return true;
                 } catch (err) {
                     console.log(err.message);
                 }
@@ -111,6 +134,7 @@ class ProductManager {
             index++;
         }
         console.log("There is no product with the specified ID");
+        return false;
     }
 
     async countAllProds() {

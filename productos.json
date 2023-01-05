@@ -7,7 +7,8 @@
         "category": "men's clothing",
         "thumbnail": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 2,
@@ -17,7 +18,8 @@
         "category": "men's clothing",
         "thumbnail": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 3,
@@ -27,7 +29,8 @@
         "category": "men's clothing",
         "thumbnail": "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 4,
@@ -37,7 +40,8 @@
         "category": "men's clothing",
         "thumbnail": "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 5,
@@ -47,7 +51,8 @@
         "category": "jewelery",
         "thumbnail": "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 6,
@@ -57,7 +62,8 @@
         "category": "jewelery",
         "thumbnail": "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 7,
@@ -67,7 +73,8 @@
         "category": "jewelery",
         "thumbnail": "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 8,
@@ -77,7 +84,8 @@
         "category": "jewelery",
         "thumbnail": "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 9,
@@ -87,7 +95,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 10,
@@ -97,7 +106,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 11,
@@ -107,7 +117,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 12,
@@ -117,7 +128,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 13,
@@ -127,7 +139,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 14,
@@ -137,17 +150,8 @@
         "category": "electronics",
         "thumbnail": "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_.jpg",
         "code": "TTT",
-        "stock": "60"
-    },
-    {
-        "id": 15,
-        "title": "BIYLACLESEN Women's 3-in-1 Snowboard Jacket Winter Coats",
-        "price": 56.99,
-        "descripcion": "Note:The Jackets is US standard size, Please choose size as your usual wear Material: 100% Polyester; Detachable Liner Fabric: Warm Fleece. Detachable Functional Liner: Skin Friendly, Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates",
-        "category": "women's clothing",
-        "thumbnail": "https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_.jpg",
-        "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
         "id": 16,
@@ -157,16 +161,27 @@
         "category": "women's clothing",
         "thumbnail": "https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_.jpg",
         "code": "TTT",
-        "stock": "60"
+        "stock": 60,
+        "status": true
     },
     {
-        "id": 17,
-        "title": "Rain Jacket Women Windbreaker Striped Climbing Raincoats",
-        "price": 39.99,
-        "descripcion": "Lightweight perfet for trip or casual wear---Long sleeve with hooded, adjustable drawstring waist design. Button and zipper front closure raincoat, fully stripes Lined and The Raincoat has 2 side pockets are a good size to hold all kinds of things, it covers the hips, and the hood is generous but doesn't overdo it.Attached Cotton Lined Hood with Adjustable Drawstrings give it a real styled look.",
+        "title": "NORTHSTAR Women's 3-in-1 Snowboard Jacket Winter Coats",
+        "descripcion": "Lightweigt and Warm.Stand Collar Liner jacket, keep you warm in cold weather. Zippered Pockets: 2 Zippered Hand Pockets, 2 Zippered Pockets on Chest (enough to keep cards or keys)and 1 Hidden Pocket Inside.Zippered Hand Pockets and Hidden Pocket keep your things secure. Humanized Design: Adjustable and Detachable Hood and Adjustable cuff to prevent the wind and water,for a comfortable fit. 3 in 1 Detachable Design provide more convenience, you can separate the coat and inner as needed, or wear it together. It is suitable for different season and help you adapt to different climates",
+        "price": 89.99,
         "category": "women's clothing",
-        "thumbnail": "https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2.jpg",
-        "code": "TTT",
-        "stock": "60"
+        "code": "TTTT",
+        "stock": 50,
+        "status": true,
+        "id": 18
+    },
+    {
+        "title": "Samsung NEO Qled TV 75",
+        "descripcion": "NEW WONDERFUL Amazing screen, miniLed technology with a refresh rate of 120Hz.",
+        "price": 7999,
+        "category": "technology",
+        "code": "TTTT",
+        "stock": 45,
+        "status": true,
+        "id": "19"
     }
 ]

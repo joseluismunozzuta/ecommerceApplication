@@ -1,4 +1,4 @@
-import express from "express";
+import express, { application } from "express";
 import ProductManagerExternal from "./ProductManager.js";
 
 const app = express();
@@ -51,6 +51,67 @@ app.get("/productoRandom", async (req, res) => {
     res.send(randObj);
 });
 
+app.post('/api/products', (req, res) => {
+    let product = req.body;
+
+    if (!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock) {
+        return res.status(400).send({ status: "error", error: "Incomplete values" })
+    }
+
+    const p = ProductManager.crearProducto(product.title, product.description, product.price, product.category, product.thumbnail, product.code, product.stock, true);
+
+    ProductManager.addProduct(p).then((data) => {
+        console.log("Product created with ID ", data)
+        res.send({ status: "success", message: "Product created" })
+    }).catch((e) => {
+        console.log(e.message);
+        return res.status(500).send({ status: "error", error: e.message })
+    })
+})
+
+app.put('/api/products/:pid', (req, res) => {
+    let product = req.body;
+    let productToUpdate = req.params.pid;
+
+    if (!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock) {
+        return res.status(400).send({ status: "error", error: "Incomplete values" })
+    }
+
+    const p = ProductManager.crearProducto(product.title, product.description, product.price, product.category, product.thumbnail, product.code, product.stock, true);
+
+    console.log(p);
+
+    ProductManager.updateProduct(productToUpdate, p).then((data) => {
+        if (data === true) {
+            console.log("Successful update for product with ID ", productToUpdate);
+            res.send({ status: "success", message: "Product updated" })
+        }else{
+            return res.status(404).send({ status: "error", error:"Product not found"})
+        }
+    }).catch((e) => {
+        console.log(e.message);
+        return res.status(500).send({ status: "error", error: e.message })
+    })
+
+})
+
+app.delete("/api/products/:pid", (req, res) => {
+    const productToDelete = req.params.pid;
+    ProductManager.deleteProduct(productToDelete).then((data) => {
+        if(data === true){
+            console.log("Deleted product with ID ", productToDelete);
+            res.send({ status: "success", message: "Product deleted" })
+        }else{
+            return res.status(404).send({ status: "error", error:"Product not found"})
+        }
+    }).catch((e) => {
+        console.log(e.message);
+        return res.status(500).send({ status: "error", error: e.message })
+    })
+})
+
 app.get("/", async (req, res) => {
     res.send("You have to enter /products, /products/<idsearched> or /productoRandom");
 });
+
+

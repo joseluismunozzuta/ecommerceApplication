@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/joseluismunozzuta/nodejsExpressServer.git"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
