@@ -182,6 +182,16 @@
         "code": "TTTT",
         "stock": 45,
         "status": true,
-        "id": "19"
+        "id": 19
+    },
+    {
+        "title": "New MSI Gamer Monitor 42 inches",
+        "descripcion": "Big screen for playing high quality games, miniLed technology with a refresh rate of 144Hz.",
+        "price": 2599,
+        "category": "technology",
+        "code": "TTTT",
+        "stock": 35,
+        "status": true,
+        "id": 20
     }
 ]
