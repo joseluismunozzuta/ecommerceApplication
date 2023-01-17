@@ -17,19 +17,6 @@ cartRouter.get("/", async (req, res) => {
 
 })
 
-cartRouter.post("/", async (req, res) => {
-    let products = [];
-    const c = cartFileManager.createCart(products);
-
-    await cartFileManager.addCart(c).then((data) => {
-        console.log("Cart created with ID ", data.id)
-        res.send(data);
-    }).catch((e) => {
-        console.log(e.message);
-        res.status(500).send(e.message);
-    })
-})
-
 cartRouter.get("/:cid?", async (req, res) => {
 
     let cartId = parseInt(req.params.cid);
@@ -52,6 +39,19 @@ cartRouter.get("/:cid?", async (req, res) => {
 
 })
 
+cartRouter.post("/", async (req, res) => {
+    let products = [];
+    const c = cartFileManager.createCart(products);
+
+    await cartFileManager.addCart(c).then((data) => {
+        console.log("Cart created with ID ", data.id)
+        res.send(data);
+    }).catch((e) => {
+        console.log(e.message);
+        res.status(500).send(e.message);
+    })
+})
+
 cartRouter.post("/:cid/product/:pid", async (req, res) => {
 
     let productIdToAdd = parseInt(req.params.pid);
@@ -71,7 +71,7 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
     }).catch((err) => {
         res.status(500).send(err.message);
     })
-    
+
 })
 
 export default cartRouter;
