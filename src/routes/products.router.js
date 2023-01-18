@@ -3,7 +3,7 @@ import { ProductManager } from "../FileManager.js";
 import path from "path";
 
 const productRouter = express.Router();
-const productFileManager = new ProductManager(path.resolve(process.cwd(), "public", "productos.json"));
+const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
 
 productRouter.get("/", async (req, res) => {
 

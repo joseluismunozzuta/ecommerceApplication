@@ -3,9 +3,9 @@ import { CartManager, ProductManager } from "../FileManager.js";
 import path from "path";
 
 const cartRouter = express.Router();
-const cartFileManager = new CartManager(path.resolve(process.cwd(), "public", "carts.json"));
+const cartFileManager = new CartManager(path.resolve(process.cwd(), "src/public", "carts.json"));
 const productFileManager = new ProductManager(
-    path.resolve(process.cwd(), "public", "productos.json"));
+    path.resolve(process.cwd(), "src/public", "productos.json"));
 
 cartRouter.get("/", async (req, res) => {
 

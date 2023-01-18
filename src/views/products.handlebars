@@ -1,0 +1,23 @@
+<div>
+    <h1>Esta vista muestra la lista de productos si se tiene el rol de Administrador:</h1>
+    <h2>Buenas tardes {{user.name}}</h2>
+    <h3>Usted tiene el rol de {{user.role}}</h3>
+    {{#if isAdmin}}
+        {{#each productos}}
+            <div>
+                <ul>
+                    <li>ID: {{this.id}}</li>
+                    <li>Title: {{this.title}}</li>
+                    <li>Price: {{this.price}}</li>
+                    <li>Description: {{this.descripcion}}</li>
+                    <li>Category: {{this.category}}</li>
+                    <img src={{this.thumbnail}} alt="#">
+                    <li>Status: {{this.status}}</li>
+                    <li>Stock: {{this.stock}} units</li>
+                </ul>
+            </div>
+        {{/each}}
+    {{else}}
+        <p>Usted no es administrador y no puede ver la lista de productos</p>
+    {{/if}}
+</div>
