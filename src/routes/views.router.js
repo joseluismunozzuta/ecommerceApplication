@@ -17,7 +17,8 @@ viewRouter.get("/products", async (req, res) => {
         }
         res.render('products', {
             user: user, 
-            style: 'products.css', 
+            style: 'products.css',
+            title: 'Products list', 
             isAdmin: user.role==="admin", 
             productos});
     } catch (err) {
