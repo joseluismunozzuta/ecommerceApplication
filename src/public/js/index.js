@@ -34,14 +34,9 @@ function addProduct(product){
                 </div>            
             </div>
         </div>`;
-
-        console.log(str);
-
         let container = document.getElementById("container");
         let originalHtml = container.getInnerHTML();
         let lastHtml = str.concat(originalHtml);
-
-        console.log(lastHtml);
         container.innerHTML = lastHtml;
     
 }
