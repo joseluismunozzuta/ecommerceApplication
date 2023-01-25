@@ -4,6 +4,7 @@ import cartRouter from "./routes/carts.router.js";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
+import { Server } from "socket.io";
 
 const app = express();
 app.use(express.json());
@@ -19,15 +20,29 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname+ '/public'));
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
+const socketServer = new Server(httpServer);
+
+app.set("io", socketServer);
+
+socketServer.on('connection', socket => {
+
+    socket.on('message', data => {
+        console.log("The message sent is " + data);
+    })
+})
 
 app.get('/', (req, res) => {
     let testUser = {
         name: "Eric",
-        last_name: "Munoz"
+        last_name: "Munoz",
+        style: "index.css"
     }
 
     res.render('index', testUser);
 })
+
+export default socketServer;

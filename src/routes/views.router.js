@@ -9,18 +9,50 @@ viewRouter.get("/products", async (req, res) => {
 
     try {
         const productos = await productFileManager.getAll();
+        let productsArray = [];
+        for(let p of productos){
+            productsArray.push(p);
+        }
+        let productosReversed = productsArray.reverse();
 
         let user = {
             role: "admin",
             name: "Jose",
             last_name: "Munoz"
         }
-        res.render('products', {
+        res.render('home', {
             user: user, 
-            style: 'products.css',
+            style: 'home.css',
             title: 'Products list', 
             isAdmin: user.role==="admin", 
-            productos});
+            productosReversed});
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+
+});
+
+viewRouter.get("/realtimeproducts", async (req, res) => {
+
+    try {
+        const productos = await productFileManager.getAll();
+        let productsArray = [];
+        for(let p of productos){
+            productsArray.push(p);
+        }
+        let productosReversed = productsArray.reverse();
+
+        let user = {
+            role: "admin",
+            name: "Jose",
+            last_name: "Munoz"
+        }
+        res.render('realtimeproducts', {
+            user: user, 
+            style: 'products.css',
+            title: 'Realtime Products list', 
+            isAdmin: user.role==="admin", 
+            productosReversed});
     } catch (err) {
         res.status(500).send(err.message);
     }

@@ -1,0 +1,34 @@
+<div>
+    <h1>Real time Products List</h1>
+    <h1>Esta vista muestra la lista de productos si se tiene el rol de Administrador:</h1>
+    <h2>Buenas tardes {{user.name}}</h2>
+    <h3>Usted tiene el rol de {{user.role}}</h3>
+    <div class="contenedor" id="container">
+        {{#if isAdmin}}
+            {{#each productosReversed}}
+                <div class="img-card iCard-style1" id="product{{this.id}}">
+                    <div class="card-content">
+                        <div class="card-image">
+                            <span class="card-title">{{this.title}}</span>
+                            <img src={{this.thumbnail}} alt="#"/>
+                        </div>
+                        <div class="card-text">
+                            <ul>
+                                <li>ID: {{this.id}}</li>
+                                <li>Price: {{this.price}}</li>
+                                <li>Description: {{this.descripcion}}</li>
+                                <li>Category: {{this.category}}</li>
+                                <li>Status: {{this.status}}</li>
+                                <li>Stock: {{this.stock}} units</li>
+                            </ul>
+                        </div>            
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <p>Usted no es administrador y no puede ver la lista de productos</p>
+        {{/if}}
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

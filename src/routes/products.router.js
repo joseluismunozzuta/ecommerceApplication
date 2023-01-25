@@ -1,6 +1,7 @@
 import express from "express";
 import { ProductManager } from "../FileManager.js";
 import path from "path";
+import socketServer from "../app.js";
 
 const productRouter = express.Router();
 const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
@@ -56,7 +57,8 @@ productRouter.post('/', async (req, res) => {
     const p = productFileManager.crearProducto(product.title, product.description, product.price, product.category, product.thumbnail, product.code, product.stock, true);
 
     await productFileManager.add(p).then((data) => {
-        console.log("Product created with ID ", data.id)
+        console.log("Product created with ID ", data.id);
+        socketServer.emit('productadded', data);
         res.send(data);
     }).catch((e) => {
         console.log(e.message);
@@ -101,6 +103,7 @@ productRouter.delete("/:pid", async (req, res) => {
             return;
         }else{
             console.log("Deleted product with ID ", productToDelete);
+            socketServer.emit('productdeleted', productToDelete);
             res.send({ status: "success", message: "Product deleted" })
         }
     }).catch((e) => {
