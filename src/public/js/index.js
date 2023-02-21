@@ -1,5 +1,4 @@
 const socket = io();
-socket.emit('message', 'Im writing from a socket');
 
 socket.on('generalevent', (arg1, arg2) => {
     console.log(arg1);
