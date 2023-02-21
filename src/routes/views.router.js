@@ -1,6 +1,6 @@
 import express from "express";
-import { ProductManager } from "../FileManager.js";
-import { ProductDBManager } from "../DBManager.js";
+import { ProductManager } from "../dao/FileManager.js";
+import { ProductDBManager } from "../dao/DBManager.js";
 import path from "path";
 
 const viewRouter = express.Router();
