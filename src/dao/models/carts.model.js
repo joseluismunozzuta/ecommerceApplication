@@ -1,4 +1,4 @@
-import mongoose from "mongoose";ñ
+import mongoose from "mongoose";
 
 const cartsCollection = 'carts';
 

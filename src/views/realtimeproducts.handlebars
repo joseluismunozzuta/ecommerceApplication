@@ -6,7 +6,7 @@
     <div class="contenedor" id="container">
         {{#if isAdmin}}
             {{#each productosReversed}}
-                <div class="img-card iCard-style1" id="product{{this.id}}">
+                <div class="img-card iCard-style1" id="product{{this._id}}">
                     <div class="card-content">
                         <div class="card-image">
                             <span class="card-title">{{this.title}}</span>
@@ -14,9 +14,9 @@
                         </div>
                         <div class="card-text">
                             <ul>
-                                <li>ID: {{this.id}}</li>
+                                <li>ID: {{this._id}}</li>
                                 <li>Price: {{this.price}}</li>
-                                <li>Description: {{this.descripcion}}</li>
+                                <li>Description: {{this.description}}</li>
                                 <li>Category: {{this.category}}</li>
                                 <li>Status: {{this.status}}</li>
                                 <li>Stock: {{this.stock}} units</li>

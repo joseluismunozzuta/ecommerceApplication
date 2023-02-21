@@ -5,21 +5,23 @@ import path from "path";
 import socketServer from "../app.js";
 
 const productRouter = express.Router();
-const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
+//const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
+const productDBManager = new ProductDBManager();
 
 productRouter.get("/", async (req, res) => {
 
     const { limit } = req.query;
 
     try {
-        const productos = await productFileManager.getAll();
-        let limitedProducts;
-        if (limit) {
-            limitedProducts = productos.slice(0, limit);
-            res.send(limitedProducts);
-        } else {
-            res.send(productos);
-        }
+        const productos = await productDBManager.read();
+        // let limitedProducts;
+        // if (limit) {
+        //     limitedProducts = productos.slice(0, limit);
+        //     res.send(limitedProducts);
+        // } else {
+        //     res.send(productos);
+        // }
+        res.send(productos);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -49,18 +51,16 @@ productRouter.get("/:pid?", async (req, res) => {
 })
 
 productRouter.post('/', async (req, res) => {
-    let product = req.body;
+    const product = {...req.body};
 
-    if (!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock) {
+    if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
         return res.status(400).send({ status: "error", error: "Incomplete values" })
     }
 
-    const p = productFileManager.crearProducto(product.title, product.description, product.price, product.category, product.thumbnail, product.code, product.stock, true);
-
-    await productFileManager.add(p).then((data) => {
-        console.log("Product created with ID ", data.id);
+    await productDBManager.create(product).then((data) => {
+        console.log(`Product succesfully created with ID: ` + data.id);
         socketServer.emit('productadded', data);
-        res.send(data);
+        res.send({status:"success", payload: data});
     }).catch((e) => {
         console.log(e.message);
         res.status(500).send(e.message);
@@ -70,23 +70,17 @@ productRouter.post('/', async (req, res) => {
 
 productRouter.put('/:pid', async (req, res) => {
 
-    let product = req.body;
+    const product = {...req.body};
     let productToUpdate = req.params.pid;
 
-    if (!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock) {
+    if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
         return res.status(400).send({ status: "error", error: "Incomplete values" })
     }
 
-    const p = productFileManager.crearProducto(product.title, product.description, product.price, product.category, product.thumbnail, product.code, product.stock, true);
-
-    await productFileManager.update(productToUpdate, p).then((data) => {
-        if (data === -1) {
-            res.status(404).send("Product not found");
-            return;
-        }else{
-            console.log("Successful update for product with ID ", data.id);
-            res.send(data);
-        }
+    await productDBManager.update(productToUpdate, product).then((data) => {
+        console.log(`Product succesfully updated with ID: ` + data.id);
+        socketServer.emit('productupdated', data);
+        res.send({status:"success",  payload: data});
     }).catch((e) => {
         console.log(e.message);
         res.status(500).send(e.message);
@@ -96,18 +90,13 @@ productRouter.put('/:pid', async (req, res) => {
 
 productRouter.delete("/:pid", async (req, res) => {
 
-    const productToDelete = parseInt(req.params.pid);
+    let productToDelete = req.params.pid;
 
-    await productFileManager.delete(productToDelete).then((data) => {
-        if(data === false){
-            res.status(404).send("Product not found");
-            return;
-        }else{
-            console.log("Deleted product with ID ", productToDelete);
-            socketServer.emit('productdeleted', productToDelete);
-            res.send({ status: "success", message: "Product deleted" })
-        }
-    }).catch((e) => {
+    await productDBManager.delete(productToDelete).then((data)=>{
+        console.log(`Product succesfully deleted with ID: ` + data.id);
+        socketServer.emit('productdeleted', data.id);
+        res.send({status:"success", payload: data});
+    }).catch((e)=>{
         console.log(e.message);
         res.status(500).send(e.message);
     })

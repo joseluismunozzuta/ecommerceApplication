@@ -5,7 +5,7 @@ import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +24,15 @@ const port = process.env.PORT || 3000;
 const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
+mongoose.connect('mongodb+srv://joseluismunozzuta:Diego0707@backendcoder1.djzve1b.mongodb.net/ecommerce1?retryWrites=true&w=majority', (error) =>{
+    if(error){
+        console.log("Cannot connect to DB: " + error);
+        process.exit();
+    }else{
+        console.log("Connected to DB");
+    }
+})
 
 const socketServer = new Server(httpServer);
 

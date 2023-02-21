@@ -1,95 +1,53 @@
 import mongoose from "mongoose";
-import { productModel } from "./dao/models/products.model";
-import { cartModel } from "./dao/models/carts.model";
+import { productModel } from "../src/dao/models/products.model.js";
+import { cartModel } from "../src/dao/models/carts.model.js";
 
 class ProductDBManager {
 
-    async read(){
-        try{
-            const products = await productModel.find();
+    async read() {
+        try {
+            const products = await productModel.find().lean();
             return products;
-        }catch(err){
+        } catch (err) {
             console.log(err);
             throw err;
         }
     }
 
-    crearProducto = (title, descripcion, price, category, thumbnail, code, stock, status) => {
-        const p = new Object();
-        p.title = title;
-        p.descripcion = descripcion;
-        p.price = price;
-        p.category = category;
-        p.thumbnail = thumbnail;
-        p.code = code;
-        p.stock = stock;
-        p.status = status;
-        return p;
-    };
-
-    async add(product) {
-
-        const jsonObjects = [];
+    async create(product) {
 
         try {
-            const objetos = await this.getAll();
-            let maxId = 0;
-            for (let ob of objetos) {
-                jsonObjects.push(ob);
-                if (ob.id > maxId) {
-                    maxId = parseInt(ob.id);
-                }
-            }
-            if (maxId == 0) {
-                product.id = 1;
-                jsonObjects.push(product);
-            } else {
-                product.id = maxId + 1;
-                jsonObjects.push(product);
-            }
-
-            await this.writeAll(jsonObjects);
-            return product;
+            const newProduct = new productModel(product);
+            let result = await newProduct.save();
+            return result;
         } catch (err) {
             throw err;
         }
     }
 
-    async update(searchedId, newProduct) {
+    async update(id, newProduct) {
 
         try {
-            const products = await this.getAll();
-            const index = products.findIndex((o) => o.id == searchedId);
-
-            if (index === -1) {
-                console.log("Product not found");
-                return -1;
-            }
-
-            newProduct.id = searchedId;
-            products[index] = { ...products[index], ...newProduct };
-            await this.writeAll(products);
-            return newProduct;
-        } catch (err) {
+            const updatedProduct = await productModel.findByIdAndUpdate(id, newProduct, { new: true });
+            return updatedProduct;
+        }
+        catch (err) {
+            console.log(err);
             throw err;
         }
     }
 
-    async delete(productId) {
+    async delete(id) {
         try {
-            const products = await this.getAll();
-            const index = products.findIndex((p) => p.id === productId);
-            console.log(index);
-            if (index === -1) {
-                return false;
-            }
-            products.splice(index, 1);
-            await this.writeAll(products);
-            return true;
-        } catch (err) {
+            const deletedProduct = await productModel.findByIdAndDelete(id);
+            return deletedProduct;
+        }
+        catch (err) {
+            console.log(err);
             throw err;
         }
     }
+
 
     // async countAllProds() {
     //     const objs = await this.getProducts();
@@ -177,33 +135,33 @@ class CartDBManager {
         try {
             await this.writeAll(carts);
             return cart;
-        }catch (err) {
+        } catch (err) {
             throw err;
         }
 
     }
 
-    async deleteProductFromCart(cartId, productId){
-    try {
-        const carts = await this.getAll();
+    async deleteProductFromCart(cartId, productId) {
+        try {
+            const carts = await this.getAll();
 
-        const cart = carts.find((c) => c.id === cartId);
+            const cart = carts.find((c) => c.id === cartId);
 
-        if (cart) {
-            const index = cart.products.findIndex((p) => p === productId);
-            if (index === -1) {
-                throw new Error("Product not found in cart");
+            if (cart) {
+                const index = cart.products.findIndex((p) => p === productId);
+                if (index === -1) {
+                    throw new Error("Product not found in cart");
+                } else {
+                    cart.products.splice(index, 1);
+                    await this.writeAll(carts);
+                }
             } else {
-                cart.products.splice(index, 1);
-                await this.writeAll(carts);
+                throw new Error("Cart not found");
             }
-        } else {
-            throw new Error("Cart not found");
+        } catch (err) {
+            throw err;
         }
-    } catch (err) {
-        throw err;
     }
-}
 
 }
 
