@@ -1,5 +1,5 @@
 {
-  "name": "motoresdeplantilla",
+  "name": "practicaintegradora",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "jlmz",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
@@ -18,5 +18,14 @@
     "mongoose": "^6.9.2",
     "nodemon": "^2.0.20",
     "socket.io": "^4.6.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joseluismunozzuta/complementaryChallengeBackEnd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joseluismunozzuta/complementaryChallengeBackEnd/issues"
+  },
+  "homepage": "https://github.com/joseluismunozzuta/complementaryChallengeBackEnd#readme"
 }
