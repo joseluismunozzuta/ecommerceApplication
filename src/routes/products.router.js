@@ -1,5 +1,6 @@
 import express from "express";
 import { ProductManager } from "../FileManager.js";
+import { ProductDBManager } from "../DBManager.js";
 import path from "path";
 import socketServer from "../app.js";
 

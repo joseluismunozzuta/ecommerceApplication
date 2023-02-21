@@ -1,40 +1,18 @@
-import fs from 'fs';
+import mongoose from "mongoose";
+import { productModel } from "./dao/models/products.model";
+import { cartModel } from "./dao/models/carts.model";
 
-class FileClass {
-    constructor(filename) {
-        this.filename = filename;
-    }
+class ProductDBManager {
 
-    async getAll() {
-        try {
-            const contenido = await fs.promises.readFile(this.filename, "utf-8");
-            const vacio = [];
-            if (contenido === "") {
-                console.log("No products");
-                return vacio;
-            } else {
-                const obj = JSON.parse(contenido);
-                console.log("Function getProducts()");
-                return obj;
-            }
-        } catch (err) {
-            console.log(err.message);
+    async read(){
+        try{
+            const products = await productModel.find();
+            return products;
+        }catch(err){
+            console.log(err);
             throw err;
         }
     }
-
-    async writeAll(data) {
-        try {
-            await fs.promises.writeFile(this.filename, JSON.stringify(data));
-            return true;
-        } catch (err) {
-            console.log(err.message);
-            throw err;
-        }
-    }
-}
-
-class ProductManager extends FileClass {
 
     crearProducto = (title, descripcion, price, category, thumbnail, code, stock, status) => {
         const p = new Object();
@@ -135,7 +113,7 @@ class ProductManager extends FileClass {
     // }
 }
 
-class CartManager extends FileClass {
+class CartDBManager {
 
     createCart = (products) => {
         const cart = new Object();
@@ -229,4 +207,4 @@ class CartManager extends FileClass {
 
 }
 
-export { ProductManager, CartManager };
+export { ProductDBManager, CartDBManager };

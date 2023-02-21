@@ -5,6 +5,7 @@ import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
 import viewRouter from "./routes/views.router.js";
 import { Server } from "socket.io";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(express.json());
@@ -33,16 +34,6 @@ socketServer.on('connection', socket => {
     socket.on('message', data => {
         console.log("The message sent is " + data);
     })
-})
-
-app.get('/', (req, res) => {
-    let testUser = {
-        name: "Eric",
-        last_name: "Munoz",
-        style: "index.css"
-    }
-
-    res.render('index', testUser);
 })
 
 export default socketServer;
