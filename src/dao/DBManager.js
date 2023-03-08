@@ -60,7 +60,7 @@ class CartDBManager {
 
     async read() {
         try {
-            const cart = await cartModel.find();
+            const cart = await cartModel.find().populate('products.product');
             return cart;
         } catch (err) {
             console.log(err);
@@ -87,7 +87,7 @@ class CartDBManager {
             //Search for the product in DB
             const productSearched = await productModel.findById(productIdToAdd);
 
-            const productInCart = cartSearched.products.find((p) => p.id === productIdToAdd);
+            const productInCart = cartSearched.products.find((p) => p.product._id.toString() === productIdToAdd);
 
             if (productInCart) {
                 //The product it's already in the cart.
@@ -96,7 +96,7 @@ class CartDBManager {
                 productInCart.quantity++;
             } else {
                 console.log("Adding a new product to cart.")
-                cartSearched.products.push({ id: productIdToAdd, quantity: 1 });
+                cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
             }
 
             //Update the cart in DB

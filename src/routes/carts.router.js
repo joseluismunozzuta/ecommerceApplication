@@ -13,6 +13,12 @@ const productDBManager = new ProductDBManager();
 cartRouter.get("/", async (req, res) => {
 
     await cartDBManager.read().then((data) => {
+        // data.forEach((e) => {
+        //     console.log(e.products.forEach((p)=>{
+        //         console.log(p.product._id.toString());
+        //         console.log(p.quantity);
+        //     }))
+        // })
         res.send(data);
     }).catch((err) => {
         res.status(500).send(err.message);
