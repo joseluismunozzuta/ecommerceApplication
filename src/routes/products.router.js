@@ -10,10 +10,10 @@ const productDBManager = new ProductDBManager();
 
 productRouter.get("/", async (req, res) => {
 
-    const { limit } = req.query;
+    const queryParams = req.query;
 
     try {
-        const productos = await productDBManager.read();
+        const productos = await productDBManager.getProducts(req.query);
         // let limitedProducts;
         // if (limit) {
         //     limitedProducts = productos.slice(0, limit);
@@ -31,27 +31,22 @@ productRouter.get("/", async (req, res) => {
 productRouter.get("/:pid?", async (req, res) => {
 
     const { pid } = req.params;
-
-    await productFileManager.getAll().then((data) => {
-        let productSearched;
-        if (pid) {
-            productSearched = data.find(e => e.id == pid);
-            if (productSearched) {
-                res.send(productSearched);
-            } else {
-                res.status(404).send("Product not found");
-                return;
-            }
-        } else {
+    if (pid) {
+        await productDBManager.getProductById(pid).then((data) => {
             res.send(data);
-        }
-    }).catch((err) => {
-        res.status(500).send(err.message);
-    })
+        }).catch((err) => {
+            res.status(500).send(err.message);
+        })
+
+    }
+    else {
+        res.status(404).send("Not ID");
+    }
+
 })
 
 productRouter.post('/', async (req, res) => {
-    const product = {...req.body};
+    const product = { ...req.body };
 
     if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
         return res.status(400).send({ status: "error", error: "Incomplete values" })
@@ -60,7 +55,7 @@ productRouter.post('/', async (req, res) => {
     await productDBManager.create(product).then((data) => {
         console.log(`Product succesfully created with ID: ` + data.id);
         socketServer.emit('productadded', data);
-        res.send({status:"success", payload: data});
+        res.send({ status: "success", payload: data });
     }).catch((e) => {
         console.log(e.message);
         res.status(500).send(e.message);
@@ -70,7 +65,7 @@ productRouter.post('/', async (req, res) => {
 
 productRouter.put('/:pid', async (req, res) => {
 
-    const product = {...req.body};
+    const product = { ...req.body };
     let productToUpdate = req.params.pid;
 
     if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
@@ -80,7 +75,7 @@ productRouter.put('/:pid', async (req, res) => {
     await productDBManager.update(productToUpdate, product).then((data) => {
         console.log(`Product succesfully updated with ID: ` + data.id);
         socketServer.emit('productupdated', data);
-        res.send({status:"success",  payload: data});
+        res.send({ status: "success", payload: data });
     }).catch((e) => {
         console.log(e.message);
         res.status(500).send(e.message);
@@ -92,11 +87,11 @@ productRouter.delete("/:pid", async (req, res) => {
 
     let productToDelete = req.params.pid;
 
-    await productDBManager.delete(productToDelete).then((data)=>{
+    await productDBManager.delete(productToDelete).then((data) => {
         console.log(`Product succesfully deleted with ID: ` + data.id);
         socketServer.emit('productdeleted', data.id);
-        res.send({status:"success", payload: data});
-    }).catch((e)=>{
+        res.send({ status: "success", payload: data });
+    }).catch((e) => {
         console.log(e.message);
         res.status(500).send(e.message);
     })

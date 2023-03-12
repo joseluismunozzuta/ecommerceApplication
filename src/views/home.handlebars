@@ -1,34 +1,48 @@
 <div>
-    <h1>Products List (not in real time)</h1>
-    <h1>Esta vista muestra la lista de productos si se tiene el rol de Administrador:</h1>
-    <h2>Buenas tardes {{user.name}}</h2>
-    <h3>Usted tiene el rol de {{user.role}}</h3>
-    <div class="contenedor">
+  <h1>Products List (not in real time)</h1>
+  <h1>Esta vista muestra la lista de productos si se tiene el rol de
+    Administrador:</h1>
+  <h2>Buenas tardes {{user.name}}</h2>
+  <h3>Usted tiene el rol de {{user.role}}</h3>
+
+  <div class="bg-white">
+    <div class="mx-20 max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-fit
+      lg:px-8">
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Our products</h2>
+
+      <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2
+        lg:grid-cols-4 xl:gap-x-8">
+
         {{#if isAdmin}}
-            {{#each productosReversed}}
-                <div class="img-card iCard-style1">
-                    <div class="card-content">
-                        <div class="card-image">
-                            <span class="card-title">{{this.title}}</span>
-                            <img src={{this.thumbnail}} alt="#"/>
-                        </div>
-                        <div class="card-text">
-                            <ul>
-                                <li>ID: {{this._id}}</li>
-                                <li>Price: {{this.price}}</li>
-                                <li>Description: {{this.description}}</li>
-                                <li>Category: {{this.category}}</li>
-                                <li>Status: {{this.status}}</li>
-                                <li>Stock: {{this.stock}} units</li>
-                            </ul>
-                        </div>            
-                    </div>
-                </div>
-            {{/each}}
+        {{#each productosReversed}}
+        <div class="group relative h-[32rem] my-10">
+          <div class="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden
+            rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none
+            lg:h-full">
+            <img
+              src={{this.thumbnail}}
+              alt="#" class="h-full w-full
+              object-cover object-center lg:h-full lg:w-full">
+          </div>
+          <div class="mt-4 flex justify-between">
+            <div>
+              <h3 class="text-sm text-gray-700">
+                <a href="#">
+                  <span aria-hidden="true" class="absolute inset-0"></span>
+                  {{this.title}}
+                </a>
+              </h3>
+              <p class="mt-1 text-sm text-gray-500">{{this.stock}} units</p>
+            </div>
+            <p class="text-sm font-medium text-gray-900">${{this.price}}</p>
+          </div>
+        </div>
+        {{/each}}
         {{else}}
-            <p>Usted no es administrador y no puede ver la lista de productos</p>
+        <p>Usted no es administrador y no puede ver la lista de productos</p>
         {{/if}}
+      </div>
     </div>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/index.js"></script>
