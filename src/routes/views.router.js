@@ -41,8 +41,10 @@ viewRouter.get("/products", async (req, res) => {
 
 viewRouter.get("/realtimeproducts", async (req, res) => {
 
+    const queryParams = req.query;
+
     try {
-        const productos = await productDBManager.read();
+        const productos = await productDBManager.getProducts(queryParams);
         let productsArray = JSON.parse(JSON.stringify(productos.docs));
         let reversed = [];
         for (let p of productsArray) {
