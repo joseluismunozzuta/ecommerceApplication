@@ -13,40 +13,12 @@ const productDBManager = new ProductDBManager();
 cartRouter.get("/", async (req, res) => {
 
     await cartDBManager.read().then((data) => {
-        // data.forEach((e) => {
-        //     console.log(e.products.forEach((p)=>{
-        //         console.log(p.product._id.toString());
-        //         console.log(p.quantity);
-        //     }))
-        // })
         res.send(data);
     }).catch((err) => {
         res.status(500).send(err.message);
     })
 
 })
-
-// cartRouter.get("/:cid?", async (req, res) => {
-
-//     let cartId = parseInt(req.params.cid);
-
-//     await cartFileManager.getAll().then((data) => {
-//         if (cartId) {
-//             const cart = data.find((c) => c.id === cartId);
-//             if (cart) {
-//                 res.send(cart.products);
-//             } else {
-//                 res.status(404).send("Product not found");
-//                 return;
-//             }
-//         } else {
-//             res.send(data);
-//         }
-//     }).catch((err) => {
-//         res.status(500).send(err.message);
-//     })
-
-// })
 
 cartRouter.post("/", async (req, res) => {
 
@@ -61,12 +33,13 @@ cartRouter.post("/", async (req, res) => {
     })
 })
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
+cartRouter.put("/:cid/products/:pid", async (req, res) => {
 
     let productIdToAdd = req.params.pid;
     let cartId = req.params.cid;
-
-    await cartDBManager.addProductToCart(cartId, productIdToAdd).then((data) => {
+    let {quantity} = req.body;
+    console.log(quantity);
+    await cartDBManager.addProductToCart(cartId, productIdToAdd, quantity).then((data) => {
         console.log("Cart updated");
         res.send({status:"success", payload: data});
     }).catch((err) => {

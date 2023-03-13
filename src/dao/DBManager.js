@@ -115,7 +115,7 @@ class CartDBManager {
         }
     }
 
-    async addProductToCart(cartId, productIdToAdd) {
+    async addProductToCart(cartId, productIdToAdd, quantity = 1) {
         try {
             //Search for the cart in DB
             const cartSearched = await cartModel.findById(cartId);
@@ -131,7 +131,7 @@ class CartDBManager {
                 //The product it's already in the cart.
                 //Increment quantity.
                 console.log("Product already in cart. Quantity incremented by one.");
-                productInCart.quantity++;
+                productInCart.quantity+= quantity;
             } else {
                 console.log("Adding a new product to cart.");
                 cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
