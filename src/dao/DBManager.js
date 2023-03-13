@@ -131,7 +131,7 @@ class CartDBManager {
                 //The product it's already in the cart.
                 //Increment quantity.
                 console.log("Product already in cart. Quantity incremented by one.");
-                productInCart.quantity+= quantity;
+                productInCart.quantity = quantity;
             } else {
                 console.log("Adding a new product to cart.");
                 cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
