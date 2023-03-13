@@ -29,10 +29,13 @@ function highlightSortOptions() {
         });
 
         items[i].addEventListener("click", function () {
-            sortSelectorLabel.textContent = sortText;
-            queryParams.sort = sortValue;
+            if (sortSelectorLabel.textContent !== sortText || sortSelectorLabel.textContent==="-") {
+                sortSelectorLabel.textContent = sortText;
+                queryParams.sort = sortValue;
+                pagina = 1;
+                renderProducts();
+            }
             hideSort();
-            renderProducts();
         });
     }
 }
