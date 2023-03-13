@@ -12,25 +12,25 @@ class ProductDBManager {
             queryParams.limit = 10;
         }
 
-        if(queryParams.page){
+        if (queryParams.page) {
             queryParams.page = parseInt(queryParams.page);
-        }else{
+        } else {
             queryParams.page = 1;
         }
 
-        let paginateOptions = { limit: queryParams.limit, page: queryParams.page};
-        
-        if(queryParams.sort){
-            if(queryParams.sort == "asc"){
-                paginateOptions.sort = {price: 1};
-            }else if(queryParams.sort =="desc"){
-                paginateOptions.sort = {price: -1};
+        let paginateOptions = { limit: queryParams.limit, page: queryParams.page };
+
+        if (queryParams.sort) {
+            if (queryParams.sort == "asc") {
+                paginateOptions.sort = { price: 1 };
+            } else if (queryParams.sort == "desc") {
+                paginateOptions.sort = { price: -1 };
             }
         }
 
         let query = {};
 
-        if(queryParams.queryCategory){
+        if (queryParams.queryCategory) {
             query.category = queryParams.queryCategory;
         }
 
@@ -131,15 +131,20 @@ class CartDBManager {
                 //The product it's already in the cart.
                 //Increment quantity.
                 console.log("Product already in cart. Quantity incremented by one.");
-                if(quantity){
+                if (quantity) {
                     productInCart.quantity = quantity;
-                }else{
+                } else {
                     productInCart.quantity++;
                 }
-                
+
             } else {
                 console.log("Adding a new product to cart.");
-                cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
+                if(quantity){
+                    cartSearched.products.push({ product: productIdToAdd, quantity: quantity });
+                }else{
+                    cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
+                }
+                
             }
 
             //Update the cart in DB
@@ -159,7 +164,9 @@ class CartDBManager {
         try {
             const cartToModify = await cartModel.findById(cartId);
 
-            const index = cartToModify.products.findIndex((p) => p === productId);
+            console.log(cartToModify);
+
+            const index = cartToModify.products.findIndex((p) => p.product.toString() === productId);
 
             console.log(index);
 
@@ -179,7 +186,15 @@ class CartDBManager {
         }
     }
 
-    async delete(cartId) { }
+    async deleteAllCart(cartId) {
+        try {
+            const deleteProduct = { products: [] }
+            const cart = await cartModel.findByIdAndUpdate(cartId, deleteProduct, { new: true });
+            return cart;
+        } catch (err) {
+            throw err;
+        }
+    }
 }
 
 export { ProductDBManager, CartDBManager };
