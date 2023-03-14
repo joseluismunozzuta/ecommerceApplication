@@ -21,7 +21,8 @@
               id="prevButton" onclick="renderPrev()">Previous
               Page</button>
             <button type="button" class="btn btn-info btn-sm mx-1"
-              id="nextButton" onclick="renderNext()">Next Page</button>
+              id="nextButton" onclick="renderNext()">Next
+              Page</button>
           </div>
         </div>
 
@@ -38,9 +39,9 @@
                 shadow-sm border border-black ring-1 ring-inset ring-gray-300
                 focus:outline-none
                 focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                aria-haspopup="listbox" aria-expanded="true"
-                aria-labelledby="listbox-label" id="sortSelector"
-                onclick="showSort()">
+                aria-haspopup="listbox"
+                aria-expanded="true" aria-labelledby="listbox-label"
+                id="sortSelector" onclick="showSort()">
                 <span class="flex items-center">
                   <span class="ml-3 block truncate" id="sortLabel">-</span>
                 </span>
@@ -60,22 +61,24 @@
 
               <ul class="absolute z-10 mt-1 max-h-56 w-full overflow-auto
                 rounded-md bg-white py-1 pl-0 text-base shadow-lg ring-1
-                ring-black ring-opacity-5 focus:outline-none sm:text-sm d-none"
-                tabindex="-1"
-                role="listbox" aria-labelledby="listbox-label"
+                ring-black ring-opacity-5 focus:outline-none sm:text-sm
+                selectComp" tabindex="-1" role="listbox"
+                aria-labelledby="listbox-label"
                 aria-activedescendant="listbox-option-3" id="sortOptions">
 
                 <li class="text-gray-900 relative cursor-default select-none
                   py-2 pl-3 pr-9" id="listbox-option-0" role="option">
                   <div class="flex items-center">
-                    <span data-value="asc" class="font-normal ml-3 block truncate">Ascendent</span>
+                    <span data-value="asc" class="font-normal ml-3 block
+                      truncate">Ascendent</span>
                   </div>
                 </li>
 
                 <li class="text-gray-900 relative cursor-default select-none
                   py-2 pl-3 pr-9" id="listbox-option-1" role="option">
                   <div class="flex items-center">
-                    <span data-value="desc" class="font-normal ml-3 block truncate">Descendent</span>
+                    <span data-value="desc" class="font-normal ml-3 block
+                      truncate">Descendent</span>
                   </div>
                 </li>
 
@@ -98,9 +101,7 @@
           <div class="min-h-max aspect-w-1 aspect-h-1 w-full overflow-hidden
             rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none
             lg:h-full">
-            <img
-              src={{this.thumbnail}}
-              alt="#" class="h-full w-full
+            <img src={{this.thumbnail}} alt="#" class="h-full w-full
               object-cover object-center lg:h-full lg:w-full">
           </div>
           <div class="mt-4 flex justify-between">
@@ -123,3 +124,114 @@
       </div>
     </div>
   </div>
+
+  <div class="relative z-10 modalBg" id="modalBg" role="dialog"
+    aria-modal="true">
+    <!--
+    Background backdrop, show/hide based on modal state.
+
+    Entering: "ease-out duration-300"
+      From: "opacity-0"
+      To: "opacity-100"
+    Leaving: "ease-in duration-200"
+      From: "opacity-100"
+      To: "opacity-0"
+  -->
+    <div class="fixed inset-0 hidden bg-gray-500 bg-opacity-75
+      transition-opacity md:block"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-stretch justify-center text-center
+        md:items-center md:px-2 lg:px-4">
+        <!--
+        Modal panel, show/hide based on modal state.
+
+        Entering: "ease-out duration-300"
+          From: "opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+          To: "opacity-100 translate-y-0 md:scale-100"
+        Leaving: "ease-in duration-200"
+          From: "opacity-100 translate-y-0 md:scale-100"
+          To: "opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+      -->
+        <div class="flex w-full transform text-left text-base transition md:my-8
+          md:max-w-2xl md:px-4 lg:max-w-4xl modalPanel" id="modalPanel">
+          <div class="relative flex w-full items-center overflow-hidden bg-white
+            px-4 pt-14 pb-8 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
+            <button type="button" class="absolute top-4 right-4 text-gray-400
+              hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6
+              lg:top-8 lg:right-8" onclick="hideModal()">
+              <span class="sr-only">Close</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18
+                  6M6 6l12 12"></path>
+              </svg>
+            </button>
+
+            <div class="grid w-full grid-cols-1 items-start gap-y-8 gap-x-6
+              sm:grid-cols-12 lg:gap-x-8">
+              <div class="aspect-w-2 aspect-h-3 overflow-hidden rounded-lg
+                bg-gray-100 sm:col-span-4 lg:col-span-5">
+                <img
+                  src="https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg"
+                  alt="Two each of gray, white, and black shirts arranged on
+                  table." class="object-cover object-center" id="modalImage">
+              </div>
+              <div class="sm:col-span-8 lg:col-span-7">
+                <h2 class="text-2xl font-bold text-gray-900 sm:pr-12"
+                  id="modalTitle">Basic
+                  Tee 6-Pack</h2>
+
+                <section aria-labelledby="information-heading" class="mt-2">
+                  <h3 id="information-heading" class="sr-only">Product
+                    information</h3>
+
+                  <p class="text-2xl text-gray-900" id="modalPrice">$192</p>
+                </section>
+
+                <section aria-labelledby="options-heading" class="mt-4">
+                  <h3 id="options-heading" class="sr-only">Product
+                    options</h3>
+
+                  
+                    <!-- Description -->
+                    <div>
+                      <h4 class="text-sm font-bold text-gray-900">Description</h4>
+                      <p class="text-gray-900" id="modalDescription">This is the
+                        description</p>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mt-4">
+                      <h4 class="text-sm font-bold text-gray-900">Category</h4>
+                      <p class="text-gray-900" id="modalCategory">This is the
+                        category</p>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="mt-4">
+                      <h4 class="text-sm font-bold text-gray-900">Stock</h4>
+                      <p class="text-gray-900" id="modalStock">This is the
+                        stock</p>
+                    </div>
+
+                    <button type="submit" class="mt-6 flex w-full
+                      items-center justify-center rounded-md
+                      border border-transparent bg-indigo-600 py-3
+                      px-8 text-base font-medium text-white
+                      hover:bg-indigo-700 focus:outline-none
+                      focus:ring-2 focus:ring-indigo-500
+                      focus:ring-offset-2" id="addCartBtn" data-value="data"
+                      onclick="addToCart()">Add to bag</button>
+                  
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

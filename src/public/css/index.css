@@ -1,7 +1,37 @@
-.div{
-    border: 2px solid black;
-    margin: 10px;
+.selectComp{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in-out 150ms;
 }
-.h1{
-    color: red;
+.selectComp.show{
+    pointer-events: auto;
+    opacity: 1;
+}
+.quickview{
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    opacity: 0;
+}
+.cardImage:hover + .quickview{
+    opacity: 1;
+}
+
+.modalBg{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in-out 300ms;
+}
+.modalBg.show{
+    pointer-events: auto;
+    opacity: 1;
+}
+.modalPanel{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in-out 300ms;
+}
+.modalPanel.show{
+    pointer-events: auto;
+    opacity: 1;
 }

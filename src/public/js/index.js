@@ -6,6 +6,15 @@ let prodContainer = document.getElementById("productContainer");
 let sortSelector = document.getElementById("sortSelector");
 let sortSelectorLabel = document.getElementById("sortLabel");
 let sortOptions = document.getElementById("sortOptions");
+let modalBg = document.getElementById("modalBg");
+let modalPanel = document.getElementById("modalPanel");
+let modalTitle = document.getElementById("modalTitle");
+let modalPrice = document.getElementById("modalPrice");
+let modalDescription = document.getElementById("modalDescription");
+let modalImage = document.getElementById("modalImage");
+let modalStock = document.getElementById("modalStock");
+let modalCategory = document.getElementById("modalCategory");
+let modalBtn = document.getElementById("addCartBtn");
 
 function highlightSortOptions() {
     const list = document.getElementById("sortOptions");
@@ -29,7 +38,7 @@ function highlightSortOptions() {
         });
 
         items[i].addEventListener("click", function () {
-            if (sortSelectorLabel.textContent !== sortText || sortSelectorLabel.textContent==="-") {
+            if (sortSelectorLabel.textContent !== sortText || sortSelectorLabel.textContent === "-") {
                 sortSelectorLabel.textContent = sortText;
                 queryParams.sort = sortValue;
                 pagina = 1;
@@ -41,12 +50,11 @@ function highlightSortOptions() {
 }
 
 function showSort() {
-    sortOptions.classList.remove("d-none");
-    sortOptions.style.display = "block";
+    sortOptions.classList.add("show");
 }
 
 function hideSort() {
-    sortOptions.style.display = "none";
+    sortOptions.classList.remove('show');
 }
 
 function renderNext() {
@@ -85,7 +93,7 @@ const render = (prods) => {
     prodContainer.innerHTML = "";
     prods.docs.map(prod => {
         const item = document.createElement('div');
-        item.innerHTML = `<div class="group relative h-[26rem] my-10">
+        item.innerHTML = `<div class="group relative h-[26rem] my-10 cardImage">
         <div class="min-h-max aspect-w-1 aspect-h-1 w-full overflow-hidden
         rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none
         lg:h-full">
@@ -93,7 +101,10 @@ const render = (prods) => {
                 src=${prod.thumbnail}
                 alt="#" class="h-full w-full
                 object-cover object-center lg:h-full lg:w-full">
+                
             </div>
+            <button type="button" id="${prod._id}" class="z-10 w-3/4 rounded-md bg-white bg-opacity-100 py-2 px-4 text-sm text-black quickview group-hover:opacity-100">Quick View</button>
+            
             <div class="mt-4 flex justify-between">
                 <div class="px-2">
                     <h3 class="text-sm text-gray-700">
@@ -108,7 +119,52 @@ const render = (prods) => {
             </div>
         </div>`;
         prodContainer.appendChild(item);
+        const btnAdd = document.getElementById(prod._id);
+        btnAdd.addEventListener('click', () => showModal(prod._id));
+
     })
+}
+
+async function showModal(id) {
+    const result = await fetch(`http://localhost:3000/api/products/${id}`);
+    const prod = await result.json();
+    modalTitle.innerText = prod.title;
+    modalPrice.innerText = "$ " + prod.price;
+    modalStock.innerText = prod.stock + " units";
+    modalDescription.innerText = prod.description;
+    modalCategory.innerText = prod.category;
+    modalImage.src = prod.thumbnail;
+    modalBtn.setAttribute("data-value", prod._id);
+    modalBg.classList.add("show");
+    modalPanel.classList.add("show");
+
+}
+
+function hideModal() {
+    modalBg.classList.remove('show');
+    modalPanel.classList.remove('show');
+}
+
+async function addToCart() {
+    let prodid = modalBtn.getAttribute("data-value");
+    const data = await getCarts();
+    const cartId = data.docs[0]._id;
+
+    try {
+        const addCartProduct = await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
+            method: 'PUT'
+        })
+        hideModal();
+        alert('Se agrego el producto al carrito');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getCarts = async () => {
+    const cart = await fetch('http://localhost:3000/api/carts')
+    const data = cart.json();
+    return data;
 }
 
 async function getProducts() {

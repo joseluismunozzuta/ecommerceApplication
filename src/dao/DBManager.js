@@ -164,11 +164,7 @@ class CartDBManager {
         try {
             const cartToModify = await cartModel.findById(cartId);
 
-            console.log(cartToModify);
-
             const index = cartToModify.products.findIndex((p) => p.product.toString() === productId);
-
-            console.log(index);
 
             if (index === -1) {
                 throw new Error("Product not found in cart");
