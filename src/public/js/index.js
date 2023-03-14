@@ -250,3 +250,5 @@ function createProductCard(product) {
     return str;
 }
 
+
+

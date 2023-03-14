@@ -39,6 +39,12 @@ viewRouter.get("/products", async (req, res) => {
 
 });
 
+viewRouter.get("/carts", async (req, res) =>{
+    res.render('cart',{
+        style: 'home.css'
+    });
+})
+
 viewRouter.get("/realtimeproducts", async (req, res) => {
 
     const queryParams = req.query;
