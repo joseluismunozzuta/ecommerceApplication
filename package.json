@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/complementaryChallengeBackEnd.git"
+    "url": "git+https://github.com/joseluismunozzuta/projectSecondPartBackend.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/complementaryChallengeBackEnd/issues"
+    "url": "https://github.com/joseluismunozzuta/projectSecondPartBackend/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/complementaryChallengeBackEnd#readme",
+  "homepage": "https://github.com/joseluismunozzuta/projectSecondPartBackend#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
