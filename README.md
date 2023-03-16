@@ -4,17 +4,17 @@ To install dependencies:
 
 `npm install nodemon`
 
-npm install express
+`npm install express`
 
-npm install express-handlebars
+`npm install express-handlebars`
 
-npm install handlebars
+`npm install handlebars`
 
-npm install socket.io
+`npm install socket.io
 
 npm install mongoose
 
-npm install mongoose-paginate-v2
+npm install mongoose-paginate-v2`
 
 
 
