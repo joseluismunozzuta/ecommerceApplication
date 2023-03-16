@@ -154,8 +154,9 @@ async function addToCart() {
         const addCartProduct = await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
             method: 'PUT'
         })
-        hideModal();
         alert('Se agrego el producto al carrito');
+        hideModal();
+        
     } catch (err) {
         console.log(err);
     }

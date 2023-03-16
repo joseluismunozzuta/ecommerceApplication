@@ -41,7 +41,8 @@ viewRouter.get("/products", async (req, res) => {
 
 viewRouter.get("/carts", async (req, res) =>{
     res.render('cart',{
-        style: 'home.css'
+        style: 'cart.css',
+        title: 'Cart View'
     });
 })
 
