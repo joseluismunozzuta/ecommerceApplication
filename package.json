@@ -1,5 +1,5 @@
 {
-  "name": "secondpartproject",
+  "name": "backendloginform",
   "version": "1.0.0",
   "description": "To install dependencies:",
   "main": "index.js",
@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/projectSecondPartBackend.git"
+    "url": "git+https://github.com/joseluismunozzuta/backendLoginForm.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/projectSecondPartBackend/issues"
+    "url": "https://github.com/joseluismunozzuta/backendLoginForm/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/projectSecondPartBackend#readme",
+  "homepage": "https://github.com/joseluismunozzuta/backendLoginForm#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
