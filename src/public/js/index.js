@@ -16,6 +16,8 @@ let modalStock = document.getElementById("modalStock");
 let modalCategory = document.getElementById("modalCategory");
 let modalBtn = document.getElementById("addCartBtn");
 
+/*************************PRODUCTS LIST****************************/
+
 function highlightSortOptions() {
     const list = document.getElementById("sortOptions");
     const items = list.getElementsByTagName("li");
@@ -50,7 +52,11 @@ function highlightSortOptions() {
 }
 
 function showSort() {
-    sortOptions.classList.add("show");
+    if (sortOptions.classList.contains("show")){
+        hideSort();
+    }else{
+        sortOptions.classList.add("show");
+    }
 }
 
 function hideSort() {
@@ -251,5 +257,7 @@ function createProductCard(product) {
     return str;
 }
 
+
+/************************************************************************** */
 
 

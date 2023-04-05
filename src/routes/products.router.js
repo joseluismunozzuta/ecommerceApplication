@@ -1,11 +1,8 @@
 import express from "express";
-import { ProductManager } from "../dao/FileManager.js";
 import { ProductDBManager } from "../dao/DBManager.js";
-import path from "path";
 import socketServer from "../app.js";
 
 const productRouter = express.Router();
-//const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
 const productDBManager = new ProductDBManager();
 
 productRouter.get("/", async (req, res) => {
@@ -14,13 +11,6 @@ productRouter.get("/", async (req, res) => {
 
     try {
         const productos = await productDBManager.getProducts(req.query);
-        // let limitedProducts;
-        // if (limit) {
-        //     limitedProducts = productos.slice(0, limit);
-        //     res.send(limitedProducts);
-        // } else {
-        //     res.send(productos);
-        // }
         res.send(productos);
     } catch (err) {
         res.status(500).send(err.message);

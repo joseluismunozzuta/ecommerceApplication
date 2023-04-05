@@ -1,10 +1,7 @@
 import express from "express";
-import { ProductManager } from "../dao/FileManager.js";
 import { ProductDBManager } from "../dao/DBManager.js";
-import path from "path";
 
 const viewRouter = express.Router();
-//const productFileManager = new ProductManager(path.resolve(process.cwd(), "src/public", "productos.json"));
 const productDBManager = new ProductDBManager();
 
 viewRouter.get("/products", async (req, res) => {
@@ -27,7 +24,7 @@ viewRouter.get("/products", async (req, res) => {
         }
         res.render('home', {
             user: user,
-            style: 'home.css',
+            style: 'products.css',
             title: 'Products list',
             isAdmin: user.role === "admin",
             productosReversed,
