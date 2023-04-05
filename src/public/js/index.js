@@ -15,6 +15,29 @@ let modalImage = document.getElementById("modalImage");
 let modalStock = document.getElementById("modalStock");
 let modalCategory = document.getElementById("modalCategory");
 let modalBtn = document.getElementById("addCartBtn");
+let logoutButton = document.getElementById("logout");
+
+if (logoutButton) {
+    logoutButton.addEventListener('click', async function () {
+        await fetch("/api/sessions/logout", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status == "success") {
+                    window.location.replace("http://localhost:3000/api/sessions/login");
+                }
+                else {
+                    alert("Cant logout");
+                }
+            })
+            .catch((error) => console.log(error));
+    })
+}
+
 
 /*************************PRODUCTS LIST****************************/
 
@@ -52,9 +75,9 @@ function highlightSortOptions() {
 }
 
 function showSort() {
-    if (sortOptions.classList.contains("show")){
+    if (sortOptions.classList.contains("show")) {
         hideSort();
-    }else{
+    } else {
         sortOptions.classList.add("show");
     }
 }
@@ -162,7 +185,7 @@ async function addToCart() {
         })
         alert('Se agrego el producto al carrito');
         hideModal();
-        
+
     } catch (err) {
         console.log(err);
     }
@@ -202,62 +225,3 @@ async function getProducts() {
 
 renderProducts();
 highlightSortOptions();
-
-
-
-/*Logic for WebSockets - RealTime Products View */
-const socket = io();
-
-socket.on('generalevent', (arg1, arg2) => {
-    console.log(arg1);
-    console.log(arg2);
-})
-
-socket.on('productdeleted', productid => {
-    let divtoDelete = document.getElementById("product" + productid);
-    divtoDelete.remove();
-})
-
-socket.on('productupdated', product => {
-    let divtoUpdate = document.getElementById("product" + product._id);
-    divtoUpdate.innerHTML = createProductCard(product);
-})
-
-socket.on('productadded', product => {
-    addProduct(product);
-})
-
-function addProduct(product) {
-    let str = createProductCard(product);
-    let container = document.getElementById("container");
-    let originalHtml = container.getInnerHTML();
-    let lastHtml = str.concat(originalHtml);
-    container.innerHTML = lastHtml;
-}
-
-function createProductCard(product) {
-    let str = `<div class="img-card iCard-style1" id="product` + product._id + `">
-    <div class="card-content">
-        <div class="card-image">
-            <span class="card-title">`+ product.title + `</span>
-            <img src="` + product.thumbnail + `" alt="#">
-            </div>
-            <div class="card-text">
-                <ul>
-                    <li>ID: ` + product._id + `</li>
-                    <li>Price: ` + product.price + `</li>
-                    <li>Description: ` + product.description + `</li>
-                    <li>Category: ` + product.category + `</li>
-                    <li>Status: ` + product.status + `</li>
-                    <li>Stock: ` + product.stock + ` units</li>
-                    </ul>
-                </div>            
-            </div>
-        </div>`;
-    return str;
-}
-
-
-/************************************************************************** */
-
-

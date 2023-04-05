@@ -13,7 +13,7 @@ document.getElementById("login").addEventListener('click', async function () {
         .then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
-                window.location.replace("http://localhost:3000/profile");
+                window.location.replace("http://localhost:3000/views/products");
             }
             else {
                 alert("Invalid email or password.");

@@ -28,14 +28,22 @@ sessionRouter.get("/login", (req, res) => {
 })
 
 sessionRouter.get("/signup", (req, res) => {
-    res.render("signup", {
-        title: 'Register',
-        style: 'sessions.css'
-    });
-})
+    if (!req.session || !req.session.user) {
+        res.render("signup", {
+            title: 'Register',
+            style: 'sessions.css'
+        });
+    } else {
+        res.redirect("/profile");
+    }
+});
 
 sessionRouter.post("/signup", async (req, res) => {
     const user = { ...req.body };
+
+    if (user.email == "adminCoder@coder.com") {
+        user.role = "admin";
+    }
 
     try {
         const newUser = new userModel(user);
@@ -63,7 +71,6 @@ sessionRouter.post("/login", async (req, res) => {
 
         console.log(loggedUser);
         req.session.user = loggedUser.email;
-        //req.session.admin = loggedUser.admin;
         res.send({ status: "success", payload: loggedUser });
 
     } catch (err) {
@@ -71,6 +78,16 @@ sessionRouter.post("/login", async (req, res) => {
         res.status(500).send(err.message);
     }
 
-
 })
+
+sessionRouter.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (!err) {
+            res.send({status:"success", message: "Logout succesful!"});
+        } else {
+            return res.json({ status: 'Logout Failed', body: err });
+        }
+    })
+});
+
 export default sessionRouter;

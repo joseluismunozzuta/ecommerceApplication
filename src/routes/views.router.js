@@ -1,5 +1,6 @@
 import express from "express";
 import { ProductDBManager } from "../dao/DBManager.js";
+import { userModel } from "../dao/models/user.model.js";
 
 const viewRouter = express.Router();
 const productDBManager = new ProductDBManager();
@@ -17,18 +18,19 @@ viewRouter.get("/products", async (req, res) => {
         }
         let productosReversed = reversed.reverse();
 
-        let user = {
-            role: "admin",
-            name: "Jose",
-            last_name: "Munoz"
+        const user = await userModel.findOne({ email: req.session.user }).lean();
+
+        let flag = true;
+
+        if (!user) {
+            flag = false;
         }
-        res.render('home', {
+
+        res.render('products', {
             user: user,
             style: 'products.css',
             title: 'Products list',
-            isAdmin: user.role === "admin",
-            productosReversed,
-            data
+            flag
         });
     } catch (err) {
         res.status(500).send(err.message);
@@ -36,8 +38,8 @@ viewRouter.get("/products", async (req, res) => {
 
 });
 
-viewRouter.get("/carts", async (req, res) =>{
-    res.render('cart',{
+viewRouter.get("/carts", async (req, res) => {
+    res.render('cart', {
         style: 'cart.css',
         title: 'Cart View'
     });
