@@ -1,11 +1,13 @@
 <div>
-  <h1>Products List</h1>
-  {{#if flag}}
-  <p>You are logged in as {{user.first_name}} {{user.last_name}}</p>
-  <button id="logout" type="button">
-    Cerrar sesión
-  </button>
-  {{/if}}
+  <div class="userInfo">
+    <h1>Products List</h1>
+    {{#if flag}}
+    <p>You are logged in as {{user.first_name}} {{user.last_name}}</p>
+    <button id="logout" type="button">
+      Cerrar sesión
+    </button>
+    {{/if}}
+  </div>
   <div class="fs-2 mx-5 mb-2 flex flex-row justify-end">
     <div class="d-flex justify-content-center align-content-center p-2">
 

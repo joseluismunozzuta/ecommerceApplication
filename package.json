@@ -1,5 +1,5 @@
 {
-  "name": "backendloginform",
+  "name": "authenticationpart",
   "version": "1.0.0",
   "description": "To install dependencies:",
   "main": "index.js",
@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/backendLoginForm.git"
+    "url": "git+https://github.com/joseluismunozzuta/jwtauthentication.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/backendLoginForm/issues"
+    "url": "https://github.com/joseluismunozzuta/jwtauthentication/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/backendLoginForm#readme",
+  "homepage": "https://github.com/joseluismunozzuta/jwtauthentication#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
