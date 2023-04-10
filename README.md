@@ -1,4 +1,4 @@
-  # Segunda PreEntrega
+  # ECommerce Project - Backend CoderHouse
 
 To install dependencies:
 
