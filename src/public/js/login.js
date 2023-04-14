@@ -2,7 +2,7 @@ document.getElementById("login").addEventListener('click', async function () {
     const userForm = document.getElementById("loginForm");
     const formData = new FormData(userForm);
     const data = Object.fromEntries(formData);
-    console.log(data);
+
     await fetch("/api/sessions/login", {
         method: "POST",
         headers: {
@@ -16,7 +16,7 @@ document.getElementById("login").addEventListener('click', async function () {
                 window.location.replace("http://localhost:3000/views/products");
             }
             else {
-                alert("Invalid email or password.");
+                alert(data.message);
 
             }
         })

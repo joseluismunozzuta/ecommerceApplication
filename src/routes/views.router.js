@@ -13,14 +13,15 @@ viewRouter.get("/products", async (req, res) => {
         //     reversed.push(p);
         // }
         // let productosReversed = reversed.reverse();
+        let user = new Map();
+        let flag = false;
 
-        const user = await userModel.findOne({ email: req.session.user }).lean();
-
-        let flag = true;
-
-        if (!user) {
-            flag = false;
-        }
+        if(req.session.user){
+            user = await userModel.findOne({ email: req.session.user.email }).lean();
+            if(user){
+                flag = true;
+            }
+        }        
 
         res.render('products', {
             user: user,

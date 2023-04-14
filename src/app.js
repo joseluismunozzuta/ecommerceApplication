@@ -5,6 +5,9 @@ import handlebars from "express-handlebars";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import passport from "passport";
+import flash from 'connect-flash';
+import initializePassport from "./config/passport.config.js";
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
 import sessionRouter from "./routes/session.router.js";
@@ -31,6 +34,10 @@ app.use(
         }),
     })
 );
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
@@ -77,16 +84,14 @@ const auth = async (req, res, next) => {
 
 app.get("/profile", auth, async (req, res) => {
     try{
-        const profile = await userModel.findOne({email: req.session.user}).lean();
+        const profile = await userModel.findOne({email: req.session.user.email}).lean();
         res.render('profile', {
             title: 'Profile',
             style: 'profile.css',
             profile: profile
         })
     }catch(err){
-        res.send(500).send("Internal error");
-        console.log(err);
-
+        return res.status(500).send("Internal error");
     }
 })
 

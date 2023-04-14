@@ -17,6 +17,18 @@ let modalCategory = document.getElementById("modalCategory");
 let modalBtn = document.getElementById("addCartBtn");
 let logoutButton = document.getElementById("logout");
 
+function goProfile(){
+    window.location.href = "http://localhost:3000/profile";
+}
+
+function goLogin(){
+    window.location.href = "http://localhost:3000/api/sessions/login";
+}
+
+function goCart(){
+    window.location.href = "http://localhost:3000/views/carts";
+}
+
 if (logoutButton) {
     logoutButton.addEventListener('click', async function () {
         await fetch("/api/sessions/logout", {

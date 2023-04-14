@@ -1,6 +1,8 @@
 import express from 'express';
 import session from 'express-session';
 import { userModel } from "../dao/models/user.model.js";
+import { createHash, isValidPassword } from '../utils.js';
+import passport from 'passport';
 
 const sessionRouter = express.Router();
 
@@ -38,52 +40,82 @@ sessionRouter.get("/signup", (req, res) => {
     }
 });
 
-sessionRouter.post("/signup", async (req, res) => {
-    const user = { ...req.body };
+sessionRouter.post("/signup", passport.authenticate('register', {failureRedirect:'/api/sessions/failregister',
+failureFlash: true}), async (req, res) => {
+    // const user = { ...req.body };
+    // user.password = createHash(user.password);
 
-    if (user.email == "adminCoder@coder.com") {
-        user.role = "admin";
-    }
+    // if (user.email == "adminCoder@coder.com") {
+    //     user.role = "admin";
+    // }
 
-    try {
-        const newUser = new userModel(user);
-        let result = await newUser.save();
-        res.send({ status: "success", payload: result });
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
+    // try {
+    //     const newUser = new userModel(user);
+    //     let result = await newUser.save();
+    //     res.send({ status: "success", payload: result });
+    // } catch (err) {
+    //     res.status(500).send(err.message);
+    // }
+
+    res.send({status:"success", message:"User registered"});
+
 });
 
-sessionRouter.post("/login", async (req, res) => {
+sessionRouter.get('/failregister', function (req, res) {
+    res.send({message: req.flash('error')});
+})
+
+sessionRouter.post("/login", passport.authenticate('login', {failureRedirect:'/api/sessions/faillogin',
+failureFlash: true}), async (req, res) => {
     const { email, password } = req.body;
 
-    try {
+    // try {
 
-        if (!email || !password) {
-            res.status(400).send({ status: "error", message: "Faltan datos" });
-        }
+    //     if (!email || !password) {
+    //         return res.status(400).send({ status: "error", message: "Faltan datos" });
+    //     }
 
-        const loggedUser = await userModel.findOne({ email: email, password: password });
+    //     const loggedUser = await userModel.findOne({ email: email });
 
-        if (!loggedUser) {
-            res.status(404).send({ status: "error", message: "Invalid email or password" });
-        }
+    //     if (!loggedUser) {
+    //         return res.status(404).send({ status: "error", message: "Invalid email or password" });
+    //     }
 
-        console.log(loggedUser);
-        req.session.user = loggedUser.email;
-        res.send({ status: "success", payload: loggedUser });
+    //     if (!isValidPassword(loggedUser, password)) {
+    //         return res.status(403).send({ status: "error", message: "Incorrect password" });
+    //     }
 
-    } catch (err) {
-        console.log(err.message);
-        res.status(500).send(err.message);
+    //     delete loggedUser.password;
+    //     req.session.user = loggedUser.email;
+    //     res.send({ status: "success", payload: loggedUser });
+
+    // } catch (err) {
+    //     console.log(err.message);
+    //     res.status(500).send(err.message);
+    // }
+
+    if(!req.user){
+        return res.status(400).send({status:"error", error:"Invalid credentials"});
     }
 
+    req.session.user = {
+        first_name : req.user.first_name,
+        last_name : req.user.last_name,
+        email : req.user.email,
+        age: req.user.age
+    }
+    res.send({status:"success", payload:req.user});
+
+})
+
+sessionRouter.get('/faillogin', (req, res) => {
+    res.send({message: req.flash('error')});
 })
 
 sessionRouter.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (!err) {
-            res.send({status:"success", message: "Logout succesful!"});
+            res.send({ status: "success", message: "Logout succesful!" });
         } else {
             return res.json({ status: 'Logout Failed', body: err });
         }
