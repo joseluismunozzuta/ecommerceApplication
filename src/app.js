@@ -10,45 +10,49 @@ import flash from 'connect-flash';
 import initializePassport from "./config/passport.config.js";
 import productRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
-import sessionRouter from "./routes/session.router.js";
-import viewRouter from "./routes/views.router.js";
+import ViewRouter from "./routes/views.router.js";
 import { userModel } from "./dao/models/user.model.js";
+import SessionRouter from "./routes/session.router.js";
 
 const app = express();
-app.use(express.json());
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
-
-/****************SESSION********************** */
-app.use(
-    session({
-        secret: 'secretCoder',
-        resave: true,
-        saveUninitialized: false,
-        store: MongoStore.create({
-            mongoUrl: "mongodb+srv://joseluismunozzuta:Diego0707@backendcoder1.djzve1b.mongodb.net/ecommerce1?retryWrites=true&w=majority",
-            mongoOptions: {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            },
-            ttl: 300,
-        }),
-    })
-);
+app.use(express.json());
+app.use(cookieParser());
 initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
+
+
+// /****************SESSION********************** */
+// app.use(
+//     session({
+//         secret: 'secretCoder',
+//         resave: true,
+//         saveUninitialized: false,
+//         store: MongoStore.create({
+//             mongoUrl: "mongodb+srv://joseluismunozzuta:Diego0707@backendcoder1.djzve1b.mongodb.net/ecommerce1?retryWrites=true&w=majority",
+//             mongoOptions: {
+//                 useNewUrlParser: true,
+//                 useUnifiedTopology: true
+//             },
+//             ttl: 300,
+//         }),
+//     })
+// );
+
 
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
-app.use("/api/sessions", sessionRouter);
-app.use("/views", viewRouter);
+
+const sessionRouter = new SessionRouter();
+app.use("/api/sessions", sessionRouter.getRouter());
+
+const viewRouter = new ViewRouter();
+app.use("/views", viewRouter.getRouter());
 
 app.engine('handlebars', handlebars.engine());
 app.set("views", __dirname + '/views');
 app.set('view engine', 'handlebars');
 
-app.use(express.static(__dirname + '/public'));
 
 const port = process.env.PORT || 3000;
 
@@ -56,7 +60,7 @@ const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
-app.use(cookieParser());
+
 
 // app.get('/session', (req, res) => {
 //     //Si al conectarse la sesion ya existe, entonces aumentamos el contador
