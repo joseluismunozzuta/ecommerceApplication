@@ -11,6 +11,15 @@ export const getCarts_controller = async (req, res) => {
 
 }
 
+export const getCartById = async (req, res) =>{
+    const cartId = req.params.cid;
+    await cartDBManager.searchById(cartId).then((data) => {
+        res.send(data);
+    }).catch((err) => {
+        res.status(500).send(err.message);
+    })
+}
+
 export const createCart_controller = async (req, res) => {
 
     let products = [];

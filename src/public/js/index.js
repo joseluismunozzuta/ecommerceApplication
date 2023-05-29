@@ -17,15 +17,15 @@ let modalCategory = document.getElementById("modalCategory");
 let modalBtn = document.getElementById("addCartBtn");
 let logoutButton = document.getElementById("logout");
 
-function goProfile(){
+function goProfile() {
     window.location.href = "http://localhost:3000/profile";
 }
 
-function goLogin(){
+function goLogin() {
     window.location.href = "http://localhost:3000/api/sessions/login";
 }
 
-function goCart(){
+async function goCart() {
     window.location.href = "http://localhost:3000/views/carts";
 }
 

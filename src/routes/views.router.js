@@ -11,16 +11,19 @@ export default class ViewRouter extends CRouter{
                 let flag = false;
         
                 if(req.user){
-                    user = await userModel.findOne({ email: req.user.user.email }).lean();
+                    user = await userModel.findOne({ email: req.user.user.email }).
+                    populate('cart').
+                    lean();
                     if(user){
                         flag = true;
                     }
-                }        
+                }
+
                 res.render("products", {
                     user: user,
                     style: 'products.css',
                     title: 'Products list',
-                    flag
+                    flag,
                 });
                 
             } catch (err) {
@@ -30,12 +33,20 @@ export default class ViewRouter extends CRouter{
         });
         
         this.get("/carts", ["PUBLIC"], passportCall('jwt'), IfAuthenticated(), async (req, res) => {
-        
-            res.render('cart', {
-                style: 'cart.css',
-                title: 'Cart View'
-            });
-        
+
+            if(req.user){
+                let user = await userModel.findOne({ email: req.user.user.email }).
+                populate('cart');
+                let cartId = user.cart._id.toString();
+                res.render('cart', {
+                    style: 'cart.css',
+                    title: 'Cart View',
+                    cartId : cartId
+                });
+            }else{
+                res.sendUserError("Not Authenticated");
+            }
         })
+
     }
 }

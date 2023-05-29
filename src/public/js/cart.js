@@ -1,8 +1,9 @@
 let prodList = document.getElementById("cartProdsList");
-const getCarts = async () => {
-    const result = await fetch('http://localhost:3000/api/carts')
+let cartId = document.getElementById("cartId").value;
+const getMyCart = async () => {
+    const result = await fetch('http://localhost:3000/api/carts/' + cartId);
     const data = await result.json();
-    const cart = data.docs[0].products.map(p => {
+    const cart = data.products.map(p => {
         const cartProduct = document.createElement('li');
         let totalPrice = p.product.price * p.quantity;
         cartProduct.innerHTML = `<li class="flex flex-col py-6 sm:flex-row sm:justify-between">
@@ -52,4 +53,4 @@ const getCarts = async () => {
     return data;
 }
 
-getCarts();
+getMyCart();

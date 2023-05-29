@@ -36,13 +36,13 @@
                 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0
                 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
-            <span class="badge badge-sm indicator-item">8</span>
+            <span class="badge badge-sm indicator-item">{{user.cart.products.length}}</span>
           </div>
         </label>
         <div tabindex="0" class="mt-3 card card-compact dropdown-content w-52
           bg-base-100 shadow">
           <div class="card-body">
-            <span class="font-bold text-lg">8 Items</span>
+            <span class="font-bold text-lg">{{user.cart.products.length}} products</span>
             <span class="text-info">Subtotal: $999</span>
             <div class="card-actions">
               <button class="btn btn-primary btn-block" onclick="goCart()">View cart</button>

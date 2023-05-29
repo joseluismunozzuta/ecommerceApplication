@@ -115,6 +115,16 @@ class CartDBManager {
         }
     }
 
+    async searchById(id) {
+        try {
+            const cart = await cartModel.findById(id).populate('products.product');
+            return cart;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     async addProductToCart(cartId, productIdToAdd, quantity) {
         try {
             //Search for the cart in DB

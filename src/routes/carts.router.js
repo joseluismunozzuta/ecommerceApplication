@@ -1,7 +1,7 @@
 import {
     getCarts_controller, createCart_controller,
     updateCart_controller, deleteProductFromCart_controller,
-    emptyCart_controller
+    emptyCart_controller, getCartById
 } from "../controllers/carts.controller.js";
 import CRouter from "./router.js";
 
@@ -10,6 +10,12 @@ export default class CartRouter extends CRouter{
         this.get("/",["PUBLIC"], async (req, res) => {
 
             await getCarts_controller(req, res);
+        
+        })
+
+        this.get("/:cid",["PUBLIC"], async (req, res) => {
+            
+            await getCartById(req, res);
         
         })
         
