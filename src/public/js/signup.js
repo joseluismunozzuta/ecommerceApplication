@@ -13,7 +13,7 @@ document.getElementById("signup").addEventListener('click', function () {
             if (data.status == "success") {
                 window.location.replace("http://localhost:3000/api/sessions/login");
             } else {
-                alert(data.message);
+                alert(data.error);
             }
         })
         .catch((error) => console.log(error));

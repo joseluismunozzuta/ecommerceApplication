@@ -1,19 +1,16 @@
 import express from "express";
-import __dirname from "./utils.js";
-import session from "express-session";
+import __dirname, { passportCall } from "./utils.js";
 import handlebars from "express-handlebars";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
-import passport from "passport";
-import flash from 'connect-flash';
 import initializePassport from "./config/passport.config.js";
-import productRouter from "./routes/products.router.js";
-import cartRouter from "./routes/carts.router.js";
-import ViewRouter from "./routes/views.router.js";
 import { userModel } from "./dao/models/user.model.js";
+import CartRouter from "./routes/carts.router.js";
 import SessionRouter from "./routes/session.router.js";
-
+import ProductRouter from "./routes/products.router.js";
+import ViewRouter from "./routes/views.router.js";
+import {IfAuthenticated } from "./utils.js";
 const app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
@@ -39,9 +36,11 @@ initializePassport();
 //     })
 // );
 
+const productRouter = new ProductRouter();
+app.use("/api/products", productRouter.getRouter());
 
-app.use("/api/products", productRouter);
-app.use("/api/carts", cartRouter);
+const cartRouter = new CartRouter();
+app.use("/api/carts", cartRouter.getRouter());
 
 const sessionRouter = new SessionRouter();
 app.use("/api/sessions", sessionRouter.getRouter());
@@ -86,9 +85,9 @@ const auth = async (req, res, next) => {
     }
 }
 
-app.get("/profile", auth, async (req, res) => {
+app.get("/profile", passportCall('jwt'), IfAuthenticated(), async (req, res) => {
     try{
-        const profile = await userModel.findOne({email: req.session.user.email}).lean();
+        const profile = await userModel.findOne({email: req.user.user.email}).lean();
         res.render('profile', {
             title: 'Profile',
             style: 'profile.css',

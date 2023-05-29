@@ -21,9 +21,28 @@ export const passportCall = (strategy) => {
                 return next();
             }
             req.user = user;
-            console.log(req.user);
             next();
         })(req, res, next);
+    }
+}
+
+export const IfAuthenticated = () => {
+    
+    return async(req, res, next) => {
+        if(!req.user){
+            return res.status(401).send({error:"Unauthorized, not authenticated"});
+        }
+        next();
+    }
+}
+
+export const notAuthenticated = () => {
+    
+    return async(req, res, next) => {
+        if(req.user){
+            return res.sendUserError("Already authenticated");
+        }
+        next();
     }
 }
 

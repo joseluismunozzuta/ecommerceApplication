@@ -16,7 +16,7 @@ document.getElementById("login").addEventListener('click', async function () {
                 window.location.replace("http://localhost:3000/views/products");
             }
             else {
-                alert(data.message);
+                alert(data.error);
 
             }
         })

@@ -32,7 +32,6 @@ export default class CRouter{
         //mapeamos cada callback y obtenemos sus parametros
         return callbacks.map((callback)=>async(...params)=>{
             try{
-                console.log("Here");
                 await callback.apply(this,params);
             }catch(error){
                 console.log(error);
@@ -44,7 +43,6 @@ export default class CRouter{
 
     handlePolicies = policies => (req, res, next) => {
         if(policies[0]==="PUBLIC"){
-            console.log("policies1")
             return next();
         }
         
@@ -57,7 +55,6 @@ export default class CRouter{
     }
 
     generateCustomResponses = (req, res, next) => {
-        console.log("responsesTrace");
         res.sendSuccess = payload => res.send({status:"success", payload});
         res.sendServerError = error => res.status(500).send({status:"error", error});
         res.sendUserError = error => res.status(400).send({status:"error", error});
