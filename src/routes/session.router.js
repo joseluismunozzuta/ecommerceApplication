@@ -18,7 +18,7 @@ export default class SessionRouter extends CRouter {
             res.sendSuccess(req.user);
         })
 
-        this.get("/getusers", ["PUBLIC"], async(req, res) => {
+        this.get("/getusers", ["PUBLIC"], async (req, res) => {
             try {
                 const users = await userModel.paginate();
                 res.send(users);
@@ -75,7 +75,7 @@ export default class SessionRouter extends CRouter {
                         email,
                         age,
                         password: createHash(password),
-                        cart:cartId
+                        cart: cartId
                     }
 
                     let ress = await userModel.create(newUser);
@@ -114,14 +114,13 @@ export default class SessionRouter extends CRouter {
             }
         })
 
-        this.post('/logout', (req, res) => {
-            req.session.destroy(err => {
-                if (!err) {
-                    res.send({ status: "success", message: "Logout succesful!" });
-                } else {
-                    return res.json({ status: 'Logout Failed', body: err });
-                }
-            })
+        this.post('/logout', ["PUBLIC"], (req, res) => {
+            try {
+                res.clearCookie('cookieToken');
+                res.sendSuccess("Logout successful");
+            } catch (error) {
+                return res.sendServerError("Internal error");
+            }
         });
 
     }

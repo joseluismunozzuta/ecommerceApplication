@@ -8,6 +8,7 @@ export default class ViewRouter extends CRouter{
             try {
         
                 let user = new Map();
+                let cartId;
                 let flag = false;
         
                 if(req.user){
@@ -15,7 +16,9 @@ export default class ViewRouter extends CRouter{
                     populate('cart').
                     lean();
                     if(user){
+                        //This means authentication is okay
                         flag = true;
+                        cartId = user.cart._id.toString();
                     }
                 }
 
@@ -23,6 +26,7 @@ export default class ViewRouter extends CRouter{
                     user: user,
                     style: 'products.css',
                     title: 'Products list',
+                    cartId: cartId,
                     flag,
                 });
                 

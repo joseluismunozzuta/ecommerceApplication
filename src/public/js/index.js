@@ -40,10 +40,10 @@ if (logoutButton) {
             .then((response) => response.json())
             .then((data) => {
                 if (data.status == "success") {
-                    window.location.replace("http://localhost:3000/api/sessions/login");
+                    window.location.replace("http://localhost:3000/views/products");
                 }
                 else {
-                    alert("Cant logout");
+                    alert("Logout failed");
                 }
             })
             .catch((error) => console.log(error));
@@ -188,8 +188,7 @@ function hideModal() {
 
 async function addToCart() {
     let prodid = modalBtn.getAttribute("data-value");
-    const data = await getCarts();
-    const cartId = data.docs[0]._id;
+    let cartId = document.getElementById("cartId").value;
 
     try {
         const addCartProduct = await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
@@ -201,12 +200,6 @@ async function addToCart() {
     } catch (err) {
         console.log(err);
     }
-}
-
-const getCarts = async () => {
-    const cart = await fetch('http://localhost:3000/api/carts')
-    const data = cart.json();
-    return data;
 }
 
 async function getProducts() {
