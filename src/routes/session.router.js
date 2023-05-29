@@ -6,13 +6,13 @@ import { cartModel } from '../dao/models/carts.model.js';
 
 export default class SessionRouter extends CRouter {
     init() {
-        this.get('/', ["PUBLIC"], passportCall('jwt'), (req, res) => {
-            if (req.user) {
-                res.sendSuccess("Hay usuario" + req.user.user.email);
-            } else {
-                res.sendSuccess("No hay usuario");
-            }
-        })
+        // this.get('/', ["PUBLIC"], passportCall('jwt'), (req, res) => {
+        //     if (req.user) {
+        //         res.sendSuccess("Hay usuario" + req.user.user.email);
+        //     } else {
+        //         res.sendSuccess("No hay usuario");
+        //     }
+        // })
 
         this.get("/current", ["PUBLIC"], passportCall('jwt'), IfAuthenticated(), (req, res) => {
             res.sendSuccess(req.user);
