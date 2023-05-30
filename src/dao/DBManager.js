@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
 import { productModel } from "./models/products.model.js";
 import { cartModel } from "./models/carts.model.js";
 
@@ -89,11 +87,6 @@ class ProductDBManager {
 }
 
 class CartDBManager {
-    // createCart = (products) => {
-    //     const cart = new Object();
-    //     cart.products = products;
-    //     return cart;
-    // }
 
     async read() {
         try {

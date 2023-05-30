@@ -125,18 +125,3 @@ export default class SessionRouter extends CRouter {
 
     }
 }
-
-//const sessionRouter = express.Router();
-
-// const auth = async (req, res, next) => {
-
-//     if (!req.session.user) {
-//         console.log("User not authenticated. Not able to enter this path.")
-//         return res.status(401).send("Not authenticated");
-//     } else {
-//         console.log("auth: ", req.session.user);
-//         return next();
-//     }
-// }
-
-//export default sessionRouter;

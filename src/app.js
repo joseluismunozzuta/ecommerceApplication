@@ -1,6 +1,7 @@
 import __dirname, { passportCall, IfAuthenticated } from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
+import cors from 'cors';
 import express from "express";
 import handlebars from "express-handlebars";
 import initializePassport from "./config/passport.config.js";
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 app.use(cookieParser());
 initializePassport();
 
@@ -36,7 +38,7 @@ app.set('view engine', 'handlebars');
 
 
 const port = process.env.PORT;
-const httpServer = app.listen(port, () => {
+app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
