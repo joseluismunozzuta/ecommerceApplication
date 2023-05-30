@@ -1,9 +1,10 @@
-import { CartDBManager } from "../dao/DBManager.js";
-const cartDBManager = new CartDBManager();
+import Cart from "../dao/classes/cart.dao.js";
+
+const cartService = new Cart();
 
 export const getCarts_controller = async (req, res) => {
 
-    await cartDBManager.read().then((data) => {
+    await cartService.read().then((data) => {
         res.send(data);
     }).catch((err) => {
         res.status(500).send(err.message);
@@ -13,7 +14,7 @@ export const getCarts_controller = async (req, res) => {
 
 export const getCartById = async (req, res) =>{
     const cartId = req.params.cid;
-    await cartDBManager.searchById(cartId).then((data) => {
+    await cartService.searchById(cartId).then((data) => {
         res.send(data);
     }).catch((err) => {
         res.status(500).send(err.message);
@@ -24,7 +25,7 @@ export const createCart_controller = async (req, res) => {
 
     let products = [];
 
-    await cartDBManager.create(products).then((data) => {
+    await cartService.create(products).then((data) => {
         console.log("Cart created with ID: ", data.id)
         res.send(data);
     }).catch((e) => {
@@ -39,7 +40,7 @@ export const updateCart_controller = async (req, res) => {
     let productIdToAdd = req.params.pid;
     let cartId = req.params.cid;
     let { quantity } = req.body;
-    await cartDBManager.addProductToCart(cartId, productIdToAdd, quantity).then((data) => {
+    await cartService.addProductToCart(cartId, productIdToAdd, quantity).then((data) => {
         console.log("Cart updated");
         res.send({ status: "success", payload: data });
     }).catch((err) => {
@@ -53,7 +54,7 @@ export const deleteProductFromCart_controller = async (req, res) => {
     let cartId = req.params.cid;
     let productId = req.params.pid;
 
-    await cartDBManager.deleteProductFromCart(cartId, productId).then((data) => {
+    await cartService.deleteProductFromCart(cartId, productId).then((data) => {
         console.log("Cart updated");
         res.send({ status: "success", payload: data });
     }).catch((err) => {
@@ -66,7 +67,7 @@ export const emptyCart_controller = async (req, res) => {
 
     let cartId = req.params.cid;
 
-    await cartDBManager.deleteAllCart(cartId).then((data) => {
+    await cartService.deleteAllCart(cartId).then((data) => {
         console.log("Cart deleted");
         res.send({ status: "success", payload: data });
     }).catch((err) => {

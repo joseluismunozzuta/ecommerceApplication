@@ -9,34 +9,14 @@ import {
 export default class ProductRouter extends CRouter{
     init(){
 
-        this.get("/",["PUBLIC"], async (req, res) => {
-
-            await getProducts_controller(req, res);
+        this.get("/",["PUBLIC"], getProducts_controller);
         
-        });
+        this.get("/:pid?",["PUBLIC"], getProductById_controller);
         
-        this.get("/:pid?",["PUBLIC"], async (req, res) => {
+        this.post('/',["PUBLIC"], createProduct_controller);
         
-            await getProductById_controller(req, res);
+        this.put('/:pid',["PUBLIC"], updateProduct_controller);
         
-        })
-        
-        this.post('/',["PUBLIC"], async (req, res) => {
-        
-            await createProduct_controller(req, res);
-        
-        })
-        
-        this.put('/:pid',["PUBLIC"], async (req, res) => {
-        
-            await updateProduct_controller(req, res);
-        
-        })
-        
-        this.delete("/:pid",["PUBLIC"], async (req, res) => {
-        
-            await deleteProduct_controller(req, res);
-        
-        })
+        this.delete("/:pid",["PUBLIC"], deleteProduct_controller);
     }
 }

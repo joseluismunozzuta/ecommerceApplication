@@ -7,40 +7,16 @@ import CRouter from "./router.js";
 
 export default class CartRouter extends CRouter{
     init(){
-        this.get("/",["PUBLIC"], async (req, res) => {
+        this.get("/",["PUBLIC"], getCarts_controller);
 
-            await getCarts_controller(req, res);
+        this.get("/:cid",["PUBLIC"], getCartById);
         
-        })
-
-        this.get("/:cid",["PUBLIC"], async (req, res) => {
-            
-            await getCartById(req, res);
+        this.post("/",["PUBLIC"], createCart_controller);
         
-        })
+        this.put("/:cid/products/:pid",["PUBLIC"], updateCart_controller);
         
-        this.post("/",["PUBLIC"], async (req, res) => {
+        this.delete("/:cid/products/:pid",["PUBLIC"], deleteProductFromCart_controller);
         
-            await createCart_controller(req, res);
-        
-        })
-        
-        this.put("/:cid/products/:pid",["PUBLIC"], async (req, res) => {
-        
-            await updateCart_controller(req, res);
-        
-        })
-        
-        this.delete("/:cid/products/:pid",["PUBLIC"], async (req, res) => {
-        
-            await deleteProductFromCart_controller(req, res);
-        
-        })
-        
-        this.delete("/:cid",["PUBLIC"],  async (req, res) => {
-        
-            await emptyCart_controller(req, res);
-        
-        })
+        this.delete("/:cid",["PUBLIC"],  emptyCart_controller);
     }
 }

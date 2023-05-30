@@ -7,7 +7,7 @@ import handlebars from "express-handlebars";
 import initializePassport from "./config/passport.config.js";
 import mongoose from "mongoose";
 import CartRouter from "./routes/carts.router.js";
-import SessionRouter from "./routes/session.router.js";
+import SessionRouter from "./routes/sessions.router.js";
 import ProductRouter from "./routes/products.router.js";
 import ViewRouter from "./routes/views.router.js";
 import { userModel } from "./dao/models/user.model.js";
