@@ -1,11 +1,8 @@
 import CRouter from './router.js';
-import { userModel } from "../dao/models/user.model.js";
-import { generateToken, passportCall, IfAuthenticated } from '../utils.js';
-import { createHash, isValidPassword } from '../utils.js';
-import { cartModel } from '../dao/models/carts.model.js';
+import { passportCall, IfAuthenticated } from '../utils.js';
 import { goLogin_controller, goSignUp_controller, 
     registerUser_controller, signIn_controller,
-logout } from '../controllers/users.controller.js';
+logout,getAllUsers_controller } from '../controllers/users.controller.js';
 
 export default class SessionRouter extends CRouter {
     init() {
@@ -14,15 +11,7 @@ export default class SessionRouter extends CRouter {
             res.sendSuccess(req.user);
         })
 
-        this.get("/getusers", ["PUBLIC"], async (req, res) => {
-            try {
-                const users = await userModel.paginate();
-                res.send(users);
-            } catch (err) {
-                console.log(err);
-                res.status(500).send(err.message);
-            }
-        })
+        this.get("/getusers", ["PUBLIC"], getAllUsers_controller);
 
         this.get("/login", ["PUBLIC"], passportCall('jwt'), goLogin_controller);
 

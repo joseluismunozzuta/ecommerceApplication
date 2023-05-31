@@ -1,6 +1,8 @@
-import { userModel } from "../dao/models/user.model.js";
+import User from "../dao/classes/user.dao.js";
 import CRouter from "./router.js";
 import { passportCall, IfAuthenticated } from "../utils.js";
+
+const userService = new User();
 
 export default class ViewRouter extends CRouter{
     init(){
@@ -11,10 +13,8 @@ export default class ViewRouter extends CRouter{
                 let cartId;
                 let flag = false;
         
-                if(req.user){
-                    user = await userModel.findOne({ email: req.user.user.email }).
-                    populate('cart').
-                    lean();
+                if(req.user){   
+                    user = await userService.searchByEmail(req.user.user.email);
                     if(user){
                         //This means authentication is okay
                         flag = true;
@@ -39,8 +39,7 @@ export default class ViewRouter extends CRouter{
         this.get("/carts", ["PUBLIC"], passportCall('jwt'), IfAuthenticated(), async (req, res) => {
 
             if(req.user){
-                let user = await userModel.findOne({ email: req.user.user.email }).
-                populate('cart');
+                let user = await userService.searchByEmail(req.user.user.email);
                 let cartId = user.cart._id.toString();
                 res.render('cart', {
                     style: 'cart.css',

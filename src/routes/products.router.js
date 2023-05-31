@@ -1,5 +1,4 @@
 import CRouter from "./router.js";
-import { passportCall, IfAuthenticated } from "../utils.js";
 import {
     getProducts_controller, getProductById_controller,
     createProduct_controller, updateProduct_controller,

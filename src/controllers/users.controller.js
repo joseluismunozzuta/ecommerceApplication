@@ -1,6 +1,18 @@
-import { userModel } from "../dao/models/user.model.js";
-import { cartModel } from "../dao/models/carts.model.js";
+import User from "../dao/classes/user.dao.js";
+import Cart from "../dao/classes/cart.dao.js";;
 import { createHash, isValidPassword, generateToken } from "../utils.js";
+
+const userService = new User();
+const cartService = new Cart();
+
+export const getAllUsers_controller = async(req, res) => {
+    try{
+        const users = await userService.getAll();
+        return res.sendSuccess(users);
+    }catch(err){
+        return res.sendServerError("Internal error");
+    }
+}
 
 export const goLogin_controller = async (req, res ) => {
 
@@ -29,17 +41,16 @@ export const registerUser_controller = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
 
             try {
-                let user = await userModel.findOne({ email: email });
+                let user = await userService.searchByEmail(email);
 
                 if (user) {
-                    console.log("User already exits");
                     return res.sendUserError("User already exists");
                 }
 
                 //Create a cart to assign Cart ID to new user
                 try {
-                    const newCart = new cartModel([]);
-                    let result = await newCart.save();
+                    
+                    let result = await cartService.create([]);
                     let cartId = result._id.toString();
                     console.log(cartId);
 
@@ -52,7 +63,7 @@ export const registerUser_controller = async (req, res) => {
                         cart: cartId
                     }
 
-                    let ress = await userModel.create(newUser);
+                    let ress = await userService.create(newUser);
 
                 } catch (err) {
                     return res.sendServerError("Internal error");
@@ -67,7 +78,7 @@ export const registerUser_controller = async (req, res) => {
 export const signIn_controller = async (req, res) => {
     const { email, password } = req.body;
             try {
-                const user = await userModel.findOne({ email: email });
+                const user = await userService.searchByEmail(email);
 
                 if (!user) {
                     return res.sendUserError("User not found");
