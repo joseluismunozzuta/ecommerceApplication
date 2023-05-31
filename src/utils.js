@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 
 const PRIVATE_KEY = "CoderHouseJoseLuis";
 
-export const passportCall = (strategy) => {
+export const setUserIfSigned = (strategy) => {
     return async(req, res, next) => {
         passport.authenticate(strategy, function(err, user, info) {
             if (err) {
@@ -17,7 +17,6 @@ export const passportCall = (strategy) => {
             }
             if(!user){
                 console.log("Not user");
-                //return res.status(401).send({error: info.messages?info.messages:info.toString()});
                 return next();
             }
             req.user = user;
@@ -26,7 +25,7 @@ export const passportCall = (strategy) => {
     }
 }
 
-export const IfAuthenticated = () => {
+export const checkAuthentication = () => {
     
     return async(req, res, next) => {
         if(!req.user){

@@ -1,9 +1,10 @@
 let prodList = document.getElementById("cartProdsList");
 let cartId = document.getElementById("cartId").value;
+let emptyButtonSection = document.getElementById("emptyButtonDiv");
 const getMyCart = async () => {
     const result = await fetch('http://localhost:3000/api/carts/' + cartId);
     const data = await result.json();
-    const cart = data.products.map(p => {
+    data.products.map(p => {
         const cartProduct = document.createElement('li');
         let totalPrice = p.product.price * p.quantity;
         cartProduct.innerHTML = `<li class="flex flex-col py-6 sm:flex-row sm:justify-between">
@@ -26,7 +27,7 @@ const getMyCart = async () => {
                 </div>
                 <div class="flex text-sm divide-x">
                     <button type="button" class="flex items-center px-2
-                        py-1 pl-0 space-x-1">
+                        py-1 pl-0 space-x-1" data-productid="${p.product._id}" onclick=removeProductfromCart(this)>
                         <svg xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 512 512" class="w-4 h-4
                             fill-current">
@@ -47,10 +48,50 @@ const getMyCart = async () => {
             </div>
         </div>
     </li>`;
-    prodList.appendChild(cartProduct);
+        prodList.appendChild(cartProduct);
     })
 
     return data;
 }
 
-getMyCart();
+async function removeProductfromCart(button) {
+
+    var productId = button.getAttribute('data-productid');
+
+    await fetch(`http://localhost:3000/api/carts/${cartId}/products/${productId}`, {
+        method: 'DELETE'
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                window.location.replace("http://localhost:3000/views/mycart");
+            } else {
+                alert('No se pudo eliminar el producto del carrito');
+            }
+        })
+        .catch((error) => console.log(error));
+
+}
+
+async function emptyCart(){
+    await fetch(`http://localhost:3000/api/carts/${cartId}`, {
+        method: 'DELETE'
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                window.location.replace("http://localhost:3000/views/mycart");
+            } else {
+                alert('No se pudo vaciar tu carrito');
+            }
+        })
+        .catch((error) => console.log(error));
+}
+
+const initMyCart = async() => {
+    const mycart = await getMyCart();
+    if(mycart.products.length == 0){
+        emptyButtonSection.style.display = 'none';
+    }
+}
+
+initMyCart();
+

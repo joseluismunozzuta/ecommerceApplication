@@ -16,6 +16,8 @@ let modalStock = document.getElementById("modalStock");
 let modalCategory = document.getElementById("modalCategory");
 let modalBtn = document.getElementById("addCartBtn");
 let logoutButton = document.getElementById("logout");
+let cartLength1 = document.getElementById("cartl1");
+let cartLength2 = document.getElementById("cartl2");
 
 function goProfile() {
     window.location.href = "http://localhost:3000/profile";
@@ -26,7 +28,7 @@ function goLogin() {
 }
 
 async function goCart() {
-    window.location.href = "http://localhost:3000/views/carts";
+    window.location.href = "http://localhost:3000/views/mycart";
 }
 
 if (logoutButton) {
@@ -193,13 +195,27 @@ async function addToCart() {
     try {
         const addCartProduct = await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
             method: 'PUT'
-        })
-        alert('Se agrego el producto al carrito');
+        }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                let cartLength = data.payload.products.length;
+                updateCartProductsLength(cartLength);
+                alert('Se agregó el producto al carrito');
+            }else{
+                alert('No se pudo agregar el producto al carrito');
+            }
+        }).catch((error) => console.log(error));
+        
         hideModal();
 
     } catch (err) {
         console.log(err);
     }
+}
+
+function updateCartProductsLength(l){
+    cartLength1.innerText = l;
+    cartLength2.innerText = l + " products";
 }
 
 async function getProducts() {

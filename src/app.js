@@ -1,4 +1,4 @@
-import __dirname, { passportCall, IfAuthenticated } from "./utils.js";
+import __dirname, { setUserIfSigned, checkAuthentication } from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
 import cors from 'cors';
@@ -42,7 +42,7 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
-app.get("/profile", passportCall('jwt'), IfAuthenticated(), async (req, res) => {
+app.get("/profile", setUserIfSigned('jwt'), checkAuthentication(), async (req, res) => {
     try {
         const profile = await userModel.findOne({ email: req.user.user.email }).lean();
         res.render('profile', {

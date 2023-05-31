@@ -2,20 +2,27 @@
     dark:bg-gray-900 dark:text-gray-100">
     <h2 class="text-xxl font-semibold text-center">Your cart</h2>
     <div class="d-flex justify-content-center">
-        <ul class="flex flex-col divide-y divide-gray-700 w-3/4" id="cartProdsList">
+        <ul class="flex flex-col divide-y divide-gray-700 w-3/4"
+            id="cartProdsList">
         </ul>
     </div>
     <input style="display: none;" readonly id="cartId" value={{cartId}}>
+    <div class="d-flex justify-content-center" id="emptyButtonDiv">
+        <button type="button" class="px-6 py-2 border rounded-md
+            dark:bg-red-400 dark:text-gray-900 dark:border-red-400" onclick="emptyCart()">
+            <span class="sr-only sm:not-sr-only text-white font-bold">Empty my
+                cart</span>
+        </button>
+    </div>
     <div class="space-y-1 text-center">
         <p>Total amount:
-            <span class="font-semibold">357 €</span>
+            <span id="totalAmount" class="font-semibold">357 €</span>
         </p>
-        <p class="text-sm dark:text-gray-400">Not including taxes and shipping
-            costs</p>
     </div>
     <div class="flex justify-center space-x-4">
-        <button type="button"class="px-6 py-2 border rounded-md
-            dark:border-violet-400"><a class="text-decoration-none text-white" href="http://localhost:3000/views/products">Back to shop</a></button>
+        <button type="button" class="px-6 py-2 border rounded-md
+            dark:border-violet-400"><a class="text-decoration-none text-white"
+                href="http://localhost:3000/views/products">Back to shop</a></button>
         <button type="button" class="px-6 py-2 border rounded-md
             dark:bg-violet-400 dark:text-gray-900 dark:border-violet-400">
             <span class="sr-only sm:not-sr-only">Continue to </span>Checkout
