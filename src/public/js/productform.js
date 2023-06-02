@@ -37,21 +37,15 @@ let myForm = document.getElementById('prodForm');
 let formFields = myForm.querySelectorAll('input[required]');
 let submitButton = document.getElementById('createProd');
 
-// Function to check if all form fields have values
 function checkFormFields() {
     var allFieldsHaveValue = true;
-
-    // Iterate through the form fields and check their values
     for (var i = 0; i < formFields.length; i++) {
         if (formFields[i].value === '') {
             allFieldsHaveValue = false;
             break;
         }
     }
-
-    // Enable or disable the submit button based on the check result
     submitButton.disabled = !allFieldsHaveValue;
 }
 
-// Listen for changes in the form fields
 myForm.addEventListener('input', checkFormFields);
