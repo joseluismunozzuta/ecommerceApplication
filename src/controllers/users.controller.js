@@ -1,5 +1,6 @@
 import User from "../dao/classes/user.dao.js";
 import Cart from "../dao/classes/cart.dao.js";;
+import UserDTO from "../dao/DTOs/user.dto.js";
 import { createHash, isValidPassword, generateToken } from "../utils.js";
 
 const userService = new User();
@@ -54,14 +55,14 @@ export const registerUser_controller = async (req, res) => {
                     let cartId = result._id.toString();
                     console.log(cartId);
 
-                    const newUser = {
+                    const newUser = new UserDTO({
                         first_name,
                         last_name,
                         email,
                         age,
                         password: createHash(password),
                         cart: cartId
-                    }
+                    });
 
                     let ress = await userService.create(newUser);
 
@@ -86,8 +87,13 @@ export const signIn_controller = async (req, res) => {
                 if (!isValidPassword(user, password)) {
                     return res.sendUserError("Incorrect password");
                 }
-
-                const access_token = generateToken(user);
+                const cookieUser = {
+                    _id: user._id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    email: user.email
+                }
+                const access_token = generateToken(cookieUser);
 
                 res.cookie('cookieToken', access_token, {
                     maxAge: 60 * 60 * 1000,

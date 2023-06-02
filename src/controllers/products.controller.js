@@ -1,3 +1,4 @@
+import ProductDTO from "../dao/DTOs/product.dto.js";
 import Product from "../dao/classes/product.dao.js";
 
 const productService = new Product();
@@ -36,7 +37,11 @@ export const createProduct_controller = async (req, res) => {
         return res.status(400).send({ status: "error", error: "Incomplete values" })
     }
 
-    await productService.create(product).then((data) => {
+    const newProd = new ProductDTO(product);
+
+    // console.log(newProd);
+    // res.send({ status: "success", message: "Success" });
+    await productService.create(newProd).then((data) => {
         console.log(`Product succesfully created with ID: ` + data.id);
         res.send({ status: "success", payload: data });
     }).catch((e) => {

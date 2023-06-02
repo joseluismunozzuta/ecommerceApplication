@@ -1,12 +1,15 @@
 let prodList = document.getElementById("cartProdsList");
 let cartId = document.getElementById("cartId").value;
 let emptyButtonSection = document.getElementById("emptyButtonDiv");
+let totalAmountIndicator = document.getElementById("totalAmount");
 const getMyCart = async () => {
     const result = await fetch('http://localhost:3000/api/carts/' + cartId);
     const data = await result.json();
+    let totalAmount = 0;
     data.products.map(p => {
         const cartProduct = document.createElement('li');
         let totalPrice = p.product.price * p.quantity;
+        totalAmount+=totalPrice;
         cartProduct.innerHTML = `<li class="flex flex-col py-6 sm:flex-row sm:justify-between">
         <div class="flex w-full space-x-2 sm:space-x-4">
             <img class="flex-shrink-0 object-cover w-20 h-20
@@ -50,7 +53,7 @@ const getMyCart = async () => {
     </li>`;
         prodList.appendChild(cartProduct);
     })
-
+    totalAmountIndicator.innerText = '$' + totalAmount;
     return data;
 }
 

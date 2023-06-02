@@ -51,5 +51,12 @@ export default class ViewRouter extends CRouter{
             }
         })
 
+        this.get("/createprod", ["PUBLIC"], async(req,res)=>{
+            res.render("createprod", {
+                style: 'productform.css',
+                title: 'Create Product',
+            });
+        })
+
     }
 }

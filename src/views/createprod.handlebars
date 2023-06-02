@@ -1,0 +1,62 @@
+<div class="cont">
+    <div class="left">
+        <div class="formclass">
+            <h2 class="text-2xl">Registrar producto</h2>
+            <form id="prodForm">
+
+                <div class="user-box">
+                    <input type="text" id="title" name="title"
+                        placeholder="Nombre del producto" required>
+                    <label>Nombre del producto</label>
+                </div>
+
+                <div class="user-box">
+                    <textarea id="description" name="description"
+                        placeholder="Descripción" required></textarea>
+                    <label>Descripción</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="text" id="category" name="category"
+                        placeholder="Categoría"
+                        required>
+                    <label>Categoría</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="number" id="price" name="price"
+                        placeholder="Precio"
+                        required>
+                    <label>Precio</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="text" id="code" name="code"
+                        placeholder="Código del producto"
+                        required>
+                    <label>Código del producto</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="number" id="stock" name="stock"
+                        placeholder="Stock" required>
+                    <label>Stock</label>
+                </div>
+
+                <div class="user-box">
+                    <input type="url" id="thumbnail" name="thumbnail"
+                        placeholder="Imagen: inserte URL"
+                        required>
+                    <label>Imagen</label>
+                </div>
+
+                <button id="createProd" type="submit" disabled>
+                    Registrar
+                </button>
+            </form>
+        </div>
+
+    </div>
+    <div class="right" id="imageCont"></div>
+</div>
+<script src="/js/productform.js"></script>
