@@ -7,7 +7,25 @@ const prodService = new Product();
 
 export default class ViewRouter extends CRouter {
     init() {
-        this.get("/products", ["PUBLIC"], async (req, res) => {
+        this.get("/products/:pagina?", ["PUBLIC"], async (req, res) => {
+            let pagina;
+
+            //Logic to maintain the page when deleting a prod
+            //Limit the max page we can access
+            if (req.params.pagina) {
+                pagina = parseInt(req.params.pagina);
+                let currentMaxPage = await prodService.getTotalPagesProds().then(
+                    (data) => {
+                        return data;
+                    });
+                if (pagina > currentMaxPage) {
+                    pagina = currentMaxPage;
+                    return res.redirect(`/views/products/${pagina}`);
+                }
+            } else {
+                pagina = 1;
+            }
+            
             try {
 
                 let user = new Map();
@@ -28,6 +46,7 @@ export default class ViewRouter extends CRouter {
                 }
 
                 res.render("products", {
+                    pagina: pagina,
                     user: user,
                     style: 'products.css',
                     title: 'Products list',
@@ -59,24 +78,24 @@ export default class ViewRouter extends CRouter {
 
         this.get("/createproduct", ["ADMIN"], async (req, res) => {
 
-            if(!req.user){
+            if (!req.user) {
                 res.sendUserError("Not Authenticated");
-            }else{
-                try{
+            } else {
+                try {
                     res.render("createprod", {
-                        edit:false,
+                        edit: false,
                         style: 'productform.css',
                         title: 'Create Product',
                     });
-                }catch (err) {
+                } catch (err) {
                     res.sendServerError("Internal error");
                 }
             }
-            
+
 
         });
 
-        this.get("/editprod/:pid",["ADMIN"], async (req, res) => {
+        this.get("/editprod/:pid", ["ADMIN"], async (req, res) => {
 
             let prodid = req.params.pid;
 
@@ -85,7 +104,7 @@ export default class ViewRouter extends CRouter {
                     const prodOb = product.toObject();
                     res.render("createprod", {
                         product: prodOb,
-                        edit:true,
+                        edit: true,
                         style: 'productform.css',
                         title: 'Edit Product',
                     });

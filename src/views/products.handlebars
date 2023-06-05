@@ -3,6 +3,7 @@
     <div class="flex-1">
       <a class="btn btn-ghost normal-case text-xl">Products List</a>
     </div>
+    <input style="display: none;" readonly id="pagina" value={{pagina}}>
     {{#if flag}}
     <input style="display: none;" readonly id="cartId" value={{cartId}}>
     <div class="flex-none">
@@ -33,6 +34,9 @@
           <li><a id="logout">Logout</a></li>
         </ul>
       </div>
+
+      {{#if adminflag}}
+      {{else}}
       <div class="dropdown dropdown-end mx-2">
         <label tabindex="0" class="btn btn-ghost btn-circle">
           <div class="indicator">
@@ -61,7 +65,7 @@
           </div>
         </div>
       </div>
-
+      {{/if}}
     </div>
     {{else}}
     <button class="btn btn-primary mx-4" onclick="goLogin()">Sign In</button>

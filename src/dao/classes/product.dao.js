@@ -40,6 +40,16 @@ export default class Product {
         }
     }
 
+    async getTotalPagesProds(){
+        try {
+            const products = await productModel.paginate();
+            return products.totalPages;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
     async getProductById(id) {
         try {
             const product = await productModel.findById(id);

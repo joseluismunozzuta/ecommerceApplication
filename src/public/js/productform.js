@@ -4,30 +4,6 @@ let myForm = document.getElementById('prodForm');
 let formFields = myForm.querySelectorAll('input[required]');
 let submitButton = document.getElementById('actionProdBtn');
 
-// document.getElementById("actionProdBtn").addEventListener('click', async function () {
-//     const userForm = document.getElementById("prodForm");
-//     const formData = new FormData(userForm);
-//     const data = Object.fromEntries(formData);
-
-//     await fetch(`/createprod`, {
-//         method: 'POST',
-//         body: JSON.stringify(data),
-//         headers: {
-//             'Content-Type': 'application/json'
-//         }
-//     }).then((response) => response.json())
-//         .then((data) => {
-//             if (data.status == "success") {
-//                 alert("Product successfully created");
-//                 window.location.replace("http://localhost:3000/views/products");
-//             } else {
-//                 alert(data.error);
-//             }
-//         })
-//         .catch((error) => console.log(error));
-// });
-
-
 async function createProdMethod() {
         const userForm = document.getElementById("prodForm");
         const formData = new FormData(userForm);
@@ -51,12 +27,35 @@ async function createProdMethod() {
             .catch((error) => console.log(error));
     };
 
-function editProd() {
+async function editProd() {
     const userForm = document.getElementById("prodForm");
     const formData = new FormData(userForm);
     const data = Object.fromEntries(formData);
     let prodid = submitButton.getAttribute("data-value");
-    fetch(`/api/products/${prodid}`, {
+    await fetch(`/api/products/${prodid}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify(data)
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                alert("Product successfully edited");
+                window.location.replace("http://localhost:3000/views/products");
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch((error) => console.log(error));
+}
+
+async function deleteProd() {
+    const userForm = document.getElementById("prodForm");
+    const formData = new FormData(userForm);
+    const data = Object.fromEntries(formData);
+    let prodid = submitButton.getAttribute("data-value");
+    await fetch(`/api/products/${prodid}`, {
         method: "PUT",
         headers: {
             "Content-type": "application/json",

@@ -1,4 +1,4 @@
-let pagina = 1;
+let pagina = document.getElementById("pagina").value;
 let queryParams = {};
 let nextBtn = document.getElementById("nextButton");
 let prevBtn = document.getElementById("prevButton");
@@ -84,7 +84,7 @@ function highlightSortOptions() {
             if (sortSelectorLabel.textContent !== sortText || sortSelectorLabel.textContent === "-") {
                 sortSelectorLabel.textContent = sortText;
                 queryParams.sort = sortValue;
-                pagina = 1;
+                //pagina = 1;
                 renderProducts();
             }
             hideSort();
@@ -214,9 +214,29 @@ async function addToCart() {
 
 }
 
-async function editProd(){
+function editProd(){
     let prodid = modalBtn.getAttribute("data-value");
     window.location.href = `http://localhost:3000/views/editprod/${prodid}`;
+}
+
+async function deleteProd(){
+    let prodid = modalBtn.getAttribute("data-value");
+    await fetch(`/api/products/${prodid}`, {
+        method: "DELETE",
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                console.log("query params: ");
+                console.log(queryParams);
+                console.log("page");
+                console.log(pagina);
+                alert("Product successfully deleted");
+                window.location.replace(`http://localhost:3000/views/products/${pagina}`);
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch((error) => console.log(error));
 }
 
 function updateCartProductsLength(l) {
@@ -226,8 +246,9 @@ function updateCartProductsLength(l) {
 
 async function getProducts() {
 
-    console.log("query params: ");
+    console.log("Query params: ");
     console.log(queryParams);
+    console.log("Pagina: " + pagina);
 
     let limit = 10;
 
