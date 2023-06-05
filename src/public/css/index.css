@@ -26,12 +26,31 @@
     pointer-events: auto;
     opacity: 1;
 }
+.modalDeleteBg{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in-out 300ms;
+}
+
+.modalDeleteBg.show{
+    pointer-events: auto;
+    opacity: 1;
+}
 .modalPanel{
     opacity: 0;
     pointer-events: none;
     transition: opacity ease-in-out 300ms;
 }
 .modalPanel.show{
+    pointer-events: auto;
+    opacity: 1;
+}
+.modalDeletePanel{
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease-in-out 300ms;
+}
+.modalDeletePanel.show{
     pointer-events: auto;
     opacity: 1;
 }

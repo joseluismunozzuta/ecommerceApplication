@@ -8,6 +8,8 @@ let sortSelectorLabel = document.getElementById("sortLabel");
 let sortOptions = document.getElementById("sortOptions");
 let modalBg = document.getElementById("modalBg");
 let modalPanel = document.getElementById("modalPanel");
+let modalDeleteBg = document.getElementById("modalDeleteBg");
+let modalDeletePanel = document.getElementById("modalDeletePanel");
 let modalTitle = document.getElementById("modalTitle");
 let modalPrice = document.getElementById("modalPrice");
 let modalDescription = document.getElementById("modalDescription");
@@ -191,6 +193,16 @@ async function showModal(id) {
 function hideModal() {
     modalBg.classList.remove('show');
     modalPanel.classList.remove('show');
+}
+
+function showDeleteModal(){
+    modalDeleteBg.classList.add("show");
+    modalDeletePanel.classList.add("show");
+}
+
+function hideDeleteModal(){
+    modalDeleteBg.classList.remove('show');
+    modalDeletePanel.classList.remove('show');
 }
 
 async function addToCart() {
