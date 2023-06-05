@@ -6,53 +6,59 @@
 
                 <div class="user-box">
                     <input type="text" id="title" name="title"
-                        placeholder="Nombre del producto" required>
+                        placeholder="Nombre del producto"
+                        value="{{#if product.title}}{{product.title}}{{else}}{{/if}}" required>
                     <label>Nombre del producto</label>
                 </div>
 
                 <div class="user-box">
                     <textarea id="description" name="description"
-                        placeholder="Descripción" required></textarea>
+                        placeholder="Descripción" required>{{#if product.description}}{{product.description}}{{else}}{{/if}}</textarea>
                     <label>Descripción</label>
                 </div>
 
                 <div class="user-box">
                     <input type="text" id="category" name="category"
                         placeholder="Categoría"
-                        required>
+                        value="{{#if product.category}}{{product.category}}{{else}}{{/if}}" required>
                     <label>Categoría</label>
                 </div>
 
                 <div class="user-box">
                     <input type="number" id="price" name="price"
                         placeholder="Precio"
-                        required>
+                        value="{{#if product.price}}{{product.price}}{{else}}{{/if}}" required>
                     <label>Precio</label>
                 </div>
 
                 <div class="user-box">
                     <input type="text" id="code" name="code"
                         placeholder="Código del producto"
-                        required>
+                        value="{{#if product.code}}{{product.code}}{{else}}{{/if}}" required>
                     <label>Código del producto</label>
                 </div>
 
                 <div class="user-box">
                     <input type="number" id="stock" name="stock"
-                        placeholder="Stock" required>
+                        value="{{#if product.stock}}{{product.stock}}{{else}}{{/if}}" placeholder="Stock" required>
                     <label>Stock</label>
                 </div>
 
                 <div class="user-box">
                     <input type="url" id="thumbnail" name="thumbnail"
                         placeholder="Imagen: inserte URL"
-                        required>
+                        value="{{#if product.thumbnail}}{{product.thumbnail}}{{else}}{{/if}}" required>
                     <label>Imagen</label>
                 </div>
-
-                <button id="createProd" type="submit" disabled>
+                {{#if edit}}
+                <button id="actionProdBtn" type="button" data-value={{product._id}} onclick="editProd()" disabled>
+                    Editar
+                </button>
+                {{else}}
+                <button id="actionProdBtn" type="button" onclick="createProdMethod()" disabled>
                     Registrar
                 </button>
+                {{/if}}
             </form>
         </div>
 

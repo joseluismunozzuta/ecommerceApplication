@@ -3,7 +3,6 @@ import {
     updateCart_controller, deleteProductFromCart_controller,
     emptyCart_controller, getCartById
 } from "../controllers/carts.controller.js";
-import { checkAuthentication, setUserIfSigned } from "../utils.js";
 import CRouter from "./router.js";
 
 export default class CartRouter extends CRouter{
@@ -12,12 +11,12 @@ export default class CartRouter extends CRouter{
 
         this.post("/",["PUBLIC"], createCart_controller);
 
-        this.get("/:cid",["PUBLIC"], getCartById); //validar que el id del user logueado sea el que se quiere hacer cambios
+        this.get("/:cid",["USER"], getCartById); //validar que el id del user logueado sea el que se quiere hacer cambios
         
-        this.put("/:cid/products/:pid",["PUBLIC"], setUserIfSigned('jwt'), checkAuthentication(), updateCart_controller);
+        this.put("/:cid/products/:pid",["USER"], updateCart_controller);
         
-        this.delete("/:cid/products/:pid",["PUBLIC"], setUserIfSigned('jwt'), checkAuthentication(), deleteProductFromCart_controller);
+        this.delete("/:cid/products/:pid",["USER"], deleteProductFromCart_controller);
         
-        this.delete("/:cid",["PUBLIC"], emptyCart_controller);
+        this.delete("/:cid",["USER"], emptyCart_controller);
     }
 }

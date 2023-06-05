@@ -14,17 +14,21 @@ let modalDescription = document.getElementById("modalDescription");
 let modalImage = document.getElementById("modalImage");
 let modalStock = document.getElementById("modalStock");
 let modalCategory = document.getElementById("modalCategory");
-let modalBtn = document.getElementById("addCartBtn");
+let modalBtn = document.getElementById("prodActionBtn");
 let logoutButton = document.getElementById("logout");
 let cartLength1 = document.getElementById("cartl1");
 let cartLength2 = document.getElementById("cartl2");
 
 function goProfile() {
-    window.location.href = "http://localhost:3000/profile";
+    window.location.href = "http://localhost:3000/api/sessions/profile";
 }
 
 function goLogin() {
     window.location.href = "http://localhost:3000/api/sessions/login";
+}
+
+function goCreateProd() {
+    window.location.href = "http://localhost:3000/views/createproduct";
 }
 
 async function goCart() {
@@ -146,8 +150,9 @@ const render = (prods) => {
                 object-cover object-center lg:h-full lg:w-full">
                 
             </div>
-            <button type="button" id="${prod._id}" class="z-10 w-3/4 rounded-md bg-white bg-opacity-100 py-2 px-4 text-sm text-black quickview group-hover:opacity-100">Quick View</button>
-            
+            <button type="button" id="${prod._id}" class="z-10 w-3/4 rounded-md bg-white bg-opacity-100 py-2 px-4 text-sm text-black quickview group-hover:opacity-100">
+            Quick View
+            </button>
             <div class="mt-4 flex justify-between">
                 <div class="px-2">
                     <h3 class="text-sm text-gray-700">
@@ -192,28 +197,29 @@ async function addToCart() {
     let prodid = modalBtn.getAttribute("data-value");
     let cartId = document.getElementById("cartId").value;
 
-    try {
-        const addCartProduct = await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
-            method: 'PUT'
-        }).then((response) => response.json())
+    await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
+        method: 'PUT'
+    }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
                 let cartLength = data.payload.products.length;
                 updateCartProductsLength(cartLength);
                 alert('Se agregó el producto al carrito');
-            }else{
+            } else {
                 alert('No se pudo agregar el producto al carrito');
             }
         }).catch((error) => console.log(error));
-        
-        hideModal();
 
-    } catch (err) {
-        console.log(err);
-    }
+    hideModal();
+
 }
 
-function updateCartProductsLength(l){
+async function editProd(){
+    let prodid = modalBtn.getAttribute("data-value");
+    window.location.href = `http://localhost:3000/views/editprod/${prodid}`;
+}
+
+function updateCartProductsLength(l) {
     cartLength1.innerText = l;
     cartLength2.innerText = l + " products";
 }

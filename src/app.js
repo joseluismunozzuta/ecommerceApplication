@@ -1,4 +1,4 @@
-import __dirname, { setUserIfSigned, checkAuthentication } from "./utils.js";
+import __dirname from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
 import cors from 'cors';
@@ -11,12 +11,13 @@ import SessionRouter from "./routes/sessions.router.js";
 import ProductRouter from "./routes/products.router.js";
 import ViewRouter from "./routes/views.router.js";
 import { userModel } from "./dao/models/user.model.js";
-
+import Product from "./dao/classes/product.dao.js";
 const app = express();
-app.use(express.static(__dirname + '/public'));
-app.use(express.urlencoded({ extended: true }));
+const productService = new Product();
+
 app.use(express.json());
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 initializePassport();
 
@@ -41,19 +42,6 @@ const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
-
-app.get("/profile", setUserIfSigned('jwt'), checkAuthentication(), async (req, res) => {
-    try {
-        const profile = await userModel.findOne({ email: req.user.user.email }).lean();
-        res.render('profile', {
-            title: 'Profile',
-            style: 'profile.css',
-            profile: profile
-        })
-    } catch (err) {
-        return res.status(500).send("Internal error");
-    }
-})
 
 mongoose.connect('mongodb+srv://'
     + process.env.ADMIN_USER

@@ -11,6 +11,7 @@ document.getElementById("signup").addEventListener('click', function () {
     }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
+                alert("User succesfully created");
                 window.location.replace("http://localhost:3000/api/sessions/login");
             } else {
                 alert(data.error);

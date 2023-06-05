@@ -6,6 +6,14 @@
     {{#if flag}}
     <input style="display: none;" readonly id="cartId" value={{cartId}}>
     <div class="flex-none">
+      {{#if adminflag}}
+      <button type="button" class="px-6 py-2 border rounded-md
+            dark:bg-blue-400 dark:text-black-900 dark:border-blue-400"
+        onclick="goCreateProd()">
+        <span class="sr-only sm:not-sr-only text-white font-bold">Create a
+          product</span>
+      </button>
+      {{/if}}
       <div class="mx-5 flex flex-row">
         <p class="text-white">Hi, {{user.first_name}} {{user.last_name}}</p>
       </div>
@@ -249,14 +257,27 @@
                       stock</p>
                   </div>
                   {{#if flag}}
-                  <button type="submit" class="mt-6 flex w-full
+                  {{#if adminflag}}
+                  <div class="flex flex-row justify-evenly">
+                    <button type="submit" class="w-1/3 mt-6 flex
                     items-center justify-center rounded-md
-                    border border-transparent bg-indigo-600 py-3
-                    px-8 text-base font-medium text-white
-                    hover:bg-indigo-700 focus:outline-none
-                    focus:ring-2 focus:ring-indigo-500
-                    focus:ring-offset-2" id="addCartBtn" data-value="data"
-                    onclick="addToCart()">Add to bag</button>
+                    border border-transparent bg-teal-600 py-2
+                    px-2 text-base font-medium text-white
+                    hover:bg-teal-600-700 focus:outline-none
+                    focus:ring-2 focus:ring-teal-500
+                    focus:ring-offset-2" id="prodActionBtn" data-value="data"
+                      onclick="editProd()">Edit</button>
+
+                    <button type="submit" class="w-1/3 mt-6 flex
+                    items-center justify-center rounded-md
+                    border border-transparent bg-red-600 py-2
+                    px-2 text-base font-medium text-white
+                    hover:bg-red-700 focus:outline-none
+                    focus:ring-2 focus:ring-red-500
+                    focus:ring-offset-2" id="deleteProdBtn" data-value="data"
+                      onclick="deleteProd()">Delete</button>
+                  </div>
+
                   {{else}}
                   <button type="submit" class="mt-6 flex w-full
                     items-center justify-center rounded-md
@@ -264,7 +285,17 @@
                     px-8 text-base font-medium text-white
                     hover:bg-indigo-700 focus:outline-none
                     focus:ring-2 focus:ring-indigo-500
-                    focus:ring-offset-2" id="addCartBtn" data-value="data"
+                    focus:ring-offset-2" id="prodActionBtn" data-value="data"
+                    onclick="addToCart()">Add to bag</button>
+                  {{/if}}
+                  {{else}}
+                  <button type="submit" class="mt-6 flex w-full
+                    items-center justify-center rounded-md
+                    border border-transparent bg-indigo-600 py-3
+                    px-8 text-base font-medium text-white
+                    hover:bg-indigo-700 focus:outline-none
+                    focus:ring-2 focus:ring-indigo-500
+                    focus:ring-offset-2" id="prodActionBtn" data-value="data"
                     onclick="goLogin()">Sign in to buy</button>
                   {{/if}}
 

@@ -12,10 +12,10 @@ export default class ProductRouter extends CRouter{
         
         this.get("/:pid?",["PUBLIC"], getProductById_controller);
         
-        this.post('/',["PUBLIC"], createProduct_controller);
+        this.post("/",["ADMIN"], createProduct_controller);
         
-        this.put('/:pid',["PUBLIC"], updateProduct_controller);
+        this.put('/:pid',["ADMIN"], updateProduct_controller);
         
-        this.delete("/:pid",["PUBLIC"], deleteProduct_controller);
+        this.delete("/:pid",["ADMIN"], deleteProduct_controller);
     }
 }
