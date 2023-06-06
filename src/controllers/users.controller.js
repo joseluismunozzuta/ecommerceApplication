@@ -86,12 +86,12 @@ export const registerUser_controller = async (req, res) => {
             let ress = await userService.create(newUser);
 
         } catch (err) {
-            return res.sendServerError("Internal error");
+            return res.sendServerError(err.message);
         }
 
         return res.sendSuccess("Usuario registrado con exito");
     } catch (error) {
-        return res.sendServerError("Internal error");
+        return res.sendServerError(error.message);
     }
 }
 

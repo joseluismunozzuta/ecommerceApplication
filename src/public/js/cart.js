@@ -2,14 +2,14 @@ let prodList = document.getElementById("cartProdsList");
 let cartId = document.getElementById("cartId").value;
 let emptyButtonSection = document.getElementById("emptyButtonDiv");
 let totalAmountIndicator = document.getElementById("totalAmount");
+let totalAmount = 0;
 const getMyCart = async () => {
     const result = await fetch('http://localhost:3000/api/carts/' + cartId);
     const data = await result.json();
-    let totalAmount = 0;
     data.products.map(p => {
         const cartProduct = document.createElement('li');
         let totalPrice = p.product.price * p.quantity;
-        totalAmount+=totalPrice;
+        totalAmount += totalPrice;
         cartProduct.innerHTML = `<li class="flex flex-col py-6 sm:flex-row sm:justify-between">
         <div class="flex w-full space-x-2 sm:space-x-4">
             <img class="flex-shrink-0 object-cover w-20 h-20
@@ -75,7 +75,37 @@ async function removeProductfromCart(button) {
 
 }
 
-async function emptyCart(){
+async function purchase() {
+    const horaActual = new Date();
+    console.log(horaActual.toLocaleString());
+    await fetch(`http://localhost:3000/api/carts/${cartId}/purchase`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            amount: totalAmount,
+            date: horaActual.toLocaleString()
+        })
+
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                //window.location.replace("http://localhost:3000/views/mycart");
+                console.log(data.payload);
+                if(data.payload.prodsError){
+                    console.log("Hay productos sin stock");
+                }else{
+                    console.log("Compra exitosa");
+                }
+            } else {
+                alert('No se pudo completar tu compra');
+            }
+        })
+        .catch((error) => console.log(error));
+}
+
+async function emptyCart() {
     await fetch(`http://localhost:3000/api/carts/${cartId}`, {
         method: 'DELETE'
     }).then((response) => response.json())
@@ -89,9 +119,9 @@ async function emptyCart(){
         .catch((error) => console.log(error));
 }
 
-const initMyCart = async() => {
+const initMyCart = async () => {
     const mycart = await getMyCart();
-    if(mycart.products.length == 0){
+    if (mycart.products.length == 0) {
         emptyButtonSection.style.display = 'none';
     }
 }

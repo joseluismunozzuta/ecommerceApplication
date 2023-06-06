@@ -29,6 +29,10 @@ function goLogin() {
     window.location.href = "http://localhost:3000/api/sessions/login";
 }
 
+function goSignUp() {
+    window.location.href = "http://localhost:3000/api/sessions/signup";
+}
+
 function goCreateProd() {
     window.location.href = "http://localhost:3000/views/createproduct";
 }
