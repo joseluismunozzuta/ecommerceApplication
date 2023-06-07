@@ -1,5 +1,5 @@
 {
-  "name": "mockinganderrors",
+  "name": "loggerimplementation",
   "version": "1.0.0",
   "description": "Ecommerce App",
   "main": "index.js",
@@ -38,12 +38,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/backend_mockinganderrors.git"
+    "url": "git+https://github.com/joseluismunozzuta/backend_logger.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/backend_mockinganderrors/issues"
+    "url": "https://github.com/joseluismunozzuta/backend_logger/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/backend_mockinganderrors#readme",
+  "homepage": "https://github.com/joseluismunozzuta/backend_logger#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
