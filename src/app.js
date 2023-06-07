@@ -1,10 +1,11 @@
-import __dirname from "./utils.js";
+import __dirname, { generateProduct } from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
 import cors from 'cors';
 import express from "express";
 import handlebars from "express-handlebars";
 import initializePassport from "./config/passport.config.js";
+import errorHandler from "./middlewares/errors/err.js";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import CartRouter from "./routes/carts.router.js";
@@ -27,10 +28,20 @@ const cartRouter = new CartRouter();
 app.use("/api/carts", cartRouter.getRouter());
 
 const sessionRouter = new SessionRouter();
+app.use(errorHandler);
 app.use("/api/sessions", sessionRouter.getRouter());
 
 const viewRouter = new ViewRouter();
 app.use("/views", viewRouter.getRouter());
+
+app.get("/mockingproducts", async(req, res) => {
+    let prods = [];
+    for (let i = 0; i < 100; i++) {
+        prods.push(generateProduct())
+    }
+    res.send({status:"success", payload:prods});
+})
+
 
 app.engine('handlebars', handlebars.engine());
 app.set("views", __dirname + '/views');
@@ -41,6 +52,8 @@ const port = process.env.PORT;
 const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
+
 
 mongoose.connect('mongodb+srv://'
     + process.env.ADMIN_USER

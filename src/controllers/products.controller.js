@@ -1,5 +1,7 @@
 import ProductDTO from "../dao/DTOs/product.dto.js";
 import Product from "../dao/classes/product.dao.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 
 const productService = new Product();
 
@@ -34,7 +36,13 @@ export const createProduct_controller = async (req, res) => {
     const product = req.body;
 
     if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
-        return res.status(400).send({ status: "error", error: "Incomplete values" })
+        CustomError.createError({
+            name: "Product Creation Error",
+            cause: `Todos los campos son obligatorios.` +  
+            ` El precio debe ser mayor a 0.` + ` El stock no puede ser negativo.`,
+            message: "Error al registrar el producto.",
+            code: EErrors.INVALID_TYPES_ERROR
+        });
     }
 
     const newProd = new ProductDTO(product);

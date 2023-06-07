@@ -10,11 +10,12 @@ document.getElementById("signup").addEventListener('click', function () {
         body: JSON.stringify(data)
     }).then((response) => response.json())
         .then((data) => {
+            console.log(data);
             if (data.status == "success") {
                 alert("User succesfully created");
                 window.location.replace("http://localhost:3000/api/sessions/login");
             } else {
-                alert(data.error);
+                alert(data.error.name);
             }
         })
         .catch((error) => console.log(error));

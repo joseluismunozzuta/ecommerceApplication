@@ -51,11 +51,11 @@
                     <label>Imagen</label>
                 </div>
                 {{#if edit}}
-                <button id="actionProdBtn" type="button" data-value={{product._id}} onclick="editProd()" disabled>
+                <button id="actionProdBtn" type="button" data-value={{product._id}} onclick="editProd()">
                     Editar
                 </button>
                 {{else}}
-                <button id="actionProdBtn" type="button" onclick="createProdMethod()" disabled>
+                <button id="actionProdBtn" type="button" onclick="createProdMethod()">
                     Registrar
                 </button>
                 {{/if}}

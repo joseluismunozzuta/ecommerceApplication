@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from 'passport';
+import errorHandler from "../middlewares/errors/err.js";
 
 export default class CRouter {
     constructor() {
@@ -35,9 +36,10 @@ export default class CRouter {
             try {
                 await callback.apply(this, params);
             } catch (error) {
-                console.log(error);
+                console.log("There was an error here");
                 //params[1] es res, por lo que se puede mandar un send
-                params[1].status(500).send(error);
+                //params[1].status(500).send(error);
+                errorHandler(error, ...params);
             }
         })
     }

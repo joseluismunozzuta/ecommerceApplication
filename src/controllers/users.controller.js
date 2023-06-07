@@ -2,6 +2,9 @@ import User from "../dao/classes/user.dao.js";
 import Cart from "../dao/classes/cart.dao.js";;
 import UserDTO from "../dao/DTOs/user.dto.js";
 import { createHash, isValidPassword, generateToken } from "../utils.js";
+import CustomError from "../services/errors/CustomError.js";
+import { generateUserErrorInfo } from "../services/errors/info.js";
+import EErrors from "../services/errors/enums.js";
 
 const userService = new User();
 const cartService = new Cart();
@@ -54,6 +57,18 @@ export const goSignUp_controller = async (req, res) => {
 export const registerUser_controller = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
 
+    if ((!first_name || !last_name || !email || !age || !password) || !Number.isInteger(age)) {
+        CustomError.createError({
+            name: "User Creation Error",
+            cause: generateUserErrorInfo({
+                first_name,
+                last_name, age, email
+            }),
+            message: "Error al registrar usuario. Uno de los campos contiene información no válida.",
+            code: EErrors.INVALID_TYPES_ERROR
+        });
+    }
+
     try {
         let user = await userService.searchByEmail(email);
 
@@ -82,7 +97,6 @@ export const registerUser_controller = async (req, res) => {
                 cart: cartId,
                 role
             });
-            console.log(newUser);
             let ress = await userService.create(newUser);
 
         } catch (err) {

@@ -21,7 +21,8 @@ async function createProdMethod() {
                     alert("Product successfully created");
                     window.location.replace("http://localhost:3000/views/products");
                 } else {
-                    alert(data.error);
+                    alert(data.error.name);
+                    console.log(data.error.cause);
                 }
             })
             .catch((error) => console.log(error));
@@ -44,7 +45,8 @@ async function editProd() {
                 alert("Product successfully edited");
                 window.location.replace("http://localhost:3000/views/products");
             } else {
-                alert(data.error);
+                alert(data.error.name);
+                console.log(data.error.cause);
             }
         })
         .catch((error) => console.log(error));
@@ -63,11 +65,13 @@ async function deleteProd() {
         body: JSON.stringify(data)
     }).then((response) => response.json())
         .then((data) => {
+            console.log(data);
             if (data.status == "success") {
                 alert("Product successfully edited");
                 window.location.replace("http://localhost:3000/views/products");
             } else {
-                alert(data.error);
+                alert(data.error.name);
+                console.log(data.error.cause);
             }
         })
         .catch((error) => console.log(error));
@@ -83,18 +87,18 @@ function imageChange() {
 }
 
 //Check info
-function checkFormFields() {
-    var allFieldsHaveValue = true;
-    for (var i = 0; i < formFields.length; i++) {
-        if (formFields[i].value === '') {
-            allFieldsHaveValue = false;
-            break;
-        }
-    }
-    submitButton.disabled = !allFieldsHaveValue;
-}
+// function checkFormFields() {
+//     var allFieldsHaveValue = true;
+//     for (var i = 0; i < formFields.length; i++) {
+//         if (formFields[i].value === '') {
+//             allFieldsHaveValue = false;
+//             break;
+//         }
+//     }
+//     submitButton.disabled = !allFieldsHaveValue;
+// }
 
 window.addEventListener('load', imageChange);
-window.addEventListener('load', checkFormFields);
+//window.addEventListener('load', checkFormFields);
 imageUrlInput.addEventListener('input', imageChange);
-myForm.addEventListener('input', checkFormFields);
+//myForm.addEventListener('input', checkFormFields);
