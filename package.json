@@ -1,7 +1,7 @@
 {
-  "name": "authenticationpart",
+  "name": "mockinganderrors",
   "version": "1.0.0",
-  "description": "To install dependencies:",
+  "description": "Ecommerce App",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -37,12 +37,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/jwtauthentication.git"
+    "url": "git+https://github.com/joseluismunozzuta/backend_mockinganderrors.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/jwtauthentication/issues"
+    "url": "https://github.com/joseluismunozzuta/backend_mockinganderrors/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/jwtauthentication#readme",
+  "homepage": "https://github.com/joseluismunozzuta/backend_mockinganderrors#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
