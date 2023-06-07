@@ -21,6 +21,10 @@ let logoutButton = document.getElementById("logout");
 let cartLength1 = document.getElementById("cartl1");
 let cartLength2 = document.getElementById("cartl2");
 
+function goChat(){
+    window.location.href = "http://localhost:3000/views/chat";
+}
+
 function goProfile() {
     window.location.href = "http://localhost:3000/api/sessions/profile";
 }

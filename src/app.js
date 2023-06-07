@@ -6,15 +6,14 @@ import express from "express";
 import handlebars from "express-handlebars";
 import initializePassport from "./config/passport.config.js";
 import mongoose from "mongoose";
+import { Server } from "socket.io";
 import CartRouter from "./routes/carts.router.js";
 import SessionRouter from "./routes/sessions.router.js";
 import ProductRouter from "./routes/products.router.js";
 import ViewRouter from "./routes/views.router.js";
-import { userModel } from "./dao/models/user.model.js";
-import Product from "./dao/classes/product.dao.js";
-const app = express();
-const productService = new Product();
+import Message from "./dao/classes/message.dao.js";
 
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
@@ -39,7 +38,7 @@ app.set('view engine', 'handlebars');
 
 
 const port = process.env.PORT;
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
@@ -57,3 +56,24 @@ mongoose.connect('mongodb+srv://'
             console.log("Connected succesfully to Mongo database");
         }
     })
+
+/*****************CHAT*********************/
+const socketServer = new Server(httpServer);
+const messageService = new Message();
+//Chat with websockets
+socketServer.on('connection', socket => {
+
+    socket.on('chatMessage', async (data) => {
+
+        try {
+            await messageService.create(data);
+            const chatMessages = await messageService.read();
+            socketServer.emit('messages', chatMessages);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    })
+})
+
+export default socketServer;

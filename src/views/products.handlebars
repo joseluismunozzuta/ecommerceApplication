@@ -14,6 +14,12 @@
         <span class="sr-only sm:not-sr-only text-white font-bold">Create a
           product</span>
       </button>
+      {{else}}
+      <button type="button" class="px-6 py-2 border rounded-md
+            dark:bg-emerald-700 dark:text-black-900 dark:border-emerald-400"
+        onclick="goChat()">
+        <span class="sr-only sm:not-sr-only text-white font-bold">Go to chat</span>
+      </button>
       {{/if}}
       <div class="mx-5 flex flex-row">
         <p class="text-white">Hi, {{user.first_name}} {{user.last_name}}</p>
@@ -312,7 +318,8 @@
                       </select>
                       <label class="label">
                         <span class="text-black label-text-alt">Quantity</span>
-                        {{!-- <span class="text-black label-text-alt">Alt label</span> --}}
+                        {{!-- <span class="text-black label-text-alt">Alt label</span>
+                        --}}
                       </label>
                     </div>
 

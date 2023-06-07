@@ -2,10 +2,12 @@ import User from "../dao/classes/user.dao.js";
 import Product from "../dao/classes/product.dao.js";
 import CRouter from "./router.js";
 import Ticket from "../dao/classes/ticket.dao.js";
+import Message from "../dao/classes/message.dao.js";
 
 const userService = new User();
 const prodService = new Product();
 const ticketService = new Ticket();
+const messageService = new Message();
 
 export default class ViewRouter extends CRouter {
     init() {
@@ -144,6 +146,28 @@ export default class ViewRouter extends CRouter {
                     res.sendServerError("Ticket not found");
                 });
         });
+
+        this.get("/chat", ["USER"], async (req, res) => {
+
+            await messageService.read()
+            .then((messages) => {
+                let messagesArray = [];
+                const messObj = messages.docs;
+                for(const m of messObj){
+                    var l = m.user.charAt(0);
+                    const mo = m.toObject();
+                    mo.first = l;
+                    messagesArray.push(mo);
+                }
+                console.log(messagesArray);
+                res.render("chat", {
+                    messages:messagesArray,
+                    style: 'chat.css',
+                    title: 'Chat',
+                    userId: req.user.user.email,
+                })
+            });
+        })
 
     }
 }
