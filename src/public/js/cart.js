@@ -8,8 +8,8 @@ const getMyCart = async () => {
     const data = await result.json();
     data.products.map(p => {
         const cartProduct = document.createElement('li');
-        let totalPrice = p.product.price * p.quantity;
-        totalAmount += totalPrice;
+        let totalPrice = (Math.round((parseFloat(p.product.price) * parseInt(p.quantity))*100) / 100).toFixed(2);
+        totalAmount += parseFloat(totalPrice);
         cartProduct.innerHTML = `<li class="flex flex-col py-6 sm:flex-row sm:justify-between">
         <div class="flex w-full space-x-2 sm:space-x-4">
             <img class="flex-shrink-0 object-cover w-20 h-20
@@ -84,20 +84,14 @@ async function purchase() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            amount: totalAmount,
+            amount: Math.round(totalAmount * 100)/100,
             date: horaActual.toLocaleString()
         })
 
     }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
-                //window.location.replace("http://localhost:3000/views/mycart");
-                console.log(data.payload);
-                if(data.payload.prodsError){
-                    console.log("Hay productos sin stock");
-                }else{
-                    console.log("Compra exitosa");
-                }
+                window.location.replace(`http://localhost:3000/views/purchasedone/${data.payload.ticket._id}`);
             } else {
                 alert('No se pudo completar tu compra');
             }

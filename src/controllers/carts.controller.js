@@ -84,6 +84,7 @@ export const emptyCart_controller = async (req, res) => {
 export const purchase_controller = async (req, res) => {
 
     let amount = req.body.amount;
+    console.log(amount);
     let purchaser = req.user.user.email;
     let cartId = req.params.cid;
     console.log(cartId);
@@ -127,7 +128,7 @@ export const purchase_controller = async (req, res) => {
                                 name: p.product.title,
                                 quantity: p.quantity,
                                 price: p.product.price,
-                                prodtotalamount: p.product.price * p.quantity
+                                prodtotalamount: Math.round(100*(p.product.price * p.quantity))/100
                             });
                         }
                     }
@@ -138,7 +139,7 @@ export const purchase_controller = async (req, res) => {
             if (!purchase) {
                 return res.sendServerError("No se puede comprar ningun producto");
             } else {
-
+                amount = Math.round(100*amount)/100;
                 const ticket = new TicketDTO({ amount, purchaser, prods_purchase, prods_outofStock });
                 await ticketService.create(ticket)
                     .then((data) => {
