@@ -1,0 +1,147 @@
+<div class="w-full flex justify-center bg-white">
+    <div
+        class="mx-40 grid w-full grid-cols-1 items-start gap-x-8 gap-y-16 px-4 py-14 sm:px-6 sm:py-20 lg:max-w-max lg:mx-40 lg:grid-cols-2 lg:px-8">
+        <div>
+            <h2
+                class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Thanks
+                for your purchase!<br>
+                Your purchase was {{#if
+                partialPurchaseflag}}partially{{else}}succesfully{{/if}} done!</h2>
+
+            {{#if partialPurchaseflag}}
+            <p class="mt-4 text-gray-500 text-2xl">Your purchase is incomplete.
+                <p class="mt-4 text-gray-500 text-xl">The following items are
+                    out of stock for the quantity you've
+                    selected.</p>
+            </p>
+            <div class="mt-8">
+                <div class="flow-root">
+                    <ul role="list" class="-my-6 divide-y divide-gray-200">
+                        {{#each ticket.outofstockprods}}
+                        <li class="flex py-6">
+                            <div
+                                class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                <img
+                                    src={{this.url}}
+                                    alt="#"
+                                    class="h-full w-full object-cover object-center">
+                            </div>
+
+                            <div class="ml-4 flex flex-1 flex-col">
+                                <div>
+                                    <div
+                                        class="flex justify-between text-base font-medium text-gray-900">
+                                        <h3>{{this.name}}</h3>
+                                        <p class="ml-4">${{this.price}}</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex flex-1 items-end justify-between text-sm">
+                                    <p class="text-gray-500">Quantity selected:
+                                        {{this.quantity}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-4 text-gray-500 text-xl">Please go back to your cart,
+                this products will be
+                there and a different quantity.</p>
+            {{/if}}
+        </div>
+
+        <div>
+            <h2
+                class="ml-10 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Your invoice:</h2>
+
+            <div class="invoice text-black">
+                <header>
+                    <h1>Invoice</h1>
+                    <address>
+                        <p>ECommerce Site</p>
+                    </address>
+                    <span><img alt
+                            src="http://www.jonathantneal.com/examples/invoice/logo.png"><input
+                            type="file" accept="image/*"></span>
+                </header>
+                <article>
+                    <h1>Recipient</h1>
+                    <address>
+                        <p>User:<br>
+                            <span class="font-light">{{ticket.purchaser}}</span></p>
+                    </address>
+                    <table class="meta">
+                        <tr>
+                            <th><span>Invoice #</span></th>
+                            <td><span>{{ticket.code}}</span></td>
+                        </tr>
+                        <tr>
+                            <th><span>Date</span></th>
+                            <td><span>{{ticket.purchase_datetime}}</span></td>
+                        </tr>
+                        <tr>
+                            <th><span>Amount Due</span></th>
+                            <td><span id="prefix">$</span><span>{{ticket.amount}}</span></td>
+                        </tr>
+                    </table>
+                    <table class="inventory">
+                        <thead>
+                            <tr>
+                                <th><span>Item</span></th>
+                                <th><span>Unit Price</span></th>
+                                <th><span>Quantity</span></th>
+                                <th><span>Total Price</span></th>
+                            </tr>
+                        </thead>
+                        {{#each ticket.purchasedproducts}}
+                        <tbody>
+                            <tr>
+                                <td><span>{{this.name}}</span></td>
+                                <td><span data-prefix>$</span><span>{{this.price}}</span></td>
+                                <td><span>{{this.quantity}}</span></td>
+                                <td><span data-prefix>$</span><span>{{this.prodtotalamount}}</span></td>
+                            </tr>
+                        </tbody>
+                        {{/each}}
+                    </table>
+                    <table class="balance">
+                        <tr>
+                            <th><span>Total</span></th>
+                            <td><span data-prefix>$</span><span>{{ticket.amount}}</span></td>
+                        </tr>
+                    </table>
+                </article>
+                {{#if partialPurchaseflag}}
+                <aside>
+                    <h1><span>Observations</span></h1>
+                    <p>The following items were out of stock for the quantity
+                        you
+                        selected:
+                    </p>
+                    <ul role="list" class="my-3 divide-y divide-gray-200">
+                        {{#each ticket.outofstockprods}}
+                        <li class="flex py-6">
+                            <div class="flex flex-1 flex-col">
+                                <div>
+                                    <div
+                                        class="text-sm flex justify-between font-light text-gray-900">
+                                        <p>{{this.name}}</p>
+                                        <p class="ml-4">Unit price:
+                                            ${{this.price}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </aside>
+                {{/if}}
+            </div>
+        </div>
+
+    </div>
+
+</div>

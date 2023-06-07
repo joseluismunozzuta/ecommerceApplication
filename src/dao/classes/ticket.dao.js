@@ -12,4 +12,12 @@ export default class Ticket {
         }
     }
 
+    async getById(id){
+        try{
+            const ticket = await ticketModel.findById(id);
+            return ticket;
+        }catch(err){
+            throw err;
+        }
+    }
 }

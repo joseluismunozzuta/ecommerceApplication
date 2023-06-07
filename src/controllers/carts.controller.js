@@ -104,7 +104,12 @@ export const purchase_controller = async (req, res) => {
                         if (!(p.quantity < product.stock)) {
                             //No se comprara este producto
                             console.log("La cantidad seleccionada excede el stock");
-                            prods_outofStock.push(p.product._id);
+                            prods_outofStock.push({
+                                name: p.product.title,
+                                price: p.product.price,
+                                url: p.product.thumbnail,
+                                quantity: p.quantity
+                            });
                             amount = amount - p.quantity * p.product.price;
                             console.log("New amount: " + amount);
                         } else {
@@ -117,7 +122,13 @@ export const purchase_controller = async (req, res) => {
                                 .catch((err) => {
                                     res.sendServerError(err.message);
                                 });
-                            prods_purchase.push(p.product._id);
+                            prods_purchase.push({
+                                id: p.product._id,
+                                name: p.product.title,
+                                quantity: p.quantity,
+                                price: p.product.price,
+                                prodtotalamount: p.product.price * p.quantity
+                            });
                         }
                     }
                 });
@@ -128,7 +139,7 @@ export const purchase_controller = async (req, res) => {
                 return res.sendServerError("No se puede comprar ningun producto");
             } else {
 
-                const ticket = new TicketDTO({ amount, purchaser });
+                const ticket = new TicketDTO({ amount, purchaser, prods_purchase, prods_outofStock });
                 await ticketService.create(ticket)
                     .then((data) => {
                         console.log("Ticket created");
@@ -152,12 +163,12 @@ export const purchase_controller = async (req, res) => {
                 // PHASE 3
                 for (const p of prods_purchase) {
                     console.log(p);
-                    await cartService.deleteProductFromCart(cartId, p.toString())
+                    await cartService.deleteProductFromCart(cartId, p.id.toString())
                         .catch((err) => {
                             console.log(err.message);
                             res.sendServerError(err.message);
                         })
-                    console.log(p + " deleted from cart");
+                    console.log(p.id + " deleted from cart");
                 }
 
                 console.log("Phase 3 completed");

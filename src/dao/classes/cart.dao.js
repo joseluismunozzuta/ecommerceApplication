@@ -48,18 +48,22 @@ export default class Cart {
             if (productInCart) {
                 //The product it's already in the cart.
                 //Increment quantity.
-                console.log("Product already in cart. Quantity incremented by one.");
+                console.log("Product already in cart.");
                 if (quantity) {
+                    console.log("Defined quantity: " + quantity + " updated");
                     productInCart.quantity = quantity;
                 } else {
+                    console.log("Not quantity. Increment quantity in one");
                     productInCart.quantity++;
                 }
 
             } else {
                 console.log("Adding a new product to cart.");
                 if(quantity){
+                    console.log("Defined quantity: " + quantity);
                     cartSearched.products.push({ product: productIdToAdd, quantity: quantity });
                 }else{
+                    console.log("Not quantity. Quantity: 1");
                     cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
                 }
                 

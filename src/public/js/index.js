@@ -197,16 +197,32 @@ async function showModal(id) {
 function hideModal() {
     modalBg.classList.remove('show');
     modalPanel.classList.remove('show');
+    if (document.getElementById("quantitySelect")) {
+        document.getElementById("quantitySelect").selectedIndex = 0;
+        modalBtn.classList.add('disabled:btn-disabled');
+        modalBtn.disabled = true;
+    }
 }
 
-function showDeleteModal(){
+function showDeleteModal() {
     modalDeleteBg.classList.add("show");
     modalDeletePanel.classList.add("show");
 }
 
-function hideDeleteModal(){
+function hideDeleteModal() {
     modalDeleteBg.classList.remove('show');
     modalDeletePanel.classList.remove('show');
+}
+
+function handleQuantity(select) {
+    let selectValue = select.value;
+    if (selectValue > 0) {
+        modalBtn.classList.remove('disabled:btn-disabled');
+        modalBtn.disabled = false;
+    } else {
+        modalBtn.classList.add('disabled:btn-disabled');
+        modalBtn.disabled = true;
+    }
 }
 
 async function addToCart() {
@@ -214,7 +230,13 @@ async function addToCart() {
     let cartId = document.getElementById("cartId").value;
 
     await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
-        method: 'PUT'
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            quantity: document.getElementById("quantitySelect").value
+        })
     }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
@@ -230,12 +252,12 @@ async function addToCart() {
 
 }
 
-function editProd(){
+function editProd() {
     let prodid = modalBtn.getAttribute("data-value");
     window.location.href = `http://localhost:3000/views/editprod/${prodid}`;
 }
 
-async function deleteProd(){
+async function deleteProd() {
     let prodid = modalBtn.getAttribute("data-value");
     await fetch(`/api/products/${prodid}`, {
         method: "DELETE",

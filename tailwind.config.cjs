@@ -13,7 +13,7 @@ module.exports = {
 
   daisyui: {
     styled: true,
-    themes: true,
+    themes: ["light", "dark", "cupcake"],
     base: true,
     utils: true,
     logs: true,

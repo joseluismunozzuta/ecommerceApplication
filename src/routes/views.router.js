@@ -1,9 +1,11 @@
 import User from "../dao/classes/user.dao.js";
 import Product from "../dao/classes/product.dao.js";
 import CRouter from "./router.js";
+import Ticket from "../dao/classes/ticket.dao.js";
 
 const userService = new User();
 const prodService = new Product();
+const ticketService = new Ticket();
 
 export default class ViewRouter extends CRouter {
     init() {
@@ -25,7 +27,7 @@ export default class ViewRouter extends CRouter {
             } else {
                 pagina = 1;
             }
-            
+
             try {
 
                 let user = new Map();
@@ -110,6 +112,30 @@ export default class ViewRouter extends CRouter {
                     });
                 }).catch((err) => {
                     res.sendServerError("Product not found");
+                });
+        });
+
+        this.get("/purchasedone/:tid", ["PUBLIC"], async (req, res) => {
+
+            let ticketid = req.params.tid;
+            let partialPurchaseflag = false; 
+
+            await ticketService.getById(ticketid).
+                then((ticket) => {
+                    const ticketOb = ticket.toObject();
+
+                    if(ticketOb.outofstockprods.length !== 0){
+                        partialPurchaseflag = true;
+                    }
+
+                    res.render("purchase", {
+                        partialPurchaseflag,
+                        ticket: ticketOb,
+                        style: 'purchase.css',
+                        title: 'Purchase Done',
+                    });
+                }).catch((err) => {
+                    res.sendServerError("Ticket not found");
                 });
         });
 
