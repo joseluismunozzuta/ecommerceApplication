@@ -115,16 +115,22 @@ export default class ViewRouter extends CRouter {
                 });
         });
 
-        this.get("/purchasedone/:tid", ["PUBLIC"], async (req, res) => {
+        this.get("/purchasedone/:tid", ["USER", "ADMIN"], async (req, res) => {
 
             let ticketid = req.params.tid;
-            let partialPurchaseflag = false; 
+            let partialPurchaseflag = false;
 
             await ticketService.getById(ticketid).
                 then((ticket) => {
+
+                    if (req.user.user.role !== "admin" &&
+                        req.user.user.email !== ticket.purchaser) {
+                        return res.sendForbidden("Forbidden");
+                    }
+
                     const ticketOb = ticket.toObject();
 
-                    if(ticketOb.outofstockprods.length !== 0){
+                    if (ticketOb.outofstockprods.length !== 0) {
                         partialPurchaseflag = true;
                     }
 
