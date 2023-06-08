@@ -84,8 +84,11 @@ export const registerUser_controller = async (req, res) => {
             let cartId = result._id.toString();
 
             let adminFlag = email.includes("admin");
+            let premiumFlag = email.includes("premium");
             if (adminFlag) {
                 role = "admin";
+            }else if(premiumFlag){
+                role = "premium";
             }
 
             const newUser = new UserDTO({
@@ -156,7 +159,7 @@ export const forgetPassword = async (req, res) => {
         if (!user) {
             return res.sendUserError("User not found");
         }
-        const token = generateToken(user, 180);
+        const token = generateToken(user, '1h');
         await sendRecoveryEmail(email, token);
         res.sendSuccess("Email sent");
         //const link = `${process.env.FRONTEND_URL}/reset-password/${token}`;

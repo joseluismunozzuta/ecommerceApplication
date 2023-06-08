@@ -65,7 +65,7 @@ export default class ViewRouter extends CRouter {
 
         });
 
-        this.get("/mycart", ["USER"], async (req, res) => {
+        this.get("/mycart", ["USER", "PREMIUM"], async (req, res) => {
 
             if (req.user) {
                 let user = await userService.searchByEmail(req.user.user.email);
@@ -80,7 +80,7 @@ export default class ViewRouter extends CRouter {
             }
         });
 
-        this.get("/createproduct", ["ADMIN"], async (req, res) => {
+        this.get("/createproduct", ["ADMIN", "PREMIUM"], async (req, res) => {
 
             if (!req.user) {
                 res.sendUserError("Not Authenticated");
@@ -99,7 +99,7 @@ export default class ViewRouter extends CRouter {
 
         });
 
-        this.get("/editprod/:pid", ["ADMIN"], async (req, res) => {
+        this.get("/editprod/:pid", ["ADMIN", "PREMIUM"], async (req, res) => {
 
             let prodid = req.params.pid;
 
@@ -148,7 +148,7 @@ export default class ViewRouter extends CRouter {
                 });
         });
 
-        this.get("/chat", ["PUBLIC","USER"], async (req, res) => {
+        this.get("/chat", ["USER"], async (req, res) => {
 
             await messageService.read()
                 .then((messages) => {

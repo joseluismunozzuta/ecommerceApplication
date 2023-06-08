@@ -11,14 +11,14 @@ export default class CartRouter extends CRouter{
 
         this.post("/",["PUBLIC"], createCart_controller);
 
-        this.get("/:cid",["USER"], getCartById); //validar que el id del user logueado sea el que se quiere hacer cambios
+        this.get("/:cid",["USER", "PREMIUM"], getCartById); //validar que el id del user logueado sea el que se quiere hacer cambios
         
-        this.put("/:cid/products/:pid",["USER"], updateCart_controller);
+        this.put("/:cid/products/:pid",["USER", "PREMIUM"], updateCart_controller);
         
-        this.delete("/:cid/products/:pid",["USER"], deleteProductFromCart_controller);
+        this.delete("/:cid/products/:pid",["USER", "PREMIUM"], deleteProductFromCart_controller);
         
-        this.delete("/:cid",["USER"], emptyCart_controller);
+        this.delete("/:cid",["USER", "PREMIUM"], emptyCart_controller);
 
-        this.post("/:cid/purchase", ["USER"], purchase_controller);
+        this.post("/:cid/purchase", ["USER", "PREMIUM"], purchase_controller);
     }
 }

@@ -11,7 +11,7 @@ export default class SessionRouter extends CRouter {
             res.sendSuccess(req.user);
         })
 
-        this.get("/profile", ["USER", "ADMIN"], myProfile_controller);
+        this.get("/profile", ["USER", "ADMIN", "PREMIUM"], myProfile_controller);
 
         this.get("/getusers", ["PUBLIC"], getAllUsers_controller);
 
