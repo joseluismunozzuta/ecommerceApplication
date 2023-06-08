@@ -50,7 +50,7 @@ const prodLogger = winston.createLogger({
         }),
         new winston.transports.File({
             level: 'error',
-            filename: "./errors.log",
+            filename: "./logs/errors.log",
             format: winston.format.combine(
                 winston.format.colorize({ colors: customLevelsOptions.colors }),
                 winston.format.simple()
