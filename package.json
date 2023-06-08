@@ -1,5 +1,5 @@
 {
-  "name": "loggerimplementation",
+  "name": "tercerapracticaintegradora",
   "version": "1.0.0",
   "description": "Ecommerce App",
   "main": "index.js",
@@ -39,12 +39,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/backend_logger.git"
+    "url": "git+https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/backend_logger/issues"
+    "url": "https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/backend_logger#readme",
+  "homepage": "https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
