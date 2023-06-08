@@ -1,5 +1,7 @@
 import { productModel } from "../models/products.model.js";
 import { cartModel } from "../models/carts.model.js";
+import EErrors from "../../services/errors/enums.js";
+import CustomError from "../../services/errors/CustomError.js";
 
 export default class Cart {
 
@@ -8,7 +10,6 @@ export default class Cart {
             const cart = await cartModel.paginate();
             return cart;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -28,18 +29,35 @@ export default class Cart {
             const cart = await cartModel.findById(id).populate('products.product');
             return cart;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
 
-    async addProductToCart(cartId, productIdToAdd, quantity) {
+    async addProductToCart(req, cartId, productIdToAdd, quantity) {
         try {
             //Search for the cart in DB
             const cartSearched = await cartModel.findById(cartId);
 
+            if (!cartSearched) {
+                CustomError.createError({
+                    name: "CartId does not exist",
+                    cause: `The cart id is not registered in DB.`,
+                    message: "Error adding product to cart",
+                    code: EErrors.DATABASE_ERROR
+                });
+            }
+
             //Search for the product in DB
             const productSearched = await productModel.findById(productIdToAdd);
+
+            if (!productSearched) {
+                CustomError.createError({
+                    name: "Product does not exist",
+                    cause: `Product selected does not exist`,
+                    message: "Error adding product to cart",
+                    code: EErrors.DATABASE_ERROR
+                });
+            }
 
             const productInCart = cartSearched.products.find(
                 (p) => p.product._id.toString() === productIdToAdd
@@ -48,25 +66,25 @@ export default class Cart {
             if (productInCart) {
                 //The product it's already in the cart.
                 //Increment quantity.
-                console.log("Product already in cart.");
+                req.logger.debug("Product already in cart.");
                 if (quantity) {
-                    console.log("Defined quantity: " + quantity + " updated");
+                    req.logger.debug("Defined quantity: " + quantity + " updated");
                     productInCart.quantity = quantity;
                 } else {
-                    console.log("Not quantity. Increment quantity in one");
+                    req.logger.debug("Not quantity. Increment quantity in one");
                     productInCart.quantity++;
                 }
 
             } else {
-                console.log("Adding a new product to cart.");
-                if(quantity){
-                    console.log("Defined quantity: " + quantity);
+                req.logger.debug("Adding a new product to cart.");
+                if (quantity) {
+                    req.logger.debug("Defined quantity: " + quantity);
                     cartSearched.products.push({ product: productIdToAdd, quantity: quantity });
-                }else{
-                    console.log("Not quantity. Quantity: 1");
+                } else {
+                    req.logger.debug("Not quantity. Quantity: 1");
                     cartSearched.products.push({ product: productIdToAdd, quantity: 1 });
                 }
-                
+
             }
 
             //Update the cart in DB
@@ -77,19 +95,36 @@ export default class Cart {
             );
             return updatedCart;
         } catch (err) {
-            console.log(err);
-            throw e;
+            req.logger.fatal(err.cause);
+            throw err;
         }
+
+
     }
 
-    async deleteProductFromCart(cartId, productId) {
+    async deleteProductFromCart(req, cartId, productId) {
+
         try {
             const cartToModify = await cartModel.findById(cartId);
+
+            if (!cartToModify) {
+                CustomError.createError({
+                    name: "CartId does not exist",
+                    cause: `The cart id is not registered in DB.`,
+                    message: "Error deleting product from cart",
+                    code: EErrors.DATABASE_ERROR
+                });
+            }
 
             const index = cartToModify.products.findIndex((p) => p.product.toString() === productId);
 
             if (index === -1) {
-                throw new Error("Product not found in cart");
+                CustomError.createError({
+                    name: "Product is not in the cart",
+                    cause: `The product selected is not in the cart.`,
+                    message: "Error deleting product from cart",
+                    code: EErrors.DATABASE_ERROR
+                });
             } else {
                 cartToModify.products.splice(index, 1);
                 const updatedCart = await cartModel.findByIdAndUpdate(
@@ -99,17 +134,21 @@ export default class Cart {
                 );
                 return updatedCart;
             }
+
         } catch (err) {
+            req.logger.fatal(err.cause);
             throw err;
         }
+
     }
 
-    async deleteAllCart(cartId) {
+    async deleteAllCart(req, cartId) {
         try {
             const deleteProduct = { products: [] }
             const cart = await cartModel.findByIdAndUpdate(cartId, deleteProduct, { new: true });
             return cart;
         } catch (err) {
+            req.logger.fatal(err);
             throw err;
         }
     }

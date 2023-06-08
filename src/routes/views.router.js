@@ -143,6 +143,7 @@ export default class ViewRouter extends CRouter {
                         title: 'Purchase Done',
                     });
                 }).catch((err) => {
+                    req.logger.error("Ticket not found");
                     res.sendServerError("Ticket not found");
                 });
         });
@@ -159,7 +160,7 @@ export default class ViewRouter extends CRouter {
                     mo.first = l;
                     messagesArray.push(mo);
                 }
-                console.log(messagesArray);
+                
                 res.render("chat", {
                     messages:messagesArray,
                     style: 'chat.css',
@@ -167,6 +168,14 @@ export default class ViewRouter extends CRouter {
                     userId: req.user.user.email,
                 })
             });
+        })
+
+        this.get("/testlogger", ["PUBLIC"], async(req, res) => {
+            req.logger.warning("This is a warning message");
+            req.logger.info("This is a info message");
+            req.logger.error("This is a error message");
+            req.logger.debug("This is a debug message");
+            res.send("Test logger");
         })
 
     }

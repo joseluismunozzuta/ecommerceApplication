@@ -81,7 +81,6 @@ export const registerUser_controller = async (req, res) => {
             let role;
             let result = await cartService.create([]);
             let cartId = result._id.toString();
-            console.log(cartId);
 
             let adminFlag = email.includes("admin");
             if (adminFlag) {

@@ -243,14 +243,17 @@ async function addToCart() {
         })
     }).then((response) => response.json())
         .then((data) => {
+            console.log(data);
             if (data.status == "success") {
                 let cartLength = data.payload.products.length;
                 updateCartProductsLength(cartLength);
                 alert('Se agregó el producto al carrito');
             } else {
-                alert('No se pudo agregar el producto al carrito');
+                alert(data.error.cause);
             }
-        }).catch((error) => console.log(error));
+        }).catch((e) => {
+            console.log(e);
+        });
 
     hideModal();
 

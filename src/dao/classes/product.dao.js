@@ -35,7 +35,6 @@ export default class Product {
             const products = await productModel.paginate(query, paginateOptions);
             return products;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -45,7 +44,6 @@ export default class Product {
             const products = await productModel.paginate();
             return products.totalPages;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -55,7 +53,6 @@ export default class Product {
             const product = await productModel.findById(id);
             return product;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -79,7 +76,6 @@ export default class Product {
             );
             return updatedProduct;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }
@@ -89,7 +85,6 @@ export default class Product {
             const deletedProduct = await productModel.findByIdAndDelete(id);
             return deletedProduct;
         } catch (err) {
-            console.log(err);
             throw err;
         }
     }

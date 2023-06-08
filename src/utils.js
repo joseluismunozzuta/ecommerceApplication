@@ -13,7 +13,6 @@ export const checkAuthentication = () => {
 
     return async (req, res, next) => {
         
-        console.log("trace check auth");
         if (!req.user) {
             return res.sendUserError("Unauthorized, not authenticated");
         }

@@ -1,3 +1,4 @@
+import {cpus} from 'os';
 import __dirname, { generateProduct } from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";

@@ -47,11 +47,11 @@ export const createProduct_controller = async (req, res) => {
 
     const newProd = new ProductDTO(product);
     await productService.create(product).then((data) => {
-        console.log(`Product succesfully created with ID: ` + data.id);
+        req.logger.debug(`Product succesfully created with ID: ` + data.id);
         res.sendSuccess("Product succesfully created");
-        console.log("Trace here");
+        
     }).catch((e) => {
-        console.log(e.message);
+        req.logger.error(e.message);
         res.sendServerError(e.message);
     })
 
@@ -69,10 +69,10 @@ export const updateProduct_controller = async (req, res) => {
     const newProd = new ProductDTO(product);
 
     await productService.update(productToUpdate, newProd).then((data) => {
-        console.log(`Product succesfully updated with ID: ` + data.id);
+        req.logger.debug(`Product succesfully updated with ID: ` + data.id);
         res.sendSuccess("Product succesfully updated");
     }).catch((e) => {
-        console.log(e.message);
+        req.logger.error(e.message);
         res.sendServerError(e.message);
     })
 }
@@ -82,10 +82,10 @@ export const deleteProduct_controller = async (req, res) => {
     let productToDelete = req.params.pid;
 
     await productService.delete(productToDelete).then((data) => {
-        console.log(`Product succesfully deleted with ID: ` + data.id);
+        req.logger.debug(`Product succesfully deleted with ID: ` + data.id);
         res.send({ status: "success", payload: data });
     }).catch((e) => {
-        console.log(e.message);
+        req.logger.error(e.message);
         res.status(500).send(e.message);
     })
 

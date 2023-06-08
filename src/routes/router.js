@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from 'passport';
 import errorHandler from "../middlewares/errors/err.js";
+import { addLogger } from "../logger.js";
 
 export default class CRouter {
     constructor() {
@@ -15,19 +16,19 @@ export default class CRouter {
     init() { }
 
     get(path, policies, ...callbacks) {
-        this.router.get(path, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+        this.router.get(path, addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
 
     post(path, policies, ...callbacks) {
-        this.router.post(path, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+        this.router.post(path, addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
 
     put(path, policies, ...callbacks) {
-        this.router.put(path, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+        this.router.put(path, addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
 
     delete(path, policies, ...callbacks) {
-        this.router.delete(path, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+        this.router.delete(path,addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
 
     applyCallbacks(callbacks) {
@@ -36,7 +37,6 @@ export default class CRouter {
             try {
                 await callback.apply(this, params);
             } catch (error) {
-                console.log("There was an error here");
                 //params[1] es res, por lo que se puede mandar un send
                 //params[1].status(500).send(error);
                 errorHandler(error, ...params);
