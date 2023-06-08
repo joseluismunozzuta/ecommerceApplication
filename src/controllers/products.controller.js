@@ -38,18 +38,25 @@ export const createProduct_controller = async (req, res) => {
     if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
         CustomError.createError({
             name: "Product Creation Error",
-            cause: `Todos los campos son obligatorios.` +  
-            ` El precio debe ser mayor a 0.` + ` El stock no puede ser negativo.`,
+            cause: `Todos los campos son obligatorios.` +
+                ` El precio debe ser mayor a 0.` + ` El stock no puede ser negativo.`,
             message: "Error al registrar el producto.",
             code: EErrors.INVALID_TYPES_ERROR
         });
     }
 
+    if (req.user.user.role !== "admin") {
+        product.owner = req.user.user._id;
+    } else {
+        product.owner = "admin";
+    }
+
     const newProd = new ProductDTO(product);
-    await productService.create(product).then((data) => {
+    console.log(newProd);
+    await productService.create(newProd).then((data) => {
         req.logger.debug(`Product succesfully created with ID: ` + data.id);
         res.sendSuccess("Product succesfully created");
-        
+
     }).catch((e) => {
         req.logger.error(e.message);
         res.sendServerError(e.message);
@@ -58,12 +65,28 @@ export const createProduct_controller = async (req, res) => {
 }
 
 export const updateProduct_controller = async (req, res) => {
-    const product = { ...req.body };
-    
+
+    const product = req.body;
+
     let productToUpdate = req.params.pid;
 
     if (!product.title || !product.description || !product.price || !product.thumbnail || !product.category || !product.code || !product.stock) {
         return res.status(400).send({ status: "error", error: "Incomplete values" })
+    }
+
+    const prodToUpdate = await productService.getProductById(productToUpdate)
+        .catch((e) => {
+            req.logger.error(e.message);
+            res.sendServerError(e.message);
+        })
+
+    if (req.user.user.role !== "admin") {
+        if (prodToUpdate.owner !== req.user.user._id) {
+            return res.sendServerError("Not allowed to update this product");
+        }
+        product.owner = req.user.user._id;
+    } else {
+        product.owner = "admin";
     }
 
     const newProd = new ProductDTO(product);
@@ -80,6 +103,18 @@ export const updateProduct_controller = async (req, res) => {
 export const deleteProduct_controller = async (req, res) => {
 
     let productToDelete = req.params.pid;
+
+    const prodToDelete = await productService.getProductById(productToDelete)
+        .catch((e) => {
+            req.logger.error(e.message);
+            res.sendServerError(e.message);
+        })
+
+    if (req.user.user.role !== "admin") {
+        if (prodToDelete.owner !== req.user.user._id) {
+            return res.sendServerError("Not allowed to delete this product");
+        }
+    }
 
     await productService.delete(productToDelete).then((data) => {
         req.logger.debug(`Product succesfully deleted with ID: ` + data.id);

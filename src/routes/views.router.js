@@ -36,6 +36,8 @@ export default class ViewRouter extends CRouter {
                 let cartId;
                 let flag = false;
                 let adminflag = false;
+                let premiumflag = false;
+                let userflag = false;
 
                 if (req.user) {
                     user = await userService.searchByEmail(req.user.user.email);
@@ -45,6 +47,17 @@ export default class ViewRouter extends CRouter {
                         cartId = user.cart._id.toString();
                         if (user.role == 'admin') {
                             adminflag = true;
+                            req.logger.debug("1");
+                        }
+
+                        if(user.role == 'premium'){
+                            premiumflag = true;
+                            req.logger.debug("2");
+                        }
+                        
+                        if(user.role == 'user'){
+                            userflag = true;
+                            req.logger.debug("3");
                         }
                     }
                 }
@@ -56,7 +69,9 @@ export default class ViewRouter extends CRouter {
                     title: 'Products list',
                     cartId: cartId,
                     flag,
-                    adminflag
+                    adminflag,
+                    premiumflag,
+                    userflag
                 });
 
             } catch (err) {
@@ -117,7 +132,7 @@ export default class ViewRouter extends CRouter {
                 });
         });
 
-        this.get("/purchasedone/:tid", ["USER", "ADMIN"], async (req, res) => {
+        this.get("/purchasedone/:tid", ["USER", "ADMIN", "PREMIUM"], async (req, res) => {
 
             let ticketid = req.params.tid;
             let partialPurchaseflag = false;
@@ -148,7 +163,7 @@ export default class ViewRouter extends CRouter {
                 });
         });
 
-        this.get("/chat", ["USER"], async (req, res) => {
+        this.get("/chat", ["USER", "PREMIUM"], async (req, res) => {
 
             await messageService.read()
                 .then((messages) => {

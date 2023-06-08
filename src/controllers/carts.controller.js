@@ -58,8 +58,7 @@ export const deleteProductFromCart_controller = async (req, res) => {
 
     let cartId = req.params.cid;
     let productId = req.params.pid;
-
-    await cartService.deleteProductFromCart(cartId, productId).then((data) => {
+    await cartService.deleteProductFromCart(req, cartId, productId).then((data) => {
         req.logger.debug("Cart updated");
         res.send({ status: "success", payload: data });
     }).catch((err) => {

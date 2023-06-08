@@ -16,12 +16,11 @@ let modalDescription = document.getElementById("modalDescription");
 let modalImage = document.getElementById("modalImage");
 let modalStock = document.getElementById("modalStock");
 let modalCategory = document.getElementById("modalCategory");
-let modalBtn = document.getElementById("prodActionBtn");
 let logoutButton = document.getElementById("logout");
 let cartLength1 = document.getElementById("cartl1");
 let cartLength2 = document.getElementById("cartl2");
 
-function goChat(){
+function goChat() {
     window.location.href = "http://localhost:3000/views/chat";
 }
 
@@ -192,7 +191,79 @@ async function showModal(id) {
     modalDescription.innerText = prod.description;
     modalCategory.innerText = prod.category;
     modalImage.src = prod.thumbnail;
-    modalBtn.setAttribute("data-value", prod._id);
+    
+    if (document.getElementById("modalActionContent")) {
+        //If it exists, we are premium
+        let modalContentContainer = document.getElementById("modalActionContent");
+        modalContentContainer.innerHTML ="";
+        let userid = document.getElementById("userId").value;
+
+        if (userid == prod.owner) {
+
+            console.log("This is my product");
+
+            modalContentContainer.innerHTML = `<div class="w-full">
+            <h2 class="text-2xl p-12 text-center font-bold text-green-900 sm:p-10">
+            This product is managed by you
+            </h2></div>
+            <div class="w-full flex flex-row justify-evenly items-center gap-2">
+            <button type="submit" class="w-1/3 mt-6 flex
+            items-center justify-center rounded-md
+            border border-transparent bg-teal-600 py-2
+            px-2 text-base font-medium text-white
+            hover:bg-teal-600-700 focus:outline-none
+            focus:ring-2 focus:ring-teal-500
+            focus:ring-offset-2" id="prodActionBtn" data-value=${prod._id}
+            onclick="editProd()">Edit</button>
+    
+            <button type="submit" class="w-1/3 mt-6 flex
+            items-center justify-center rounded-md
+            border border-transparent bg-red-600 py-2
+            px-2 text-base font-medium text-white
+            hover:bg-red-700 focus:outline-none
+            focus:ring-2 focus:ring-red-500
+            focus:ring-offset-2" id="deleteProdBtn" data-value=${prod._id}
+            onclick="showDeleteModal()">Delete</button></div>`;
+        } else {
+
+            console.log("This is not my product");
+
+            modalContentContainer.innerHTML = `<div class="w-full flex flex-row justify-evenly items-start gap-2">
+            <button type="submit" class="mt-6 flex w-5/12
+            items-end justify-center rounded-md
+            border border-transparent bg-indigo-600 py-3
+            px-8 text-base font-medium text-white
+            hover:bg-indigo-700 focus:outline-none
+            focus:ring-2 focus:ring-indigo-500
+            focus:ring-offset-2 disabled:btn-disabled"
+            id="prodActionBtn" data-value=${prod._id}
+            onclick="addToCart()" disabled>Add to bag</button>
+
+            <div class="form-control w-4/12 mt-6">
+            <select class="select text-black bg-transparent 
+            select-primary w-full max-w-xs"
+                onchange="handleQuantity(this)" id="quantitySelect">
+                <option class="text-black" disabled selected>Quantity</option>
+                <option class="text-black">1</option>
+                <option class="text-black">2</option>
+                <option class="text-black">3</option>
+                <option class="text-black">4</option>
+                <option class="text-black">5</option>
+                <option class="text-black">6</option>
+                <option class="text-black">7</option>
+                <option class="text-black">8</option>
+                <option class="text-black">9</option>
+                <option class="text-black">10</option>
+            </select>
+            <label class="label">
+                <span class="text-black label-text-alt">Quantity</span>
+            </label>
+            </div></div>`
+        }
+    }else{
+        document.getElementById("prodActionBtn").setAttribute("data-value", prod._id);
+    }
+
     modalBg.classList.add("show");
     modalPanel.classList.add("show");
 
@@ -201,10 +272,11 @@ async function showModal(id) {
 function hideModal() {
     modalBg.classList.remove('show');
     modalPanel.classList.remove('show');
+    let modalactionbtn = document.getElementById("prodActionBtn");
     if (document.getElementById("quantitySelect")) {
         document.getElementById("quantitySelect").selectedIndex = 0;
-        modalBtn.classList.add('disabled:btn-disabled');
-        modalBtn.disabled = true;
+        modalactionbtn.classList.add('disabled:btn-disabled');
+        modalactionbtn.disabled = true;
     }
 }
 
@@ -220,17 +292,18 @@ function hideDeleteModal() {
 
 function handleQuantity(select) {
     let selectValue = select.value;
+    let modalactionbtn = document.getElementById("prodActionBtn");
     if (selectValue > 0) {
-        modalBtn.classList.remove('disabled:btn-disabled');
-        modalBtn.disabled = false;
+        modalactionbtn.classList.remove('disabled:btn-disabled');
+        modalactionbtn.disabled = false;
     } else {
-        modalBtn.classList.add('disabled:btn-disabled');
-        modalBtn.disabled = true;
+        modalactionbtn.classList.add('disabled:btn-disabled');
+        modalactionbtn.disabled = true;
     }
 }
 
 async function addToCart() {
-    let prodid = modalBtn.getAttribute("data-value");
+    let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     let cartId = document.getElementById("cartId").value;
 
     await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
@@ -260,12 +333,12 @@ async function addToCart() {
 }
 
 function editProd() {
-    let prodid = modalBtn.getAttribute("data-value");
+    let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     window.location.href = `http://localhost:3000/views/editprod/${prodid}`;
 }
 
 async function deleteProd() {
-    let prodid = modalBtn.getAttribute("data-value");
+    let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     await fetch(`/api/products/${prodid}`, {
         method: "DELETE",
     }).then((response) => response.json())

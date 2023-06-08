@@ -9,7 +9,7 @@ export default class SessionRouter extends CRouter {
 
         this.get("/current", ["PUBLIC"], checkAuthentication(), (req, res) => {
             res.sendSuccess(req.user);
-        })
+        });
 
         this.get("/profile", ["USER", "ADMIN", "PREMIUM"], myProfile_controller);
 

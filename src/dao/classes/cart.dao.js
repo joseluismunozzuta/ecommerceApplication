@@ -103,10 +103,10 @@ export default class Cart {
     }
 
     async deleteProductFromCart(req, cartId, productId) {
-
+        
         try {
             const cartToModify = await cartModel.findById(cartId);
-
+            
             if (!cartToModify) {
                 CustomError.createError({
                     name: "CartId does not exist",
@@ -117,7 +117,7 @@ export default class Cart {
             }
 
             const index = cartToModify.products.findIndex((p) => p.product.toString() === productId);
-
+            
             if (index === -1) {
                 CustomError.createError({
                     name: "Product is not in the cart",
@@ -126,6 +126,7 @@ export default class Cart {
                     code: EErrors.DATABASE_ERROR
                 });
             } else {
+                
                 cartToModify.products.splice(index, 1);
                 const updatedCart = await cartModel.findByIdAndUpdate(
                     cartId,
