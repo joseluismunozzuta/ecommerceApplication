@@ -171,9 +171,10 @@ export default class ViewRouter extends CRouter {
         })
 
         this.get("/testlogger", ["PUBLIC"], async(req, res) => {
+            req.logger.fatal("This is a fatal message");
+            req.logger.error("This is a error message");
             req.logger.warning("This is a warning message");
             req.logger.info("This is a info message");
-            req.logger.error("This is a error message");
             req.logger.debug("This is a debug message");
             res.send("Test logger");
         })
