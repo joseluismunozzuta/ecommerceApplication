@@ -31,10 +31,10 @@ export const createCart_controller = async (req, res) => {
     let products = [];
 
     await cartService.create(products).then((data) => {
-        console.log("Cart created with ID: ", data.id)
+        req.logger.debug("Cart created with ID: ", data.id)
         res.send(data);
     }).catch((e) => {
-        console.log(e.message);
+        req.logger.error(e.message);
         res.status(500).send(e.message);
     })
 
@@ -45,11 +45,11 @@ export const updateCart_controller = async (req, res) => {
     let productIdToAdd = req.params.pid;
     let cartId = req.params.cid;
     let { quantity } = req.body;
-    await cartService.addProductToCart(cartId, productIdToAdd, quantity).then((data) => {
-        console.log("Cart updated");
+    await cartService.addProductToCart(req, cartId, productIdToAdd, quantity).then((data) => {
+        req.logger.debug("Cart updated");
         res.send({ status: "success", payload: data });
     }).catch((err) => {
-        res.status(500).send(err.message);
+        res.sendServerError(err);
     })
 
 }
@@ -60,7 +60,7 @@ export const deleteProductFromCart_controller = async (req, res) => {
     let productId = req.params.pid;
 
     await cartService.deleteProductFromCart(cartId, productId).then((data) => {
-        console.log("Cart updated");
+        req.logger.debug("Cart updated");
         res.send({ status: "success", payload: data });
     }).catch((err) => {
         res.status(500).send(err.message);
@@ -72,8 +72,8 @@ export const emptyCart_controller = async (req, res) => {
 
     let cartId = req.params.cid;
 
-    await cartService.deleteAllCart(cartId).then((data) => {
-        console.log("Cart deleted");
+    await cartService.deleteAllCart(req, cartId).then((data) => {
+        req.logger.debug("Cart deleted");
         res.send({ status: "success", payload: data });
     }).catch((err) => {
         res.status(500).send(err.message);
@@ -84,14 +84,13 @@ export const emptyCart_controller = async (req, res) => {
 export const purchase_controller = async (req, res) => {
 
     let amount = req.body.amount;
-    console.log(amount);
     let purchaser = req.user.user.email;
     let cartId = req.params.cid;
-    console.log(cartId);
     let prods_outofStock = [];
     let prods_purchase = [];
     let purchase = false;
     const payload = {};
+    req.logger.debug(`Cart id doing purchase is ${cartId}`);
 
     (async () => {
         try {
@@ -104,7 +103,7 @@ export const purchase_controller = async (req, res) => {
 
                         if (!(p.quantity < product.stock)) {
                             //No se comprara este producto
-                            console.log("La cantidad seleccionada excede el stock");
+                            req.logger.debug("La cantidad seleccionada excede el stock");
                             prods_outofStock.push({
                                 name: p.product.title,
                                 price: p.product.price,
@@ -112,7 +111,7 @@ export const purchase_controller = async (req, res) => {
                                 quantity: p.quantity
                             });
                             amount = amount - p.quantity * p.product.price;
-                            console.log("New amount: " + amount);
+                            req.logger.debug("New amount: " + amount);
                         } else {
                             purchase = true;
                             //Se comprara este producto
@@ -128,22 +127,20 @@ export const purchase_controller = async (req, res) => {
                                 name: p.product.title,
                                 quantity: p.quantity,
                                 price: p.product.price,
-                                prodtotalamount: Math.round(100*(p.product.price * p.quantity))/100
+                                prodtotalamount: Math.round(100 * (p.product.price * p.quantity)) / 100
                             });
                         }
                     }
                 });
 
-            // PHASE 2
-            console.log("Phase 1 completed.");
             if (!purchase) {
                 return res.sendServerError("No se puede comprar ningun producto");
             } else {
-                amount = Math.round(100*amount)/100;
+                amount = Math.round(100 * amount) / 100;
                 const ticket = new TicketDTO({ amount, purchaser, prods_purchase, prods_outofStock });
                 await ticketService.create(ticket)
                     .then((data) => {
-                        console.log("Ticket created");
+                        req.logger.debug("Ticket created");
                         if (!prods_outofStock.length == 0) {
                             //Hay productos que no fueron comprados
                             //Enviamos el ticket y los productos que faltan comprar
@@ -155,37 +152,26 @@ export const purchase_controller = async (req, res) => {
                         }
 
                     }).catch((err) => {
-                        console.log(err.message);
+                        req.logger.error(err.message);
                         res.sendServerError(err.message);
                     })
 
-                console.log("Phase 2 completed.");
-
-                // PHASE 3
                 for (const p of prods_purchase) {
-                    console.log(p);
-                    await cartService.deleteProductFromCart(cartId, p.id.toString())
+                    await cartService.deleteProductFromCart(req, cartId, p.id.toString())
                         .catch((err) => {
-                            console.log(err.message);
+                            req.logger.error(err.message);
                             res.sendServerError(err.message);
                         })
-                    console.log(p.id + " deleted from cart");
+                        req.logger.debug(p.name + " deleted from cart");
                 }
-
-                console.log("Phase 3 completed");
 
                 res.send({ status: "success", payload: payload });
             }
 
         } catch (error) {
-            // Handle any errors that occurred
-            console.error(error);
+            req.logger.error(error);
             res.sendServerError(error.message);
         }
     })();
-
-
-
-
 
 }
