@@ -148,29 +148,29 @@ export default class ViewRouter extends CRouter {
                 });
         });
 
-        this.get("/chat", ["USER"], async (req, res) => {
+        this.get("/chat", ["PUBLIC","USER"], async (req, res) => {
 
             await messageService.read()
-            .then((messages) => {
-                let messagesArray = [];
-                const messObj = messages.docs;
-                for(const m of messObj){
-                    var l = m.user.charAt(0);
-                    const mo = m.toObject();
-                    mo.first = l;
-                    messagesArray.push(mo);
-                }
-                
-                res.render("chat", {
-                    messages:messagesArray,
-                    style: 'chat.css',
-                    title: 'Chat',
-                    userId: req.user.user.email,
-                })
-            });
+                .then((messages) => {
+                    let messagesArray = [];
+                    const messObj = messages;
+                    for (const m of messObj) {
+                        var l = m.user.charAt(0);
+                        const mo = m.toObject();
+                        mo.first = l;
+                        messagesArray.push(mo);
+                    }
+
+                    res.render("chat", {
+                        messages: messagesArray,
+                        style: 'chat.css',
+                        title: 'Chat',
+                        userId: req.user.user.email,
+                    })
+                });
         })
 
-        this.get("/testlogger", ["PUBLIC"], async(req, res) => {
+        this.get("/testlogger", ["PUBLIC"], async (req, res) => {
             req.logger.fatal("This is a fatal message");
             req.logger.error("This is a error message");
             req.logger.warning("This is a warning message");
@@ -179,5 +179,25 @@ export default class ViewRouter extends CRouter {
             res.send("Test logger");
         })
 
+        this.get("/forgotpassword", ["PUBLIC"], (req, res) => {
+            if (!req.user) {
+                res.render("forgotPassword")
+            } else {
+                res.redirect("/api/sessions/profile");
+            }
+        });
+
+        this.get("/resetpassword", ["PUBLIC"], (req, res) => {
+            const token = req.query.token;
+            if (!res.user) {
+                res.render("resetpassword",
+                    {
+                        token
+                    });
+            } else {
+                res.redirect("/api/sessions/profile");
+            }
+
+        });
     }
 }

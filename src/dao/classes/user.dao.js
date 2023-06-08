@@ -1,31 +1,44 @@
 import { userModel } from "../models/user.model.js";
 
-export default class User{
-    
-    async create(user){
+export default class User {
+
+    async create(user) {
         try {
             const newUser = new userModel(user);
             let result = await newUser.save();
             return result;
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }
 
-    async searchByEmail(email){
-        try{
-            let user = await userModel.findOne({email: email}).populate('cart').lean();
+    async searchByEmail(email) {
+        try {
+            let user = await userModel.findOne({ email: email }).populate('cart').lean();
             return user;
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }
 
-    async getAll(){
-        try{
+    async update(id, newUser) {
+        try {
+            const user = await userModel.findByIdAndUpdate(
+                id,
+                newUser,
+                { new: true }
+            );
+            return user;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async getAll() {
+        try {
             let users = await userModel.paginate();
             return users;
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }

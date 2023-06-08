@@ -1,10 +1,11 @@
 import User from "../dao/classes/user.dao.js";
 import Cart from "../dao/classes/cart.dao.js";;
 import UserDTO from "../dao/DTOs/user.dto.js";
-import { createHash, isValidPassword, generateToken } from "../utils.js";
+import { createHash, isValidPassword, generateToken, verifyEmailToken } from "../utils.js";
 import CustomError from "../services/errors/CustomError.js";
 import { generateUserErrorInfo } from "../services/errors/info.js";
 import EErrors from "../services/errors/enums.js";
+import { sendRecoveryEmail } from "../config/messages/gmail.js";
 
 const userService = new User();
 const cartService = new Cart();
@@ -57,7 +58,7 @@ export const goSignUp_controller = async (req, res) => {
 export const registerUser_controller = async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
 
-    if ((!first_name || !last_name || !email || !age || !password) || !Number.isInteger(age)) {
+    if ((!first_name || !last_name || !email || !age || !password) || !Number.isInteger(parseInt(age))) {
         CustomError.createError({
             name: "User Creation Error",
             cause: generateUserErrorInfo({
@@ -142,6 +143,59 @@ export const logout = async (req, res) => {
     try {
         res.clearCookie('cookieToken');
         res.sendSuccess("Logout successful");
+    } catch (error) {
+        return res.sendServerError("Internal error");
+    }
+}
+
+export const forgetPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await userService.searchByEmail(email);
+        
+        if (!user) {
+            return res.sendUserError("User not found");
+        }
+        const token = generateToken(user, 180);
+        await sendRecoveryEmail(email, token);
+        res.sendSuccess("Email sent");
+        //const link = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    } catch (error) {
+        req.logger.error(error);
+        return res.sendServerError("Internal error");
+    }
+}
+
+export const resetpassword = async (req, res) => {
+
+    try {
+        const token = req.query.token;
+        const { email, newPassword } = req.body;
+        //validar que el token sea valido.
+        const validEmail = verifyEmailToken(token);
+        req.logger.debug(validEmail);
+        if (!validEmail) {
+            return res.send(`El enlace caduco o no es valido, <a href="/forgotpassword">intentar de nuevo</a>`)
+        }
+        //validamos que el usuario exista en la db
+        const user = await userService.searchByEmail(email);
+        if (!user) {
+            return res.send(`<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`)
+        }
+        if (isValidPassword(user, newPassword)) {
+
+            return res.render("resetpassword", {
+                error: "The password can't be the same",
+                token
+            })
+        }
+
+        const newUser = {
+            ...user,
+            password: createHash(newPassword)
+        }
+        await userService.update(user._id, newUser);
+        res.redirect("/api/sessions/login");
     } catch (error) {
         return res.sendServerError("Internal error");
     }

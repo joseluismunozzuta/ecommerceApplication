@@ -41,4 +41,4 @@ userSchema.pre('find', function(){
     this.populate('cart');
 });
 
-export const userModel = new mongoose.model(userCollection, userSchema);
+export const userModel = mongoose.model(userCollection, userSchema);

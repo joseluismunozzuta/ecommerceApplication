@@ -2,7 +2,7 @@ import CRouter from './router.js';
 import {checkAuthentication } from '../utils.js';
 import { goLogin_controller, goSignUp_controller, 
     registerUser_controller, signIn_controller,
-logout,getAllUsers_controller, myProfile_controller } from '../controllers/users.controller.js';
+logout,getAllUsers_controller, myProfile_controller, resetpassword, forgetPassword } from '../controllers/users.controller.js';
 
 export default class SessionRouter extends CRouter {
     init() {
@@ -24,6 +24,10 @@ export default class SessionRouter extends CRouter {
         this.post("/login", ["PUBLIC"], signIn_controller);
 
         this.post('/logout', ["PUBLIC"], logout);
+
+        this.post('/resetpassword', ["PUBLIC"], resetpassword);
+
+        this.post('/forgotpassword', ["PUBLIC"], forgetPassword);
 
     }
 }

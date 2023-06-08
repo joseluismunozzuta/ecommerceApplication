@@ -13,7 +13,7 @@ export default class Message {
 
     async read() {
         try {
-            const result = await messageModel.paginate();
+            const result = await messageModel.find();
             return result;
         } catch (err) {
             throw err;

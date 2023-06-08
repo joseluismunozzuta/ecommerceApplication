@@ -28,7 +28,7 @@ chatBox.addEventListener('keyup', evt => {
 socket.on('messages', data => {
     let log = document.getElementById("messages");
     let messages = "";
-    data.docs.forEach(message => {
+    data.forEach(message => {
         messages = messages + `<div class="col-start-1 col-end-8 p-3 rounded-lg">
         <div class="flex flex-row items-center">
             <div

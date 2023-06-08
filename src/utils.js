@@ -20,10 +20,22 @@ export const checkAuthentication = () => {
     }
 }
 
-export const generateToken = (user) => {
-    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: '24h' });
+export const generateToken = (user, exp = '1h') => {
+    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: exp });
     return token;
 }
+
+export const verifyEmailToken=(token)=>{
+    try {
+        console.log("trac1 here");
+        const info = jwt.verify(token, PRIVATE_KEY);
+        console.log("trace here");
+        console.log(info);
+        return info.user.email;
+    } catch (error) {
+        return null;
+    }
+};
 
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
