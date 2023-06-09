@@ -37,8 +37,6 @@ export default class CRouter {
             try {
                 await callback.apply(this, params);
             } catch (error) {
-                //params[1] es res, por lo que se puede mandar un send
-                //params[1].status(500).send(error);
                 errorHandler(error, ...params);
             }
         })
@@ -78,7 +76,6 @@ export default class CRouter {
                     return next(err);
                 }
                 if (!user) {
-                    console.log("There is no user");
                     return next();
                 }
                 req.user = user;

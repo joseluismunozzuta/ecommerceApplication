@@ -25,3 +25,21 @@ toggle.addEventListener('click', () => {
 
     }
 });
+
+function enableUpdateButton() {
+    const fileInput = document.getElementById('profileImage');
+    const updateButton = document.getElementById('updateButton');
+
+    if (fileInput.files.length > 0) {
+        if (fileInput.files[0].size > 10 * 1024 * 1024) {
+            alert('File size exceeds the limit of 10MB.');
+        } else {
+            updateButton.classList.remove('disabled');
+            updateButton.disabled = false;
+        }
+
+    } else {
+        updateButton.classList.add('disabled');
+        updateButton.disabled = true;
+    }
+}

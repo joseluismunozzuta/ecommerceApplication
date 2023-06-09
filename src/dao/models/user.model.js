@@ -25,19 +25,23 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cart:{
+    cart: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:"carts",
+        ref: "carts",
     },
     role: {
         type: String,
         default: "user"
     },
+    profileimage: {
+        data: Buffer,
+        contentType: String
+    }
 });
 
 userSchema.plugin(mongoosePaginate);
 
-userSchema.pre('find', function(){
+userSchema.pre('find', function () {
     this.populate('cart');
 });
 

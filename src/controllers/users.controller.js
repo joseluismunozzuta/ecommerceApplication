@@ -6,20 +6,64 @@ import CustomError from "../services/errors/CustomError.js";
 import { generateUserErrorInfo } from "../services/errors/info.js";
 import EErrors from "../services/errors/enums.js";
 import { sendRecoveryEmail } from "../config/messages/gmail.js";
+import fs from 'fs';
+import path from "path";
+import __dirname from "../utils.js";
 
 const userService = new User();
 const cartService = new Cart();
 
 export const myProfile_controller = async (req, res) => {
     try {
+        let photoflag = false;
+        let base64img;
         const profile = await userService.searchByEmail(req.user.user.email);
+        if(profile.profileimage){
+            photoflag = true;
+            base64img = profile.profileimage.data.toString('base64');
+        }
         res.render('profile', {
             title: 'Profile',
             style: 'profile.css',
-            profile: profile
+            profile: profile,
+            photoflag,
+            base64img
         })
     } catch (err) {
         return res.sendServerError("Internal Error");
+    }
+}
+
+export const updateProfile_controller = async (req, res) => {
+    try {
+        const imageFile = req.file;
+
+        //Find the user profile to update
+        const profile = await userService.searchByEmail(req.user.user.email);
+
+        if (imageFile) {
+
+            let dirPath = path.join(__dirname, "/multer/users/img");
+            let fileName = `${req.user.user.email}-profile-${req.file.originalname}`
+            let filePath = path.join(dirPath, fileName); 
+
+            const imagedata = await fs.promises.readFile(filePath);
+
+            profile.profileimage = {
+                data: imagedata,
+                contentType: imageFile.mimetype
+            }
+
+            const newProfile = new UserDTO(profile);
+            //Update the user profile
+            await userService.update(profile._id, newProfile);
+        }
+
+        res.redirect("/api/sessions/profile");
+
+    } catch (err) {
+        req.logger.error(err);
+        res.sendServerError(err);
     }
 }
 
@@ -87,7 +131,7 @@ export const registerUser_controller = async (req, res) => {
             let premiumFlag = email.includes("premium");
             if (adminFlag) {
                 role = "admin";
-            }else if(premiumFlag){
+            } else if (premiumFlag) {
                 role = "premium";
             }
 
@@ -155,7 +199,7 @@ export const forgetPassword = async (req, res) => {
     const { email } = req.body;
     try {
         const user = await userService.searchByEmail(email);
-        
+
         if (!user) {
             return res.sendUserError("User not found");
         }
