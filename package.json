@@ -1,5 +1,5 @@
 {
-  "name": "tercerapracticaintegradora",
+  "name": "cuartapracticaintegradora",
   "version": "1.0.0",
   "description": "Ecommerce App",
   "main": "index.js",
@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora.git"
+    "url": "git+https://github.com/joseluismunozzuta/backend_cuartapracticaintegradora.git"
   },
   "bugs": {
-    "url": "https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora/issues"
+    "url": "https://github.com/joseluismunozzuta/backend_cuartapracticaintegradora/issues"
   },
-  "homepage": "https://github.com/joseluismunozzuta/backend_tercerapracticaintegradora#readme",
+  "homepage": "https://github.com/joseluismunozzuta/backend_cuartapracticaintegradora#readme",
   "devDependencies": {
     "tailwindcss": "^3.2.7"
   }
