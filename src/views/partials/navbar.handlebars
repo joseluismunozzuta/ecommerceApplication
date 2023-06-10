@@ -40,8 +40,13 @@
             <div class="dropdown dropdown-end mx-2">
                 <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                     <div class="w-14 rounded-full">
+                        {{#if user.profileimage}}
                         <img
                             src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}" />
+                        {{else}}
+                        <img
+                            src="https://freesvg.org/img/abstract-user-flat-4.png" />
+                        {{/if}}
                     </div>
                 </label>
                 <ul tabindex="0"

@@ -41,8 +41,10 @@ export default class ViewRouter extends CRouter {
                     user = await userService.searchByEmail(req.user.user.email);
                     if (user) {
                         cartId = user.cart._id.toString();
+                        if (user.profileimage) {
+                            base64img = user.profileimage.data.toString('base64');
+                        }
                     }
-                    base64img = user.profileimage.data.toString('base64');
                 } else {
                     req.logger.debug("No user.");
                 }
@@ -75,6 +77,9 @@ export default class ViewRouter extends CRouter {
             let user = await userService.searchByEmail(req.user.user.email);
             const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
             let cartId = user.cart._id.toString();
+            if (user.profileimage) {
+                base64img = user.profileimage.data.toString('base64');
+            }
             res.render('cart', {
                 style: 'cart.css',
                 title: 'Cart View',
@@ -213,20 +218,21 @@ export default class ViewRouter extends CRouter {
 
         this.get("/profile", ["USER", "ADMIN", "PREMIUM"], async (req, res) => {
             try {
-                let photoflag = false;
+
                 let doc1 = false;
                 let doc2 = false;
                 let doc3 = false;
                 let completed = false;
+                let base64img = false;
                 const profile = await userService.searchByEmail(req.user.user.email);
                 completed = (profile.status == "Complete");
                 if (profile.profileimage) {
-                    photoflag = true;
+                    base64img = profile.profileimage.data.toString('base64');
                 }
                 const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(profile);
 
-                if(profile.role == "user"){
-                    ({doc1, doc2, doc3} = checkDocs(profile));
+                if (profile.role == "user") {
+                    ({ doc1, doc2, doc3 } = checkDocs(profile));
                     req.logger.debug(doc1);
                     req.logger.debug(doc2);
                     req.logger.debug(doc3);
@@ -237,8 +243,7 @@ export default class ViewRouter extends CRouter {
                     title: 'Profile',
                     style: 'profile.css',
                     user: profile,
-                    photoflag,
-                    base64img:profile.profileimage.data.toString('base64'),
+                    base64img,
                     flag,
                     adminflag,
                     premiumflag,
@@ -270,7 +275,7 @@ export default class ViewRouter extends CRouter {
                     excludePartial: true
                 });
             } else {
-                res.redirect("/api/sessions/profile");
+                res.redirect("/api/views/profile");
             }
         });
 
@@ -283,7 +288,7 @@ export default class ViewRouter extends CRouter {
                         excludePartial: true
                     });
             } else {
-                res.redirect("/api/sessions/profile");
+                res.redirect("/api/views/profile");
             }
 
         });

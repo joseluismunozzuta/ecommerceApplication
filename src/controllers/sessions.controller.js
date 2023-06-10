@@ -64,7 +64,7 @@ export const goLogin_controller = async (req, res) => {
             title: 'Login'
         });
     } else {
-        res.redirect("/api/sessions/profile");
+        res.redirect("/api/views/profile");
     }
 }
 
@@ -76,7 +76,7 @@ export const goSignUp_controller = async (req, res) => {
             style: 'sessions.css'
         });
     } else {
-        res.redirect("/api/sessions/profile");
+        res.redirect("/api/views/profile");
     }
 }
 
@@ -109,11 +109,9 @@ export const registerUser_controller = async (req, res) => {
             let cartId = result._id.toString();
 
             let adminFlag = email.includes("admin");
-            let premiumFlag = email.includes("premium");
+
             if (adminFlag) {
                 role = "admin";
-            } else if (premiumFlag) {
-                role = "premium";
             }
 
             const newUser = new UserDTO({
