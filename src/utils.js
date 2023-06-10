@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { faker } from '@faker-js/faker';
+import config from './config/config.js';
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcrypt';
@@ -13,7 +14,7 @@ export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSy
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
 export default __dirname;
 
-const PRIVATE_KEY = "CoderHouseJoseLuis";
+const PRIVATE_KEY = config.private_key;
 export const generateToken = (user, exp = '1h') => {
     const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: exp });
     return token;

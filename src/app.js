@@ -61,11 +61,11 @@ const httpServer = app.listen(port, () => {
 
 
 mongoose.connect('mongodb+srv://'
-    + process.env.ADMIN_USER
+    + config.adminUser
     + ':'
-    + process.env.ADMIN_PASSWORD
-    + process.env.MONGO_URL
-    + process.env.DB_NAME
+    + config.adminPassword
+    + config.mongoURL
+    + config.dbname
     + '?retryWrites=true&w=majority', (error) => {
         if (error) {
             console.log("Cannot connect to DB: " + error);
