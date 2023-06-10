@@ -75,6 +75,10 @@ export default class ViewRouter extends CRouter {
 
             // if (req.user) {
             let user = await userService.searchByEmail(req.user.user.email);
+            let base64img;
+            if(user.profileimage){
+                base64img = user.profileimage.data.toString('base64');
+            }
             const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
             let cartId = user.cart._id.toString();
             if (user.profileimage) {
@@ -89,7 +93,7 @@ export default class ViewRouter extends CRouter {
                 premiumflag,
                 userflag,
                 user,
-                base64img: user.profileimage.data.toString('base64')
+                base64img
             });
             // } else {
             //     res.sendUserError("Not Authenticated");
@@ -100,6 +104,10 @@ export default class ViewRouter extends CRouter {
 
             try {
                 const user = await userService.searchByEmail(req.user.user.email);
+                let base64img;
+                if(user.profileimage){
+                    base64img = user.profileimage.data.toString('base64');
+                }
                 const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
 
                 res.render("createprod", {
@@ -111,7 +119,7 @@ export default class ViewRouter extends CRouter {
                     premiumflag,
                     userflag,
                     user,
-                    base64img: user.profileimage.data.toString('base64')
+                    base64img
                 });
             } catch (err) {
                 res.sendServerError("Internal error");
@@ -123,7 +131,10 @@ export default class ViewRouter extends CRouter {
 
             let prodid = req.params.pid;
             const user = await userService.searchByEmail(req.user.user.email);
-
+            let base64img;
+            if(user.profileimage){
+                base64img = user.profileimage.data.toString('base64');
+            }
             await prodService.getProductById(prodid).
                 then(async (product) => {
                     const prodOb = product.toObject();
@@ -138,7 +149,7 @@ export default class ViewRouter extends CRouter {
                         premiumflag,
                         userflag,
                         user,
-                        base64img: user.profileimage.data.toString('base64')
+                        base64img
                     });
                 }).catch((err) => {
                     req.logger.error(err);
@@ -151,7 +162,10 @@ export default class ViewRouter extends CRouter {
             let ticketid = req.params.tid;
             let partialPurchaseflag = false;
             const user = await userService.searchByEmail(req.user.user.email);
-
+            let base64img;
+            if(user.profileimage){
+                base64img = user.profileimage.data.toString('base64');
+            }
             await ticketService.getById(ticketid).
                 then((ticket) => {
 
@@ -178,7 +192,7 @@ export default class ViewRouter extends CRouter {
                         premiumflag,
                         userflag,
                         user,
-                        base64img: user.profileimage.data.toString('base64')
+                        base64img
                     });
                 }).catch((err) => {
                     req.logger.error(err);
@@ -187,9 +201,13 @@ export default class ViewRouter extends CRouter {
         });
 
         this.get("/chat", ["USER", "PREMIUM"], async (req, res) => {
-
+            req.logger.debug("Trace start");
+            let base64img;
             const user = await userService.searchByEmail(req.user.user.email);
-
+            if(user.profileimage){
+                base64img = user.profileimage.data.toString('base64');
+            }
+            req.logger.debug("Trace medium");
             await messageService.read()
                 .then((messages) => {
                     let messagesArray = [];
@@ -201,6 +219,7 @@ export default class ViewRouter extends CRouter {
                         messagesArray.push(mo);
                     }
                     const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
+                    req.logger.debug("Trace end");
                     res.render("chat", {
                         messages: messagesArray,
                         style: 'chat.css',
@@ -211,7 +230,7 @@ export default class ViewRouter extends CRouter {
                         premiumflag,
                         userflag,
                         user,
-                        base64img: user.profileimage.data.toString('base64')
+                        base64img
                     })
                 });
         })
@@ -223,7 +242,7 @@ export default class ViewRouter extends CRouter {
                 let doc2 = false;
                 let doc3 = false;
                 let completed = false;
-                let base64img = false;
+                let base64img;
                 const profile = await userService.searchByEmail(req.user.user.email);
                 completed = (profile.status == "Complete");
                 if (profile.profileimage) {
@@ -231,7 +250,7 @@ export default class ViewRouter extends CRouter {
                 }
                 const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(profile);
 
-                if (profile.role == "user") {
+                if (profile.role != "admin") {
                     ({ doc1, doc2, doc3 } = checkDocs(profile));
                     req.logger.debug(doc1);
                     req.logger.debug(doc2);

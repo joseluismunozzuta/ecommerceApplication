@@ -2812,6 +2812,10 @@ html {
   z-index: 0;
 }
 
+.z-auto {
+  z-index: auto;
+}
+
 .col-start-1 {
   grid-column-start: 1;
 }
@@ -2977,6 +2981,18 @@ html {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 
 .block {

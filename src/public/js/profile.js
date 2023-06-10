@@ -4,8 +4,9 @@ function enableUpdateButton() {
     const updateButton = document.getElementById('updateButton');
 
     if (fileInput.files.length > 0) {
-        if (fileInput.files[0].size > 10 * 1024 * 1024) {
-            alert('File size exceeds the limit of 10MB.');
+        if (fileInput.files[0].size > 1 * 1024 * 1024) {
+            alert('File size exceeds the limit of 1MB.');
+            input.value ="";
         } else {
             updateButton.classList.remove('disabled');
             updateButton.disabled = false;
@@ -14,6 +15,19 @@ function enableUpdateButton() {
     } else {
         updateButton.classList.add('disabled');
         updateButton.disabled = true;
+    }
+}
+
+function enableUpload(input){
+    const docsUploadBtn = document.getElementById("docsUpload");
+    if(input.files.length > 0 ){
+        if (input.files[0].size > 10 * 1024 * 1024) {
+            alert('File size exceeds the limit of 10MB.');
+            input.value ="";
+        } else {
+            docsUploadBtn.classList.remove('disabled');
+            docsUploadBtn.disabled = false;
+        }
     }
 }
 

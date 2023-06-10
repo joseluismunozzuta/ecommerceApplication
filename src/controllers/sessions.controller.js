@@ -24,7 +24,7 @@ export const updateProfile_controller = async (req, res) => {
 
             let dirPath = path.join(__dirname, "/multer/users/img");
             let fileName = `${req.user.user.email}-profile-${req.file.originalname}`
-            let filePath = path.join(dirPath, fileName); 
+            let filePath = path.join(dirPath, fileName);
 
             const imagedata = await fs.promises.readFile(filePath);
 
@@ -155,6 +155,10 @@ export const signIn_controller = async (req, res) => {
         }
         const access_token = generateToken(cookieUser);
 
+        user.last_connection = new Date().toLocaleString()
+
+        await userService.update(user._id, user);
+
         res.cookie('cookieToken', access_token, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true
@@ -166,7 +170,13 @@ export const signIn_controller = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
+
     try {
+
+        const user = await userService.searchByEmail(req.user.user.email);
+        user.last_connection = new Date().toLocaleString()
+        await userService.update(user._id, user);
+
         res.clearCookie('cookieToken');
         res.sendSuccess("Logout successful");
     } catch (error) {
@@ -200,11 +210,11 @@ export const resetpassword = async (req, res) => {
 
         //Validamos el token.
         const validEmail = verifyEmailToken(token);
-        
+
         if (!validEmail) {
             return res.send(`El enlace caduco o no es valido, <a href="/forgotpassword">intentar de nuevo</a>`)
         }
-        
+
         const user = await userService.searchByEmail(email);
         if (!user) {
             return res.send(`<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`)
