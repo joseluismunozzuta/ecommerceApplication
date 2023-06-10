@@ -3,7 +3,7 @@ import {checkAuthentication, uploadProfilePhoto, deleteExistingImage } from '../
 import { goLogin_controller, goSignUp_controller, 
     registerUser_controller, signIn_controller,
 logout,getAllUsers_controller, 
-updateProfile_controller, resetpassword, forgetPassword } from '../controllers/users.controller.js';
+updateProfile_controller, resetpassword, forgetPassword } from '../controllers/sessions.controller.js';
 
 export default class SessionRouter extends CRouter {
     init() {

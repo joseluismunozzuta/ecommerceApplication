@@ -14,9 +14,11 @@ import SessionRouter from "./routes/sessions.router.js";
 import ProductRouter from "./routes/products.router.js";
 import ViewRouter from "./routes/views.router.js";
 import Message from "./dao/classes/message.dao.js";
+import UserRouter from './routes/users.router.js';
 
 const app = express();
 app.use(express.json());
+app.use(errorHandler);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
@@ -29,11 +31,13 @@ const cartRouter = new CartRouter();
 app.use("/api/carts", cartRouter.getRouter());
 
 const sessionRouter = new SessionRouter();
-app.use(errorHandler);
 app.use("/api/sessions", sessionRouter.getRouter());
 
 const viewRouter = new ViewRouter();
 app.use("/views", viewRouter.getRouter());
+
+const userRouter = new UserRouter();
+app.use("/api/users", userRouter.getRouter());
 
 app.get("/mockingproducts", async(req, res) => {
     let prods = [];

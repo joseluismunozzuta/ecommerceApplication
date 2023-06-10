@@ -2,7 +2,7 @@
     class="font-sans antialiased text-gray-900 leading-normal tracking-wider bg-cover"
     style="background-image:url('https://source.unsplash.com/1L71sPT5XKc');">
     <div
-        class="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
+        class="max-w-4xl flex items-center h-auto lg:h-full flex-wrap mx-auto my-28 lg:my-0">
 
         <!--Main Col-->
         <div id="profile"
@@ -46,9 +46,26 @@
                             d="M12 3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5Zm-4 9.5A3.75 3.75 0 0 0 4.25 17v1.188c0 .754.546 1.396 1.29 1.517c4.278.699 8.642.699 12.92 0a1.537 1.537 0 0 0 1.29-1.517V17A3.75 3.75 0 0 0 16 13.25h-.34c-.185 0-.369.03-.544.086l-.866.283a7.251 7.251 0 0 1-4.5 0l-.866-.283a1.752 1.752 0 0 0-.543-.086H8Z" /></svg>
                     {{user.age}} years</p>
 
+                <div class="pt-6 flex flex-row items-center text-center gap-5">
+                    <p
+                        class="text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24"><path
+                                fill="currentColor"
+                                d="M15 21h-2a2 2 0 0 1 0-4h2v-2h-2a4 4 0 0 0 0 8h2Zm8-2a4 4 0 0 1-4 4h-2v-2h2a2 2 0 0 0 0-4h-2v-2h2a4 4 0 0 1 4 4Z" /><path
+                                fill="currentColor"
+                                d="M14 18h4v2h-4zm-7 1a5.989 5.989 0 0 1 .09-1H3v-1.4c0-2 4-3.1 6-3.1a8.548 8.548 0 0 1 1.35.125A5.954 5.954 0 0 1 13 13h5V4a2.006 2.006 0 0 0-2-2h-4.18a2.988 2.988 0 0 0-5.64 0H2a2.006 2.006 0 0 0-2 2v14a2.006 2.006 0 0 0 2 2h5.09A5.989 5.989 0 0 1 7 19ZM9 2a1 1 0 1 1-1 1a1.003 1.003 0 0 1 1-1Zm0 4a3 3 0 1 1-3 3a2.996 2.996 0 0 1 3-3Z" /></svg>
+                        Your role is: <span class="uppercase font-bold">{{user.role}}</span></p>
+                        {{#if adminflag}}
+                        {{else}}
+                        <button type="submit" class="btn btn-info btn-xs" onclick="changeRole()">{{#if userflag}}Upgrade to premium{{else}}Change to user{{/if}}</button>
+                        {{/if}}
+                </div>
+
                 <form action="/api/sessions/updateProfile" method="POST"
                     enctype="multipart/form-data" class="form-control my-5">
-                    <input type="file" name="profileImage" id="profileImage" onchange="enableUpdateButton()"
+                    <input type="file" name="profileImage" id="profileImage"
+                        onchange="enableUpdateButton()"
                         class="file-input file-input-bordered file-input-accent w-full max-w-xs" />
 
                     <div class="pt-6 pb-8">
@@ -65,21 +82,16 @@
         <!--Img Col-->
         <div class="w-full lg:w-2/5">
             {{#if photoflag}}
-            <img src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}"
+            <img
+                src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}"
                 class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
-            
+
             {{else}}
             <!-- Big profile image for side bar (desktop) -->
             <img src="https://source.unsplash.com/MP0IUfwrn0A"
                 class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
             {{/if}}
         </div>
-
-        <!-- Pin to top right corner -->
-        <div class="absolute top-0 right-0 h-12 w-18 p-4">
-            <button class="js-change-theme focus:outline-none">🌙</button>
-        </div>
-
     </div>
 
 </div>

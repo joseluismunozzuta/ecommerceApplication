@@ -86,7 +86,11 @@ export const updateProduct_controller = async (req, res) => {
         }
         product.owner = req.user.user._id;
     } else {
-        product.owner = "admin";
+        if (prodToUpdate.owner == req.user.user._id){
+            product.owner = "admin";
+        }else{
+            product.owner = prodToUpdate.owner;
+        }
     }
 
     const newProd = new ProductDTO(product);

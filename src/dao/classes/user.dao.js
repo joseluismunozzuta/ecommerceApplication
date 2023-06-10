@@ -12,6 +12,15 @@ export default class User {
         }
     }
 
+    async searchById(id){
+        try{
+            let user = await userModel.findById(id);
+            return user;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async searchByEmail(email) {
         try {
             let user = await userModel.findOne({ email: email }).populate('cart').lean();

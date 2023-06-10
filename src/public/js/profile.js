@@ -2,30 +2,6 @@ tippy('.link', {
     placement: 'bottom'
 })
 
-//Toggle mode
-const toggle = document.querySelector('.js-change-theme');
-const body = document.querySelector('body');
-const profile = document.getElementById('profile');
-
-
-toggle.addEventListener('click', () => {
-
-    if (body.classList.contains('text-gray-900')) {
-        toggle.innerHTML = "☀️";
-        body.classList.remove('text-gray-900');
-        body.classList.add('text-gray-100');
-        profile.classList.remove('bg-white');
-        profile.classList.add('bg-gray-900');
-    } else {
-        toggle.innerHTML = "🌙";
-        body.classList.remove('text-gray-100');
-        body.classList.add('text-gray-900');
-        profile.classList.remove('bg-gray-900');
-        profile.classList.add('bg-white');
-
-    }
-});
-
 function enableUpdateButton() {
     const fileInput = document.getElementById('profileImage');
     const updateButton = document.getElementById('updateButton');
@@ -42,4 +18,25 @@ function enableUpdateButton() {
         updateButton.classList.add('disabled');
         updateButton.disabled = true;
     }
+}
+
+async function changeRole() {
+
+    let userid = document.getElementById("userId").value;
+
+    await fetch(`/api/users/premium/${userid}`, {
+        method: "PUT",
+        headers: {
+            "Content-type": "application/json",
+        }
+    }).then((response) => response.json())
+        .then((data) => {
+            if (data.status == "success") {
+                alert(data.payload);
+                window.location.replace("http://localhost:3000/views/profile");
+            } else {
+                console.log(data.error);
+            }
+        })
+        .catch((error) => console.log(error));
 }
