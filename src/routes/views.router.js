@@ -3,7 +3,7 @@ import Product from "../dao/classes/product.dao.js";
 import CRouter from "./router.js";
 import Ticket from "../dao/classes/ticket.dao.js";
 import Message from "../dao/classes/message.dao.js";
-import { defineRoleFlags } from "../utils.js";
+import { checkDocs, defineRoleFlags } from "../utils.js";
 
 const userService = new User();
 const prodService = new Product();
@@ -14,6 +14,7 @@ export default class ViewRouter extends CRouter {
     init() {
         this.get("/products/:pagina?", ["PUBLIC"], async (req, res) => {
             let pagina;
+            let base64img;
 
             //Logic to maintain the page when deleting a prod
             //Limit the max page we can access
@@ -41,6 +42,7 @@ export default class ViewRouter extends CRouter {
                     if (user) {
                         cartId = user.cart._id.toString();
                     }
+                    base64img = user.profileimage.data.toString('base64');
                 } else {
                     req.logger.debug("No user.");
                 }
@@ -56,10 +58,12 @@ export default class ViewRouter extends CRouter {
                     flag,
                     adminflag,
                     premiumflag,
-                    userflag
+                    userflag,
+                    base64img
                 });
 
             } catch (err) {
+                console.log(err);
                 res.sendServerError("Internal error");
             }
 
@@ -79,7 +83,8 @@ export default class ViewRouter extends CRouter {
                 adminflag,
                 premiumflag,
                 userflag,
-                user
+                user,
+                base64img: user.profileimage.data.toString('base64')
             });
             // } else {
             //     res.sendUserError("Not Authenticated");
@@ -100,7 +105,8 @@ export default class ViewRouter extends CRouter {
                     adminflag,
                     premiumflag,
                     userflag,
-                    user
+                    user,
+                    base64img: user.profileimage.data.toString('base64')
                 });
             } catch (err) {
                 res.sendServerError("Internal error");
@@ -126,7 +132,8 @@ export default class ViewRouter extends CRouter {
                         adminflag,
                         premiumflag,
                         userflag,
-                        user
+                        user,
+                        base64img: user.profileimage.data.toString('base64')
                     });
                 }).catch((err) => {
                     req.logger.error(err);
@@ -165,7 +172,8 @@ export default class ViewRouter extends CRouter {
                         adminflag,
                         premiumflag,
                         userflag,
-                        user
+                        user,
+                        base64img: user.profileimage.data.toString('base64')
                     });
                 }).catch((err) => {
                     req.logger.error(err);
@@ -197,7 +205,8 @@ export default class ViewRouter extends CRouter {
                         adminflag,
                         premiumflag,
                         userflag,
-                        user
+                        user,
+                        base64img: user.profileimage.data.toString('base64')
                     })
                 });
         })
@@ -205,25 +214,42 @@ export default class ViewRouter extends CRouter {
         this.get("/profile", ["USER", "ADMIN", "PREMIUM"], async (req, res) => {
             try {
                 let photoflag = false;
-                let base64img;
+                let doc1 = false;
+                let doc2 = false;
+                let doc3 = false;
+                let completed = false;
                 const profile = await userService.searchByEmail(req.user.user.email);
+                completed = (profile.status == "Complete");
                 if (profile.profileimage) {
                     photoflag = true;
-                    base64img = profile.profileimage.data.toString('base64');
                 }
                 const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(profile);
+
+                if(profile.role == "user"){
+                    ({doc1, doc2, doc3} = checkDocs(profile));
+                    req.logger.debug(doc1);
+                    req.logger.debug(doc2);
+                    req.logger.debug(doc3);
+
+                }
+
                 res.render('profile', {
                     title: 'Profile',
                     style: 'profile.css',
                     user: profile,
                     photoflag,
-                    base64img,
+                    base64img:profile.profileimage.data.toString('base64'),
                     flag,
                     adminflag,
                     premiumflag,
-                    userflag
+                    userflag,
+                    doc1,
+                    doc2,
+                    doc3,
+                    completed
                 })
             } catch (err) {
+                console.log(err);
                 return res.sendServerError("Internal Error");
             }
         })

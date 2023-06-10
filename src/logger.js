@@ -31,6 +31,7 @@ const devLogger = winston.createLogger({
             level: 'debug',
             format: winston.format.combine(
                 winston.format.colorize({ colors: customLevelsOptions.colors }),
+                winston.format.errors({ stack: true }),
                 winston.format.simple()
             )
         })

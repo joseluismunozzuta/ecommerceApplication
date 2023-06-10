@@ -36,6 +36,29 @@ const userSchema = new mongoose.Schema({
     profileimage: {
         data: Buffer,
         contentType: String
+    },
+    documents: {
+        type: [
+            {
+                name: {
+                    type: String,
+                    required: true
+                },
+                reference: {
+                    type: String,
+                    required: true
+                }
+            }
+        ],
+        default: []
+    },
+    last_connection: {
+        type: String,
+        default: null
+    }, status: {
+        type: String,
+        required: true,
+        default: "Pending"
     }
 });
 

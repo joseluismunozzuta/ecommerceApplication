@@ -1,6 +1,3 @@
-tippy('.link', {
-    placement: 'bottom'
-})
 
 function enableUpdateButton() {
     const fileInput = document.getElementById('profileImage');
@@ -35,8 +32,31 @@ async function changeRole() {
                 alert(data.payload);
                 window.location.replace("http://localhost:3000/views/profile");
             } else {
+                alert(data.error);
                 console.log(data.error);
             }
         })
         .catch((error) => console.log(error));
 }
+
+// async function uploadDocs(){
+
+//     let userid = document.getElementById("userId").value;
+
+//     await fetch(`/api/users/${userid}/documents`, {
+//         method: "POST",
+//         headers: {
+//             "Content-type": "application/json",
+//         }
+//     }).then((response) => response.json())
+//         .then((data) => {
+//             if (data.status == "success") {
+//                 alert(data.payload);
+//                 window.location.replace("http://localhost:3000/views/profile");
+//             } else {
+//                 alert(data.error);
+//                 console.log(data.error);
+//             }
+//         })
+//         .catch((error) => console.log(error));
+// }

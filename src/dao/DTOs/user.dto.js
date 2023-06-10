@@ -7,6 +7,9 @@ export default class UserDTO{
         this.password = user.password,
         this.cart = user.cart,
         this.role = user.role ? user.role : "user",
-        this.profileimage = user.profileimage
+        this.profileimage = user.profileimage,
+        this.last_connection = user.last_connection,
+        this.status = user.status,
+        this.documents = user.documents
     }
 }

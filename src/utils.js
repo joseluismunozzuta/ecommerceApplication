@@ -60,6 +60,24 @@ export const defineRoleFlags = (user) => {
     return flags;
 }
 
+export const checkDocs = (user) => {
+    let docNames = []
+    const flags = {};
+    user.documents.forEach((doc) => {
+        docNames.push(doc.name);
+    })
+    if (docNames.includes("identificacion")) {
+        flags.doc1 = true;
+    }
+    if (docNames.includes("domicilio")) {
+        flags.doc2 = true;
+    }
+    if (docNames.includes("estadoDeCuenta")) {
+        flags.doc3 = true;
+    }
+    return flags;
+}
+
 export const generateProduct = () => {
     return {
         title: faker.commerce.productName(),
@@ -79,22 +97,16 @@ export const generateProduct = () => {
 export const deleteExistingImage = (req, res, next) => {
     const userEmail = req.user.user.email;
 
-    // Get the email prefix
     const emailPrefix = userEmail.split('@')[0];
 
-    // Directory where the images are stored
     const imageDirectory = path.join(__dirname, '/multer/users/img');
 
-    // Get a list of files in the directory
     const files = fs.readdirSync(imageDirectory);
 
-    // Iterate over the files
     files.forEach((file) => {
         if (file.startsWith(emailPrefix)) {
-            // Found a file with the same email prefix, delete it
             const filePath = path.join(imageDirectory, file);
             fs.unlinkSync(filePath);
-            console.log(`Deleted existing image file: ${file}`);
         }
     });
 
@@ -121,7 +133,7 @@ const userdocumentsStorage = multer.diskStorage({
     },
 
     filename: function (req, file, cb) {
-        cb(null, `${req.user.email}-doc-${file.originalname}`)
+        cb(null, `${req.user.user.email}-doc-${file.fieldname}` + path.extname(file.originalname).toLowerCase())
     }
 });
 export const uploadUserDocuments = multer({ storage: userdocumentsStorage });

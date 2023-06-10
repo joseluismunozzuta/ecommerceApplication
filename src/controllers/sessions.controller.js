@@ -199,13 +199,14 @@ export const resetpassword = async (req, res) => {
     try {
         const token = req.query.token;
         const { email, newPassword } = req.body;
-        //validar que el token sea valido.
+
+        //Validamos el token.
         const validEmail = verifyEmailToken(token);
-        req.logger.debug(validEmail);
+        
         if (!validEmail) {
             return res.send(`El enlace caduco o no es valido, <a href="/forgotpassword">intentar de nuevo</a>`)
         }
-        //validamos que el usuario exista en la db
+        
         const user = await userService.searchByEmail(email);
         if (!user) {
             return res.send(`<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`)
@@ -223,6 +224,7 @@ export const resetpassword = async (req, res) => {
             password: createHash(newPassword)
         }
         await userService.update(user._id, newUser);
+        req.logger.debug("Password updated");
         res.redirect("/api/sessions/login");
     } catch (error) {
         return res.sendServerError("Internal error");
