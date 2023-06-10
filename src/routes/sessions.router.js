@@ -2,7 +2,7 @@ import CRouter from './router.js';
 import {checkAuthentication, uploadProfilePhoto, deleteExistingImage } from '../utils.js';
 import { goLogin_controller, goSignUp_controller, 
     registerUser_controller, signIn_controller,
-logout,getAllUsers_controller, myProfile_controller, 
+logout,getAllUsers_controller, 
 updateProfile_controller, resetpassword, forgetPassword } from '../controllers/users.controller.js';
 
 export default class SessionRouter extends CRouter {
@@ -11,8 +11,6 @@ export default class SessionRouter extends CRouter {
         this.get("/current", ["PUBLIC"], checkAuthentication(), (req, res) => {
             res.sendSuccess(req.user);
         });
-
-        this.get("/profile", ["USER", "ADMIN", "PREMIUM"], myProfile_controller);
 
         this.post("/updateprofile", ["USER", "ADMIN", "PREMIUM"], deleteExistingImage, uploadProfilePhoto.single('profileImage'), updateProfile_controller);
 

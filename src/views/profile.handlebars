@@ -14,8 +14,8 @@
                     class="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"
                     style="background-image: url(data:image/{{user.profileImage.contentType}};base64,{{base64img}})"></div>
 
-                <h1 class="text-3xl font-bold pt-8 lg:pt-0">{{profile.first_name}}
-                    {{profile.last_name}}</h1>
+                <h1 class="text-3xl font-bold pt-8 lg:pt-0">{{user.first_name}}
+                    {{user.last_name}}</h1>
                 <div
                     class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25"></div>
                 <p
@@ -37,14 +37,14 @@
                                 d="M3 6.5L12 12L21 6.5"><animate fill="freeze"
                                     attributeName="stroke-dashoffset"
                                     begin="0.6s" dur="0.4s" values="24;0" /></path></g></svg>
-                    {{profile.email}}</p>
+                    {{user.email}}</p>
                 <p
                     class="pt-6 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start"><svg
                         xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" viewBox="0 0 24 24"><path
                             fill="currentColor"
                             d="M12 3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5Zm-4 9.5A3.75 3.75 0 0 0 4.25 17v1.188c0 .754.546 1.396 1.29 1.517c4.278.699 8.642.699 12.92 0a1.537 1.537 0 0 0 1.29-1.517V17A3.75 3.75 0 0 0 16 13.25h-.34c-.185 0-.369.03-.544.086l-.866.283a7.251 7.251 0 0 1-4.5 0l-.866-.283a1.752 1.752 0 0 0-.543-.086H8Z" /></svg>
-                    {{profile.age}} years</p>
+                    {{user.age}} years</p>
 
                 <form action="/api/sessions/updateProfile" method="POST"
                     enctype="multipart/form-data" class="form-control my-5">

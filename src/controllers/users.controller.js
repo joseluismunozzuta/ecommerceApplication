@@ -13,27 +13,6 @@ import __dirname from "../utils.js";
 const userService = new User();
 const cartService = new Cart();
 
-export const myProfile_controller = async (req, res) => {
-    try {
-        let photoflag = false;
-        let base64img;
-        const profile = await userService.searchByEmail(req.user.user.email);
-        if(profile.profileimage){
-            photoflag = true;
-            base64img = profile.profileimage.data.toString('base64');
-        }
-        res.render('profile', {
-            title: 'Profile',
-            style: 'profile.css',
-            profile: profile,
-            photoflag,
-            base64img
-        })
-    } catch (err) {
-        return res.sendServerError("Internal Error");
-    }
-}
-
 export const updateProfile_controller = async (req, res) => {
     try {
         const imageFile = req.file;
@@ -59,7 +38,7 @@ export const updateProfile_controller = async (req, res) => {
             await userService.update(profile._id, newProfile);
         }
 
-        res.redirect("/api/sessions/profile");
+        res.redirect("/views/profile");
 
     } catch (err) {
         req.logger.error(err);
@@ -80,6 +59,7 @@ export const goLogin_controller = async (req, res) => {
 
     if (!req.user) {
         res.render("login", {
+            excludePartial: true,
             style: 'sessions.css',
             title: 'Login'
         });
@@ -91,6 +71,7 @@ export const goLogin_controller = async (req, res) => {
 export const goSignUp_controller = async (req, res) => {
     if (!req.user) {
         res.render("signup", {
+            excludePartial: true,
             title: 'Register',
             style: 'sessions.css'
         });

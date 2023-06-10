@@ -39,6 +39,27 @@ export const verifyEmailToken = (token) => {
     }
 };
 
+export const defineRoleFlags = (user) => {
+    const flags = {};
+
+    if (user.role === 'admin') {
+        flags.adminflag = true;
+        flags.flag = true;
+    }
+
+    if (user.role === 'premium') {
+        flags.premiumflag = true;
+        flags.flag = true;
+    }
+
+    if (user.role === 'user') {
+        flags.userflag = true;
+        flags.flag = true;
+    }
+
+    return flags;
+}
+
 export const generateProduct = () => {
     return {
         title: faker.commerce.productName(),

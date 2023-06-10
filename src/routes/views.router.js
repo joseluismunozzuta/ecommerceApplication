@@ -3,6 +3,7 @@ import Product from "../dao/classes/product.dao.js";
 import CRouter from "./router.js";
 import Ticket from "../dao/classes/ticket.dao.js";
 import Message from "../dao/classes/message.dao.js";
+import { defineRoleFlags } from "../utils.js";
 
 const userService = new User();
 const prodService = new Product();
@@ -34,33 +35,17 @@ export default class ViewRouter extends CRouter {
 
                 let user = new Map();
                 let cartId;
-                let flag = false;
-                let adminflag = false;
-                let premiumflag = false;
-                let userflag = false;
 
                 if (req.user) {
                     user = await userService.searchByEmail(req.user.user.email);
                     if (user) {
-                        //This means authentication is okay
-                        flag = true;
                         cartId = user.cart._id.toString();
-                        if (user.role == 'admin') {
-                            adminflag = true;
-                            req.logger.debug("1");
-                        }
-
-                        if(user.role == 'premium'){
-                            premiumflag = true;
-                            req.logger.debug("2");
-                        }
-                        
-                        if(user.role == 'user'){
-                            userflag = true;
-                            req.logger.debug("3");
-                        }
                     }
+                } else {
+                    req.logger.debug("No user.");
                 }
+
+                const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
 
                 res.render("products", {
                     pagina: pagina,
@@ -82,52 +67,69 @@ export default class ViewRouter extends CRouter {
 
         this.get("/mycart", ["USER", "PREMIUM"], async (req, res) => {
 
-            if (req.user) {
-                let user = await userService.searchByEmail(req.user.user.email);
-                let cartId = user.cart._id.toString();
-                res.render('cart', {
-                    style: 'cart.css',
-                    title: 'Cart View',
-                    cartId: cartId
-                });
-            } else {
-                res.sendUserError("Not Authenticated");
-            }
+            // if (req.user) {
+            let user = await userService.searchByEmail(req.user.user.email);
+            const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
+            let cartId = user.cart._id.toString();
+            res.render('cart', {
+                style: 'cart.css',
+                title: 'Cart View',
+                cartId: cartId,
+                flag,
+                adminflag,
+                premiumflag,
+                userflag,
+                user
+            });
+            // } else {
+            //     res.sendUserError("Not Authenticated");
+            // }
         });
 
         this.get("/createproduct", ["ADMIN", "PREMIUM"], async (req, res) => {
 
-            if (!req.user) {
-                res.sendUserError("Not Authenticated");
-            } else {
-                try {
-                    res.render("createprod", {
-                        edit: false,
-                        style: 'productform.css',
-                        title: 'Create Product',
-                    });
-                } catch (err) {
-                    res.sendServerError("Internal error");
-                }
-            }
+            try {
+                const user = await userService.searchByEmail(req.user.user.email);
+                const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
 
+                res.render("createprod", {
+                    edit: false,
+                    style: 'productform.css',
+                    title: 'Create Product',
+                    flag,
+                    adminflag,
+                    premiumflag,
+                    userflag,
+                    user
+                });
+            } catch (err) {
+                res.sendServerError("Internal error");
+            }
 
         });
 
         this.get("/editprod/:pid", ["ADMIN", "PREMIUM"], async (req, res) => {
 
             let prodid = req.params.pid;
+            const user = await userService.searchByEmail(req.user.user.email);
 
             await prodService.getProductById(prodid).
-                then((product) => {
+                then(async (product) => {
                     const prodOb = product.toObject();
+                    const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
                     res.render("createprod", {
                         product: prodOb,
                         edit: true,
                         style: 'productform.css',
                         title: 'Edit Product',
+                        flag,
+                        adminflag,
+                        premiumflag,
+                        userflag,
+                        user
                     });
                 }).catch((err) => {
+                    req.logger.error(err);
                     res.sendServerError("Product not found");
                 });
         });
@@ -136,6 +138,7 @@ export default class ViewRouter extends CRouter {
 
             let ticketid = req.params.tid;
             let partialPurchaseflag = false;
+            const user = await userService.searchByEmail(req.user.user.email);
 
             await ticketService.getById(ticketid).
                 then((ticket) => {
@@ -151,19 +154,28 @@ export default class ViewRouter extends CRouter {
                         partialPurchaseflag = true;
                     }
 
+                    const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
+
                     res.render("purchase", {
                         partialPurchaseflag,
                         ticket: ticketOb,
                         style: 'purchase.css',
                         title: 'Purchase Done',
+                        flag,
+                        adminflag,
+                        premiumflag,
+                        userflag,
+                        user
                     });
                 }).catch((err) => {
-                    req.logger.error("Ticket not found");
+                    req.logger.error(err);
                     res.sendServerError("Ticket not found");
                 });
         });
 
         this.get("/chat", ["USER", "PREMIUM"], async (req, res) => {
+
+            const user = await userService.searchByEmail(req.user.user.email);
 
             await messageService.read()
                 .then((messages) => {
@@ -175,15 +187,47 @@ export default class ViewRouter extends CRouter {
                         mo.first = l;
                         messagesArray.push(mo);
                     }
-
+                    const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
                     res.render("chat", {
                         messages: messagesArray,
                         style: 'chat.css',
                         title: 'Chat',
                         userId: req.user.user.email,
+                        flag,
+                        adminflag,
+                        premiumflag,
+                        userflag,
+                        user
                     })
                 });
         })
+
+        this.get("/profile", ["USER", "ADMIN", "PREMIUM"], async (req, res) => {
+            try {
+                let photoflag = false;
+                let base64img;
+                const profile = await userService.searchByEmail(req.user.user.email);
+                if (profile.profileimage) {
+                    photoflag = true;
+                    base64img = profile.profileimage.data.toString('base64');
+                }
+                const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(profile);
+                res.render('profile', {
+                    title: 'Profile',
+                    style: 'profile.css',
+                    user: profile,
+                    photoflag,
+                    base64img,
+                    flag,
+                    adminflag,
+                    premiumflag,
+                    userflag
+                })
+            } catch (err) {
+                return res.sendServerError("Internal Error");
+            }
+        })
+
 
         this.get("/testlogger", ["PUBLIC"], async (req, res) => {
             req.logger.fatal("This is a fatal message");
@@ -196,7 +240,9 @@ export default class ViewRouter extends CRouter {
 
         this.get("/forgotpassword", ["PUBLIC"], (req, res) => {
             if (!req.user) {
-                res.render("forgotPassword")
+                res.render("forgotPassword", {
+                    excludePartial: true
+                });
             } else {
                 res.redirect("/api/sessions/profile");
             }
@@ -207,7 +253,8 @@ export default class ViewRouter extends CRouter {
             if (!res.user) {
                 res.render("resetpassword",
                     {
-                        token
+                        token,
+                        excludePartial: true
                     });
             } else {
                 res.redirect("/api/sessions/profile");
