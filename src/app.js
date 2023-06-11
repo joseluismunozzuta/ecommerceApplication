@@ -47,6 +47,9 @@ app.get("/mockingproducts", async(req, res) => {
     res.send({status:"success", payload:prods});
 })
 
+app.get("/", (req, res) => {
+    res.redirect("/views/products");
+})
 
 app.engine('handlebars', handlebars.engine());
 app.set("views", __dirname + '/views');

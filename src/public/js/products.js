@@ -136,7 +136,7 @@ const render = (prods) => {
 }
 
 async function showModal(id) {
-    const result = await fetch(`http://localhost:3000/api/products/${id}`);
+    const result = await fetch(`/api/products/${id}`);
     const prod = await result.json();
     modalTitle.innerText = prod.title;
     modalPrice.innerText = "$ " + prod.price;
@@ -259,7 +259,7 @@ async function addToCart() {
     let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     let cartId = document.getElementById("cartId").value;
 
-    await fetch(`http://localhost:3000/api/carts/${cartId}/products/${prodid}`, {
+    await fetch(`/api/carts/${cartId}/products/${prodid}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -287,7 +287,7 @@ async function addToCart() {
 
 function editProd() {
     let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
-    window.location.href = `http://localhost:3000/views/editprod/${prodid}`;
+    window.location.href = `/views/editprod/${prodid}`;
 }
 
 async function deleteProd() {
@@ -302,7 +302,7 @@ async function deleteProd() {
                 console.log("page");
                 console.log(pagina);
                 alert("Product successfully deleted");
-                window.location.replace(`http://localhost:3000/views/products/${pagina}`);
+                window.location.replace(`/views/products/${pagina}`);
             } else {
                 alert(data.error);
             }
@@ -327,7 +327,9 @@ async function getProducts() {
         limit = parseInt(queryParams.limit);
     }
 
-    let url = `http://localhost:3000/api/products?limit=${limit}&page=${pagina}`;
+    console.log("Trace 2");
+
+    let url = `/api/products?limit=${limit}&page=${pagina}`;
 
     if (queryParams.sort) {
         url = url.concat(`&sort=${queryParams.sort}`);

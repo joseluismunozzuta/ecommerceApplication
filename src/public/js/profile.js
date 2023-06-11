@@ -44,7 +44,7 @@ async function changeRole() {
         .then((data) => {
             if (data.status == "success") {
                 alert(data.payload);
-                window.location.replace("http://localhost:3000/views/profile");
+                window.location.replace("/views/profile");
             } else {
                 alert(data.error);
                 console.log(data.error);

@@ -19,7 +19,7 @@ async function createProdMethod() {
             .then((data) => {
                 if (data.status == "success") {
                     alert("Product successfully created");
-                    window.location.replace("http://localhost:3000/views/products");
+                    window.location.replace("/views/products");
                 } else {
                     alert(data.error.name);
                     console.log(data.error.cause);
@@ -43,7 +43,7 @@ async function editProd() {
         .then((data) => {
             if (data.status == "success") {
                 alert("Product successfully edited");
-                window.location.replace("http://localhost:3000/views/products");
+                window.location.replace("/views/products");
             } else {
                 alert(data.error.name);
                 console.log(data.error.cause);
@@ -53,12 +53,9 @@ async function editProd() {
 }
 
 async function deleteProd() {
-    const userForm = document.getElementById("prodForm");
-    const formData = new FormData(userForm);
-    const data = Object.fromEntries(formData);
     let prodid = submitButton.getAttribute("data-value");
     await fetch(`/api/products/${prodid}`, {
-        method: "PUT",
+        method: "DELETE",
         headers: {
             "Content-type": "application/json",
         },
@@ -67,8 +64,8 @@ async function deleteProd() {
         .then((data) => {
             console.log(data);
             if (data.status == "success") {
-                alert("Product successfully edited");
-                window.location.replace("http://localhost:3000/views/products");
+                alert("Product successfully deleted");
+                window.location.replace("views/products");
             } else {
                 alert(data.error.name);
                 console.log(data.error.cause);

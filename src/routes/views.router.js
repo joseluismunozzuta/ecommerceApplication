@@ -294,7 +294,7 @@ export default class ViewRouter extends CRouter {
                     excludePartial: true
                 });
             } else {
-                res.redirect("/api/views/profile");
+                res.redirect("/views/profile");
             }
         });
 

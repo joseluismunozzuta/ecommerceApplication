@@ -13,7 +13,7 @@ document.getElementById("signup").addEventListener('click', function () {
             console.log(data);
             if (data.status == "success") {
                 alert("User succesfully created");
-                window.location.replace("http://localhost:3000/api/sessions/login");
+                window.location.replace("/api/sessions/login");
             } else {
                 alert(data.error.name);
             }

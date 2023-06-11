@@ -1,31 +1,31 @@
 let logoutButton = document.getElementById("logout");
 
 function goHome(){
-    window.location.replace("http://localhost:3000/views/products");
+    window.location.replace("/views/products");
 }
 
 function goChat() {
-    window.location.href = "http://localhost:3000/views/chat";
+    window.location.href = "/views/chat";
 }
 
 function goProfile() {
-    window.location.href = "http://localhost:3000/views/profile";
+    window.location.href = "/views/profile";
 }
 
 function goLogin() {
-    window.location.href = "http://localhost:3000/api/sessions/login";
+    window.location.href = "/api/sessions/login";
 }
 
 function goSignUp() {
-    window.location.href = "http://localhost:3000/api/sessions/signup";
+    window.location.href = "/api/sessions/signup";
 }
 
 function goCreateProd() {
-    window.location.href = "http://localhost:3000/views/createproduct";
+    window.location.href = "/views/createproduct";
 }
 
 async function goCart() {
-    window.location.href = "http://localhost:3000/views/mycart";
+    window.location.href = "/views/mycart";
 }
 
 if (logoutButton) {
@@ -39,7 +39,7 @@ if (logoutButton) {
             .then((response) => response.json())
             .then((data) => {
                 if (data.status == "success") {
-                    window.location.replace("http://localhost:3000/views/products");
+                    window.location.replace("/views/products");
                 }
                 else {
                     alert("Logout failed");

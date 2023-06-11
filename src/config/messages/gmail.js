@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendRecoveryEmail = async(email,token)=>{
-    const link = `http://localhost:3000/views/resetpassword?token=${token}`;//enlace con token
+    const link = `https://ecommerceapplication-production.up.railway.app/views/resetpassword?token=${token}`;//enlace con token
 
     await transporter.sendMail({
         from:"ECommerce Jose Luis",
