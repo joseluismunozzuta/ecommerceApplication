@@ -290,7 +290,7 @@ export default class ViewRouter extends CRouter {
 
         this.get("/forgotpassword", ["PUBLIC"], (req, res) => {
             if (!req.user) {
-                res.render("forgotPassword", {
+                res.render("forgotpassword", {
                     excludePartial: true
                 });
             } else {
@@ -300,7 +300,7 @@ export default class ViewRouter extends CRouter {
 
         this.get("/resetpassword", ["PUBLIC"], (req, res) => {
             const token = req.query.token;
-            if (!res.user) {
+            if (!req.user) {
                 res.render("resetpassword",
                     {
                         token,
