@@ -28,6 +28,7 @@ export const sendRecoveryEmail = async(email,token)=>{
             <a href="${link}">
                 <button>Restablecer contraseña</button>
             </a>
+            <p>Si no has solicitado un cambio de contraseña, ignora este correo.</p>
         `
     });
 }
