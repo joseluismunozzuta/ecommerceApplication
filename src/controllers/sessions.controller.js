@@ -192,7 +192,14 @@ export const forgetPassword = async (req, res) => {
         if (!user) {
             return res.sendUserError("User not found");
         }
-        const token = generateToken(user, '1h');
+        const tokenUser = {
+            _id: user._id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            role: user.role
+        }
+        const token = generateToken(tokenUser, '1h');
         await sendRecoveryEmail(email, token);
         res.sendSuccess("Email sent");
         //const link = `${process.env.FRONTEND_URL}/reset-password/${token}`;
