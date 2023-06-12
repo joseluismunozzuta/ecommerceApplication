@@ -1,26 +1,27 @@
-<div class="navbar bg-base-100 py-5">
-    <div class="flex-1">
-        <a class="btn btn-ghost normal-case text-xl" href="/views/products">Home</a>
+<div class="navbar bg-base-100 py-5 flex-col sm:flex-row">
+    <div class="flex-1 mx-4">
+        <a class="btn btn-ghost btn-outline normal-case text-xl"
+            href="/views/products">Home</a>
     </div>
     <input style="display: none;" readonly id="pagina" value={{pagina}}>
     {{#if flag}}
     <input style="display: none;" readonly id="cartId" value={{cartId}}>
     <input style="display: none;" readonly id="userId" value={{user._id}}>
-    <div class="flex-none">
+    <div class="flex flex-col-reverse gap-5 my-4
+    md:flex-row md:gap-3">
         {{#if adminflag}}
         <button type="button" class="px-6 py-2 border rounded-md
             dark:bg-blue-400 dark:text-black-900 dark:border-blue-400"
             onclick="goCreateProd()">
-            <span class="sr-only sm:not-sr-only text-white font-bold">Create
-                a
-                product</span>
+            <span class="text-white font-bold">Create
+                a product</span>
         </button>
         {{else}}
         {{#if premiumflag}}
         <button type="button" class="px-6 py-2 border rounded-md
             dark:bg-blue-400 dark:text-black-900 dark:border-blue-400"
             onclick="goCreateProd()">
-            <span class="sr-only sm:not-sr-only text-white font-bold">Create
+            <span class="text-white font-bold">Create
                 a
                 product</span>
         </button>
@@ -28,35 +29,35 @@
         <button type="button" class="px-6 py-2 border rounded-md
             dark:bg-emerald-700 dark:text-black-900 dark:border-emerald-400"
             onclick="goChat()">
-            <span class="sr-only sm:not-sr-only text-white font-bold">Go to
+            <span class="text-white font-bold">Go to
                 chat</span>
         </button>
         {{/if}}
         {{/if}}
-        <div class="mx-5 flex flex-row">
+        <div class="mx-5 flex flex-col sm:flex-row items-center gap-3">
             <p class="text-white">Hi, {{user.first_name}} {{user.last_name}}</p>
-        </div>
-        <div class="dropdown dropdown-end mx-2">
-            <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                <div class="w-14 rounded-full">
-                    {{#if user.profileimage}}
-                    <img
-                        src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}" />
-                    {{else}}
-                    <img
-                        src="https://freesvg.org/img/abstract-user-flat-4.png" />
-                    {{/if}}
-                </div>
-            </label>
-            <ul tabindex="0"
-                class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                <li>
-                    <a class="justify-between" onclick="goProfile()">
-                        Profile
-                    </a>
-                </li>
-                <li><a id="logout">Logout</a></li>
-            </ul>
+            <div class="dropdown dropdown-end mx-2">
+                <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-14 rounded-full">
+                        {{#if user.profileimage}}
+                        <img
+                            src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}" />
+                        {{else}}
+                        <img
+                            src="https://freesvg.org/img/abstract-user-flat-4.png" />
+                        {{/if}}
+                    </div>
+                </label>
+                <ul tabindex="0"
+                    class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                    <li>
+                        <a class="justify-between" onclick="goProfile()">
+                            Profile
+                        </a>
+                    </li>
+                    <li><a id="logout">Logout</a></li>
+                </ul>
+            </div>
         </div>
 
         {{#if adminflag}}
