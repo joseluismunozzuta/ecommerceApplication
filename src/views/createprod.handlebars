@@ -1,61 +1,70 @@
-<div class="cont">
-    <div class="left">
-        <div class="formclass">
+<div class="cont my-4">
+    <div class="left rounded-lg my-3">
+        <div class="formclass p-16">
             <h2 class="text-2xl">Registrar producto</h2>
             <form id="prodForm">
 
                 <div class="user-box">
                     <input type="text" id="title" name="title"
                         placeholder="Nombre del producto"
-                        value="{{#if product.title}}{{product.title}}{{else}}{{/if}}" required>
+                        value="{{#if product.title}}{{product.title}}{{else}}{{/if}}"
+                        required>
                     <label>Nombre del producto</label>
                 </div>
 
                 <div class="user-box">
                     <textarea id="description" name="description"
-                        placeholder="Descripción" required>{{#if product.description}}{{product.description}}{{else}}{{/if}}</textarea>
+                        placeholder="Descripción" required>{{#if
+                        product.description}}{{product.description}}{{else}}{{/if}}</textarea>
                     <label>Descripción</label>
                 </div>
 
                 <div class="user-box">
                     <input type="text" id="category" name="category"
                         placeholder="Categoría"
-                        value="{{#if product.category}}{{product.category}}{{else}}{{/if}}" required>
+                        value="{{#if product.category}}{{product.category}}{{else}}{{/if}}"
+                        required>
                     <label>Categoría</label>
                 </div>
 
                 <div class="user-box">
                     <input type="number" id="price" name="price"
                         placeholder="Precio"
-                        value="{{#if product.price}}{{product.price}}{{else}}{{/if}}" required>
+                        value="{{#if product.price}}{{product.price}}{{else}}{{/if}}"
+                        required>
                     <label>Precio</label>
                 </div>
 
                 <div class="user-box">
                     <input type="text" id="code" name="code"
                         placeholder="Código del producto"
-                        value="{{#if product.code}}{{product.code}}{{else}}{{/if}}" required>
+                        value="{{#if product.code}}{{product.code}}{{else}}{{/if}}"
+                        required>
                     <label>Código del producto</label>
                 </div>
 
                 <div class="user-box">
                     <input type="number" id="stock" name="stock"
-                        value="{{#if product.stock}}{{product.stock}}{{else}}{{/if}}" placeholder="Stock" required>
+                        value="{{#if product.stock}}{{product.stock}}{{else}}{{/if}}"
+                        placeholder="Stock" required>
                     <label>Stock</label>
                 </div>
 
                 <div class="user-box">
                     <input type="url" id="thumbnail" name="thumbnail"
                         placeholder="Imagen: inserte URL"
-                        value="{{#if product.thumbnail}}{{product.thumbnail}}{{else}}{{/if}}" required>
+                        value="{{#if product.thumbnail}}{{product.thumbnail}}{{else}}{{/if}}"
+                        required>
                     <label>Imagen</label>
                 </div>
                 {{#if edit}}
-                <button id="actionProdBtn" type="button" data-value={{product._id}} onclick="editProd()">
+                <button id="actionProdBtn" type="button"
+                    data-value={{product._id}} onclick="editProd()">
                     Editar
                 </button>
                 {{else}}
-                <button id="actionProdBtn" type="button" onclick="createProdMethod()">
+                <button id="actionProdBtn" type="button"
+                    onclick="createProdMethod()">
                     Registrar
                 </button>
                 {{/if}}
@@ -63,6 +72,6 @@
         </div>
 
     </div>
-    <div class="right" id="imageCont"></div>
+    <div class="right my-10" id="imageCont"></div>
 </div>
 <script src="/js/productform.js"></script>

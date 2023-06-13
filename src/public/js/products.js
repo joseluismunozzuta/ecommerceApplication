@@ -153,8 +153,6 @@ async function showModal(id) {
 
         if (userid == prod.owner) {
 
-            console.log("This is my product");
-
             modalContentContainer.innerHTML = `<div class="w-full">
             <h2 class="text-2xl p-12 text-center font-bold text-green-900 sm:p-10">
             This product is managed by you
@@ -178,8 +176,6 @@ async function showModal(id) {
             focus:ring-offset-2" id="deleteProdBtn" data-value=${prod._id}
             onclick="showDeleteModal()">Delete</button></div>`;
         } else {
-
-            console.log("This is not my product");
 
             modalContentContainer.innerHTML = `<div class="w-full flex flex-row justify-evenly items-start gap-2">
             <button type="submit" class="mt-6 flex w-5/12
@@ -297,10 +293,6 @@ async function deleteProd() {
     }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
-                console.log("query params: ");
-                console.log(queryParams);
-                console.log("page");
-                console.log(pagina);
                 alert("Product successfully deleted");
                 window.location.replace(`/views/products/${pagina}`);
             } else {
@@ -317,17 +309,11 @@ function updateCartProductsLength(l) {
 
 async function getProducts() {
 
-    console.log("Query params: ");
-    console.log(queryParams);
-    console.log("Pagina: " + pagina);
-
     let limit = 10;
 
     if (queryParams.limit) {
         limit = parseInt(queryParams.limit);
     }
-
-    console.log("Trace 2");
 
     let url = `/api/products?limit=${limit}&page=${pagina}`;
 
@@ -338,7 +324,7 @@ async function getProducts() {
     if (queryParams.queryCategory) {
         url = url.concat(`&query=${queryParams.queryCategory}`);
     }
-    console.log(url);
+
     const products = await fetch(url);
     const result = await products.json();
     return result;

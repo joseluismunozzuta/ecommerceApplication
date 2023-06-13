@@ -8,28 +8,25 @@ body {
 
 .cont {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    width: 75%;
-    height: 100%;
+    width: 85%;
     margin: auto;
 }
 
 .left {
-    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
-    animation-name: left;
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
-    animation-delay: 0.5s;
+    width: 100%;
 }
 
 .right {
-    margin: 40px;
-    flex: 1;
+    width: 100%;
+    min-height: 500px;
     background-color: black;
+    height: min-content;
     transition: 0.5s;
     background-image: url(https://www.rowsignsandgraphics.com/wp-content/uploads/2021/08/Vertical_Rectangle_Black_Bordered.jpg);
     background-size: cover;
@@ -46,17 +43,48 @@ body {
     100% {
         opacity: 1;
         padding: 20px 40px;
-        width: 50%;
+        margin-right: 40px;
+        margin-left: 40px;
+        width: 100%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .left {
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        animation-name: left;
+        animation-duration: 0.5s;
+        animation-fill-mode: both;
+        animation-delay: 0.5s;
+    }
+    .cont {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 85%;
+        height: 80%;
+        margin: auto;
+    }
+    .right {
+        margin: 40px;
+        height: auto;
+        background-color: black;
+        transition: 0.5s;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
     }
 }
 
 .formclass {
-    width:100%;
+    width: 100%;
     padding: 40px;
     background: rgb(0, 0, 0);
-    box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .formclass h2 {
