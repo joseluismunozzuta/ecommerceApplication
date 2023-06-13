@@ -199,16 +199,18 @@
 
         <!--Img Col-->
         <div class="w-full lg:w-2/5">
-            {{#if user.profileimage}}
-            <img
-                src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}"
-                class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
 
-            {{else}}
-            <!-- Big profile image for side bar (desktop) -->
-            <img src="https://freesvg.org/img/abstract-user-flat-4.png"
-                class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block">
-            {{/if}}
+            <label tabindex="0" class="avatar mr-5 -ml-5">
+                <div class="w-full rounded-full">
+                    {{#if user.profileimage}}
+                    <img class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
+                        src="data:image/{{user.profileImage.contentType}};base64,{{base64img}}" />
+                    {{else}}
+                    <img class="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
+                        src="https://freesvg.org/img/abstract-user-flat-4.png" />
+                    {{/if}}
+                </div>
+            </label>
         </div>
     </div>
 
