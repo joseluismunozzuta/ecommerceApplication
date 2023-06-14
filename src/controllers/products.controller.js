@@ -1,9 +1,12 @@
+import { sendDeleteProdEmail } from "../config/messages/gmail.js";
 import ProductDTO from "../dao/DTOs/product.dto.js";
 import Product from "../dao/classes/product.dao.js";
+import User from "../dao/classes/user.dao.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 
 const productService = new Product();
+const userService = new User();
 
 export const getProducts_controller = async (req, res) => {
     const queryParams = req.query;
@@ -120,8 +123,15 @@ export const deleteProduct_controller = async (req, res) => {
         }
     }
 
-    await productService.delete(productToDelete).then((data) => {
+    const prodOwner = await userService.searchById(prodToDelete.owner);
+
+    await productService.delete(productToDelete).then(async (data) => {
         req.logger.debug(`Product succesfully deleted with ID: ` + data.id);
+        if(prodOwner){
+            if(prodOwner.role == "premium"){
+                await sendDeleteProdEmail(prodOwner, data);
+            }
+        }
         res.send({ status: "success", payload: data });
     }).catch((e) => {
         req.logger.error(e.message);

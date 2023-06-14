@@ -1,7 +1,16 @@
 import User from "../dao/classes/user.dao.js";
-import { checkDocs } from "../utils.js";
+import {generateToken, checkDocs } from "../utils.js";
 
 const userService = new User();
+
+export const getAllUsers_controller = async (req, res) => {
+    try {
+        const users = await userService.getAll();
+        return res.sendSuccess(users.docs);
+    } catch (err) {
+        return res.sendServerError("Internal error");
+    }
+}
 
 export const modifyUser = async (req, res) => {
     try {
@@ -21,7 +30,21 @@ export const modifyUser = async (req, res) => {
             return res.sendUserError("No es posible cambiar el rol de un administrador");
         }
         await userService.update(userId, user);
-        return res.sendSuccess(`Nuevo rol del usuario: ${user.role}`);
+
+        const cookieUser = {
+            _id: user._id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            role: user.role
+        }
+
+        const access_token = generateToken(cookieUser);
+
+        res.cookie('cookieToken', access_token, {
+            maxAge: 60 * 60 * 1000,
+            httpOnly: true
+        }).sendSuccess(`Nuevo rol del usuario: ${user.role}`);
     } catch (error) {
         res.sendServerError(error);
     }

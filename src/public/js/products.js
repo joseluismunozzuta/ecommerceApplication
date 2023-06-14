@@ -287,12 +287,14 @@ function editProd() {
 }
 
 async function deleteProd() {
+    document.getElementById("loading").style.display = "flex";
     let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     await fetch(`/api/products/${prodid}`, {
         method: "DELETE",
     }).then((response) => response.json())
         .then((data) => {
             if (data.status == "success") {
+                document.getElementById("loading").style.display = "none";
                 alert("Product successfully deleted");
                 window.location.replace(`/views/products/${pagina}`);
             } else {

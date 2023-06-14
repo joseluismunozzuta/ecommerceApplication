@@ -45,7 +45,7 @@ export default class User {
 
     async getAll() {
         try {
-            let users = await userModel.paginate();
+            let users = await userModel.paginate({}, {select:'first_name last_name email role'});
             return users;
         } catch (err) {
             throw err;

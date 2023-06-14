@@ -32,3 +32,14 @@ export const sendRecoveryEmail = async(email,token)=>{
         `
     });
 }
+
+export const sendDeleteProdEmail = async(user, product) => {
+    await transporter.sendMail({
+        from:"ECommerce Jose Luis",
+        to:user.email,
+        subject:"Tu producto fue eliminado",
+        html:`<h3>Hola, ${user.first_name} ${user.last_name}: </h3>
+        <p>Tu producto ${product.title} con ID[${product._id}] ha sido eliminado de la tienda
+        ECommerce.</p>`
+    })
+}

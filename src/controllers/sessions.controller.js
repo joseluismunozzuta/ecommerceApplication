@@ -46,15 +46,6 @@ export const updateProfile_controller = async (req, res) => {
     }
 }
 
-export const getAllUsers_controller = async (req, res) => {
-    try {
-        const users = await userService.getAll();
-        return res.sendSuccess(users);
-    } catch (err) {
-        return res.sendServerError("Internal error");
-    }
-}
-
 export const goLogin_controller = async (req, res) => {
 
     if (!req.user) {

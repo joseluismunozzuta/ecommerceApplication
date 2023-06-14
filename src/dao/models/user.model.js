@@ -64,8 +64,8 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(mongoosePaginate);
 
-userSchema.pre('find', function () {
-    this.populate('cart');
-});
+// userSchema.pre('find', function () {
+//     this.populate('cart');
+// });
 
 export const userModel = mongoose.model(userCollection, userSchema);

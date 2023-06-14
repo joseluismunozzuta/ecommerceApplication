@@ -1,9 +1,11 @@
 import CRouter from "./router.js";
-import { modifyUser, uploadUserDocs } from "../controllers/users.controller.js";
+import { modifyUser, uploadUserDocs, getAllUsers_controller } from "../controllers/users.controller.js";
 import { uploadUserDocuments } from "../utils.js";
+
 
 export default class UserRouter extends CRouter {
     init() {
+        this.get("/", ["PUBLIC"], getAllUsers_controller);
         this.put("/premium/:uid", ["USER", "PREMIUM"], modifyUser);
         this.post("/:uid/documents", ["USER", "PREMIUM"],
             uploadUserDocuments.fields([

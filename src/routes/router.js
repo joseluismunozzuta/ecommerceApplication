@@ -53,6 +53,7 @@ export default class CRouter {
             //Se devuelve error por falta de autenticacion.
             return res.status(400).send({ status: "error", error: "Not authenticated"});
         } else {
+            req.logger.debug(req.user.user.role);
             if (!policies.includes(req.user.user.role.toUpperCase())) {
                 return res.status(403).send({ error: "Your role doesn't match this site policy. Forbidden." });
             }
