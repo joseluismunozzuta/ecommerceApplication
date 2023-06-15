@@ -133,7 +133,7 @@ export const purchase_controller = async (req, res) => {
                 });
 
             if (!purchase) {
-                return res.sendServerError("No se puede comprar ningun producto");
+                return res.sendUserError("No se puede comprar ningun producto");
             } else {
                 amount = Math.round(100 * amount) / 100;
                 const ticket = new TicketDTO({ amount, purchaser, prods_purchase, prods_outofStock });

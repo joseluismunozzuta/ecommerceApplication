@@ -136,7 +136,9 @@ const render = (prods) => {
 }
 
 async function showModal(id) {
+    document.getElementById("loading").style.display = "flex";
     const result = await fetch(`/api/products/${id}`);
+    document.getElementById("loading").style.display = "none";
     const prod = await result.json();
     modalTitle.innerText = prod.title;
     modalPrice.innerText = "$ " + prod.price;
@@ -252,6 +254,7 @@ function handleQuantity(select) {
 }
 
 async function addToCart() {
+    document.getElementById("loading").style.display = "flex";
     let prodid = document.getElementById("prodActionBtn").getAttribute("data-value");
     let cartId = document.getElementById("cartId").value;
 
@@ -265,7 +268,7 @@ async function addToCart() {
         })
     }).then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            document.getElementById("loading").style.display = "none";
             if (data.status == "success") {
                 let cartLength = data.payload.products.length;
                 updateCartProductsLength(cartLength);

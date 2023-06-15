@@ -76,8 +76,11 @@ async function removeProductfromCart(button) {
 }
 
 async function purchase() {
+
+    document.getElementById("loading").style.display = "flex";
+
     const horaActual = new Date();
-    console.log(horaActual.toLocaleString());
+    
     await fetch(`/api/carts/${cartId}/purchase`, {
         method: 'POST',
         headers: {
@@ -90,6 +93,7 @@ async function purchase() {
 
     }).then((response) => response.json())
         .then((data) => {
+            document.getElementById("loading").style.display = "none";
             if (data.status == "success") {
                 window.location.replace(`/views/purchasedone/${data.payload.ticket._id}`);
             } else {

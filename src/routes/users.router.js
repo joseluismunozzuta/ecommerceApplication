@@ -13,5 +13,9 @@ export default class UserRouter extends CRouter {
                 { name: 'domicilio', maxCount: 1 },
                 { name: 'estadoDeCuenta', maxCount: 1 },
             ]), uploadUserDocs);
+        this.all("/*", (req, res) => {
+            req.logger.debug("Route undefined");
+            res.sendNotFound();
+        })
     }
 }
