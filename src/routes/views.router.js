@@ -76,7 +76,7 @@ export default class ViewRouter extends CRouter {
             // if (req.user) {
             let user = await userService.searchByEmail(req.user.user.email);
             let base64img;
-            if(user.profileimage){
+            if (user.profileimage) {
                 base64img = user.profileimage.data.toString('base64');
             }
             const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
@@ -105,7 +105,7 @@ export default class ViewRouter extends CRouter {
             try {
                 const user = await userService.searchByEmail(req.user.user.email);
                 let base64img;
-                if(user.profileimage){
+                if (user.profileimage) {
                     base64img = user.profileimage.data.toString('base64');
                 }
                 const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
@@ -132,7 +132,7 @@ export default class ViewRouter extends CRouter {
             let prodid = req.params.pid;
             const user = await userService.searchByEmail(req.user.user.email);
             let base64img;
-            if(user.profileimage){
+            if (user.profileimage) {
                 base64img = user.profileimage.data.toString('base64');
             }
             await prodService.getProductById(prodid).
@@ -163,7 +163,7 @@ export default class ViewRouter extends CRouter {
             let partialPurchaseflag = false;
             const user = await userService.searchByEmail(req.user.user.email);
             let base64img;
-            if(user.profileimage){
+            if (user.profileimage) {
                 base64img = user.profileimage.data.toString('base64');
             }
             await ticketService.getById(ticketid).
@@ -203,24 +203,28 @@ export default class ViewRouter extends CRouter {
         this.get("/chat", ["USER", "PREMIUM"], async (req, res) => {
             let base64img;
             const user = await userService.searchByEmail(req.user.user.email);
-            if(user.profileimage){
+            if (user.profileimage) {
                 base64img = user.profileimage.data.toString('base64');
             }
-            
+
             await messageService.read()
                 .then((messages) => {
+
                     let messagesArray = [];
-                    const messObj = messages;
-                    for (const m of messObj) {
+
+                    for (const m of messages) {
                         var l = m.user.charAt(0);
                         const mo = m.toObject();
                         mo.first = l;
+                        if (m.user == user.email) {
+                            mo.mine = true;
+                        }
                         messagesArray.push(mo);
                     }
                     const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
-                    
+
                     res.render("chat", {
-                        messages: messagesArray,
+                        mymessages: messagesArray,
                         style: 'chat.css',
                         title: 'Chat',
                         userId: req.user.user.email,
