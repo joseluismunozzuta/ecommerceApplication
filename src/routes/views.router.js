@@ -12,6 +12,7 @@ const messageService = new Message();
 
 export default class ViewRouter extends CRouter {
     init() {
+
         this.get("/products/:pagina?", ["PUBLIC"], async (req, res) => {
             let pagina;
             let base64img;
@@ -315,5 +316,11 @@ export default class ViewRouter extends CRouter {
             }
 
         });
+
+        this.all("/*", (req, res) => {
+            req.logger.debug("Route undefined");
+            res.sendNotFound();
+        })
+
     }
 }

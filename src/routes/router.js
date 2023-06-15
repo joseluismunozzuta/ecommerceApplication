@@ -15,6 +15,10 @@ export default class CRouter {
 
     init() { }
 
+    all(path, ...callbacks){
+        this.router.all(path, addLogger, this.generateCustomResponses, this.applyCallbacks(callbacks));
+    }
+
     get(path, policies, ...callbacks) {
         this.router.get(path, addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
@@ -80,6 +84,11 @@ export default class CRouter {
         res.sendForbidden = () => res.status(403).render("forbidden", {
             style: "forbidden.css",
             title: 'Forbidden',
+            excludePartial: true
+        });
+        res.sendNotFound = () => res.status(404).render("notfound", {
+            style: "notfound.css",
+            title: '404 Not Found',
             excludePartial: true
         });
         next();
