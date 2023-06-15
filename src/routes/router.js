@@ -71,7 +71,11 @@ export default class CRouter {
 
     generateCustomResponses = (req, res, next) => {
         res.sendSuccess = payload => res.status(200).send({ status: "success", payload });
-        res.sendServerError = error => res.status(500).send({ status: "error", error });
+        res.sendServerError = () => res.status(500).render("internalerror", {
+            style: "internalerror.css",
+            title: '500 Error',
+            excludePartial: true
+        });
         res.sendUserError = error => res.status(400).send({ status: "error", error });
         res.sendForbidden = () => res.status(403).render("forbidden", {
             style: "forbidden.css",

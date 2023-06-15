@@ -55,7 +55,7 @@ export const createProduct_controller = async (req, res) => {
     }
 
     const newProd = new ProductDTO(product);
-    console.log(newProd);
+    
     await productService.create(newProd).then((data) => {
         req.logger.debug(`Product succesfully created with ID: ` + data.id);
         res.sendSuccess("Product succesfully created");

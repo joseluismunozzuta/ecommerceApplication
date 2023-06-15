@@ -8,7 +8,7 @@ export const getAllUsers_controller = async (req, res) => {
         const users = await userService.getAll();
         return res.sendSuccess(users.docs);
     } catch (err) {
-        return res.sendServerError("Internal error");
+        return res.sendServerError();
     }
 }
 
@@ -92,7 +92,7 @@ export const uploadUserDocs = async (req, res) => {
         res.redirect("/views/profile");
 
     } catch (error) {
-        console.log(error);
+        req.logger.error(error);
         res.sendServerError(error);
     }
 }

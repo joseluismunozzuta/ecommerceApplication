@@ -156,7 +156,8 @@ export const signIn_controller = async (req, res) => {
         }).sendSuccess("Login successful");
 
     } catch (error) {
-        return res.sendServerError("Internal error");
+        req.logger.error(error);
+        return res.sendServerError();
     }
 }
 
@@ -171,7 +172,7 @@ export const logout = async (req, res) => {
         res.clearCookie('cookieToken');
         res.sendSuccess("Logout successful");
     } catch (error) {
-        return res.sendServerError("Internal error");
+        return res.sendServerError();
     }
 }
 
@@ -193,10 +194,10 @@ export const forgetPassword = async (req, res) => {
         const token = generateToken(tokenUser, '1h');
         await sendRecoveryEmail(email, token);
         res.sendSuccess("Email sent");
-        //const link = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+        
     } catch (error) {
         req.logger.error(error);
-        return res.sendServerError("Internal error");
+        return res.sendServerError();
     }
 }
 
@@ -233,6 +234,7 @@ export const resetpassword = async (req, res) => {
         req.logger.debug("Password updated");
         res.redirect("/api/sessions/login");
     } catch (error) {
-        return res.sendServerError("Internal error");
+        req.logger.error(error);
+        return res.sendServerError();
     }
 }

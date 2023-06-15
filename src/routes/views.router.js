@@ -65,8 +65,8 @@ export default class ViewRouter extends CRouter {
                 });
 
             } catch (err) {
-                console.log(err);
-                res.sendServerError("Internal error");
+                req.logger.error(err);
+                res.sendServerError();
             }
 
         });
@@ -122,7 +122,8 @@ export default class ViewRouter extends CRouter {
                     base64img
                 });
             } catch (err) {
-                res.sendServerError("Internal error");
+                req.logger.error(err);
+                res.sendServerError();
             }
 
         });
@@ -276,8 +277,8 @@ export default class ViewRouter extends CRouter {
                     completed
                 })
             } catch (err) {
-                console.log(err);
-                return res.sendServerError("Internal Error");
+                req.logger.error(err);
+                return res.sendServerError();
             }
         })
 
