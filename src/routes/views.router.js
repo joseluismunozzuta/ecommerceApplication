@@ -171,7 +171,7 @@ export default class ViewRouter extends CRouter {
 
                     if (req.user.user.role !== "admin" &&
                         req.user.user.email !== ticket.purchaser) {
-                        return res.sendForbidden("Forbidden");
+                        return res.sendForbidden();
                     }
 
                     const ticketOb = ticket.toObject();

@@ -2748,6 +2748,22 @@ html {
   top: 1rem;
 }
 
+.top-32 {
+  top: 8rem;
+}
+
+.top-48 {
+  top: 12rem;
+}
+
+.top-96 {
+  top: 24rem;
+}
+
+.left-1\/2 {
+  left: 50%;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -2926,6 +2942,10 @@ html {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.-mb-60 {
+  margin-bottom: -15rem;
 }
 
 .block {
@@ -3678,6 +3698,11 @@ html {
   padding-bottom: 0.32rem;
 }
 
+.py-32 {
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -3783,6 +3808,11 @@ html {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
 }
 
 .font-bold {

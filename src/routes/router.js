@@ -28,7 +28,7 @@ export default class CRouter {
     }
 
     delete(path, policies, ...callbacks) {
-        this.router.delete(path,addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
+        this.router.delete(path, addLogger, this.setUserIfSigned("jwt"), this.handlePolicies(policies), this.generateCustomResponses, this.applyCallbacks(callbacks));
     }
 
     applyCallbacks(callbacks) {
@@ -47,15 +47,22 @@ export default class CRouter {
             //No es necesario autenticarse
             return next();
         }
-    
+
         if (!req.user) {
             //No hay usuario y esta ya no es una ruta publica.
             //Se devuelve error por falta de autenticacion.
-            return res.status(400).send({ status: "error", error: "Not authenticated"});
+            return res.status(400).render("unauthenticated", {
+                style: "unauthenticated.css",
+                title: 'User not authenticated',
+                excludePartial: true
+            });
         } else {
-            req.logger.debug(req.user.user.role);
             if (!policies.includes(req.user.user.role.toUpperCase())) {
-                return res.status(403).send({ error: "Your role doesn't match this site policy. Forbidden." });
+                return res.status(403).render("forbidden", {
+                    style: "forbidden.css",
+                    title: 'Forbidden',
+                    excludePartial: true
+                });
             }
         }
         next();
@@ -66,7 +73,11 @@ export default class CRouter {
         res.sendSuccess = payload => res.status(200).send({ status: "success", payload });
         res.sendServerError = error => res.status(500).send({ status: "error", error });
         res.sendUserError = error => res.status(400).send({ status: "error", error });
-        res.sendForbidden = error => res.status(403).send({ status: "error", error });
+        res.sendForbidden = () => res.status(403).render("forbidden", {
+            style: "forbidden.css",
+            title: 'Forbidden',
+            excludePartial: true
+        });
         next();
     }
 
