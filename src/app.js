@@ -1,4 +1,4 @@
-import {cpus} from 'os';
+import { cpus } from 'os';
 import __dirname, { generateProduct } from "./utils.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
@@ -39,12 +39,12 @@ app.use("/views", viewRouter.getRouter());
 const userRouter = new UserRouter();
 app.use("/api/users", userRouter.getRouter());
 
-app.get("/mockingproducts", async(req, res) => {
+app.get("/mockingproducts", async (req, res) => {
     let prods = [];
     for (let i = 0; i < 100; i++) {
         prods.push(generateProduct())
     }
-    res.send({status:"success", payload:prods});
+    res.send({ status: "success", payload: prods });
 })
 
 app.get("/", (req, res) => {
@@ -89,7 +89,14 @@ socketServer.on('connection', socket => {
         try {
             await messageService.create(data);
             const chatMessages = await messageService.read();
-            socketServer.emit('messages', chatMessages);
+            let messagesArray = [];
+            for (const m of chatMessages) {
+                var l = m.user.charAt(0);
+                const mo = m.toObject();
+                mo.first = l;
+                messagesArray.push(mo);
+            }
+            socketServer.emit('messages', messagesArray);
         }
         catch (err) {
             console.log(err);

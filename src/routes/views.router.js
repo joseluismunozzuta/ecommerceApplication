@@ -201,13 +201,12 @@ export default class ViewRouter extends CRouter {
         });
 
         this.get("/chat", ["USER", "PREMIUM"], async (req, res) => {
-            req.logger.debug("Trace start");
             let base64img;
             const user = await userService.searchByEmail(req.user.user.email);
             if(user.profileimage){
                 base64img = user.profileimage.data.toString('base64');
             }
-            req.logger.debug("Trace medium");
+            
             await messageService.read()
                 .then((messages) => {
                     let messagesArray = [];
@@ -219,7 +218,7 @@ export default class ViewRouter extends CRouter {
                         messagesArray.push(mo);
                     }
                     const { adminflag, premiumflag, userflag, flag } = defineRoleFlags(user);
-                    req.logger.debug("Trace end");
+                    
                     res.render("chat", {
                         messages: messagesArray,
                         style: 'chat.css',
