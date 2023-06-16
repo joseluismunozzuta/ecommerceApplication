@@ -4,6 +4,7 @@ import CRouter from "./router.js";
 import Ticket from "../dao/classes/ticket.dao.js";
 import Message from "../dao/classes/message.dao.js";
 import { checkDocs, defineRoleFlags } from "../utils.js";
+import { verifyEmailToken } from "../utils.js";
 
 const userService = new User();
 const prodService = new Product();
@@ -304,11 +305,21 @@ export default class ViewRouter extends CRouter {
         });
 
         this.get("/resetpassword", ["PUBLIC"], (req, res) => {
+
             const token = req.query.token;
+
+            const validEmail = verifyEmailToken(token);
+
+            if (!validEmail) {
+                return res.send(`El enlace caduco o no es valido, <a href="/views/forgotpassword">intentar de nuevo</a>`)
+            }
+
             if (!req.user) {
                 res.render("resetpassword",
                     {
+                        title: "Reset password",
                         token,
+                        email: validEmail,
                         excludePartial: true
                     });
             } else {

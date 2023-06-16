@@ -205,7 +205,7 @@ export const resetpassword = async (req, res) => {
 
     try {
         const token = req.query.token;
-        const { email, newPassword } = req.body;
+        const {newPassword } = req.body;
 
         //Validamos el token.
         const validEmail = verifyEmailToken(token);
@@ -214,15 +214,18 @@ export const resetpassword = async (req, res) => {
             return res.send(`El enlace caduco o no es valido, <a href="/forgotpassword">intentar de nuevo</a>`)
         }
 
-        const user = await userService.searchByEmail(email);
+        const user = await userService.searchByEmail(validEmail);
         if (!user) {
             return res.send(`<p>el usuario no existe, <a href="/signup">Crea una cuenta</a></p>`)
         }
         if (isValidPassword(user, newPassword)) {
 
             return res.render("resetpassword", {
+                title: "Reset password",
                 error: "The password can't be the same",
-                token
+                token,
+                email:validEmail,
+                excludePartial: true
             })
         }
 
