@@ -193,7 +193,11 @@ export const forgetPassword = async (req, res) => {
         }
         const token = generateToken(tokenUser, '1h');
         await sendRecoveryEmail(email, token);
-        res.sendSuccess("Email sent");
+        res.render("emailsent", {
+            title: "Email sent",
+            email: user.email,
+            excludePartial: true
+        });
         
     } catch (error) {
         req.logger.error(error);
